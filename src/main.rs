@@ -258,21 +258,18 @@ async fn listen_blocks(mut stream: mpsc::Receiver<near_indexer::StreamerMessage>
 fn main() {
     // We use it to automatically search the for root certificates to perform HTTPS calls
     // (sending telemetry and downloading genesis)
-    print!("Starting");
+    info!(target: "Main", "Starting");
     openssl_probe::init_ssl_cert_env_vars();
-    print!("openssl_probe");
     init_logging();
-    print!("init_logging");
 
     let opts: Opts = Opts::parse();
-    print!("Opts::parse");
 
     let home_dir =
         opts.home_dir.unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
 
     match opts.subcmd {
         SubCommand::Run => {
-            print!("RUN!");
+            info!(target: "Main", "Running");
             let indexer_config = near_indexer::IndexerConfig {
                 home_dir,
                 sync_mode: near_indexer::SyncModeEnum::BlockHeight(43175177) ,
