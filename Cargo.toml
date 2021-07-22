@@ -1,5 +1,7 @@
+cargo-features = ["resolver"]
+
 [package]
-name = "near-indexer"
+name = "near-dm-indexer"
 version = "0.1.0"
 authors = ["billettc <charles@cbillette.com>"]
 edition = "2018"
