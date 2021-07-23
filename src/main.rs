@@ -1,13 +1,13 @@
+mod configs;
+mod pb;
+
 use actix;
-
 use clap::Clap;
-use tokio::sync::mpsc;
-use tracing::info;
-
 use configs::{init_logging, Opts, SubCommand};
 use near_indexer;
-
-mod configs;
+use prost::Message;
+use tokio::sync::mpsc;
+use tracing::info;
 
 async fn listen_blocks(mut stream: mpsc::Receiver<near_indexer::StreamerMessage>) {
     while let Some(streamer_message) = stream.recv().await {
@@ -242,15 +242,24 @@ async fn listen_blocks(mut stream: mpsc::Receiver<near_indexer::StreamerMessage>
         //         },
         //     ],
         // }
+
+        let wrap = pb::BlockWrapper::from(&streamer_message);
+
+        let mut buf = Vec::new();
+        buf.reserve(wrap.encoded_len());
+        wrap.encode(&mut buf).unwrap();
+        info!(target: "indexer_example", "{:x?}", buf);
+        info!(target: "indexer_example", "BBBBB {}", wrap);
+
         info!(
             target: "indexer_example",
             "#{} {} Shards: {}, Transactions: {}, Receipts: {}, ExecutionOutcomes: {}",
             streamer_message.block.header.height,
             streamer_message.block.header.hash,
-            streamer_message.shards.len(),
-            streamer_message.shards.iter().map(|shard| if let Some(chunk) = &shard.chunk { chunk.transactions.len() } else { 0usize }).sum::<usize>(),
-            streamer_message.shards.iter().map(|shard| if let Some(chunk) = &shard.chunk { chunk.receipts.len() } else { 0usize }).sum::<usize>(),
-            streamer_message.shards.iter().map(|shard| shard.receipt_execution_outcomes.len()).sum::<usize>(),
+            wrap.shards.len(),
+            wrap.shards.iter().map(|shard| if let Some(chunk) = &shard.chunk { chunk.transactions.len() } else { 0usize }).sum::<usize>(),
+            wrap.shards.iter().map(|shard| if let Some(chunk) = &shard.chunk { chunk.receipts.len() } else { 0usize }).sum::<usize>(),
+            wrap.shards.iter().map(|shard| shard.receipt_execution_outcomes.len()).sum::<usize>(),
         );
     }
 }
@@ -264,15 +273,17 @@ fn main() {
 
     let opts: Opts = Opts::parse();
 
-    let home_dir =
-        opts.home_dir.unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
+    let home_dir = opts
+        .home_dir
+        .unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
 
     match opts.subcmd {
         SubCommand::Run => {
             info!(target: "Main", "Running");
             let indexer_config = near_indexer::IndexerConfig {
                 home_dir,
-                sync_mode: near_indexer::SyncModeEnum::BlockHeight(43175177) ,
+
+                sync_mode: near_indexer::SyncModeEnum::BlockHeight(43355192),
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
             };
             let system = actix::System::new();
