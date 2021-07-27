@@ -684,7 +684,7 @@ pub struct MerklePathItem {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Action {
-    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5, 6, 7")]
+    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
     pub action: ::core::option::Option<action::Action>,
 }
 /// Nested message and enum types in `Action`.
@@ -705,6 +705,8 @@ pub mod action {
         AddKey(super::AddKeyAction),
         #[prost(message, tag = "7")]
         DeleteKey(super::DeleteKeyAction),
+        #[prost(message, tag = "8")]
+        DeleteAccount(super::DeleteAccountAction),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

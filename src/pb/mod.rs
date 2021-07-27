@@ -2,13 +2,13 @@ mod sf_near_v1;
 
 use crate::pb::SignatureType::{Ed25519, Secp256k1};
 use near_crypto;
-
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::views as near_views;
-use near_indexer::near_primitives::views::ChunkHeaderView;
+use near_indexer::near_primitives::views::{AccessKeyPermissionView, AccessKeyView, ActionView};
 use near_indexer::StreamerMessage;
 pub use sf_near_v1::*;
 use std::fmt::{Display, Formatter};
+use std::rc::Rc;
 
 impl From<&near_indexer::StreamerMessage> for BlockWrapper {
     fn from(sm: &StreamerMessage) -> Self {
@@ -26,10 +26,9 @@ impl From<&near_indexer::StreamerMessage> for BlockWrapper {
                 .map(|ch| ChunkHeader::from(ch))
                 .collect(),
         };
-
         BlockWrapper {
             block: Some(block),
-            shards: vec![],
+            shards: sm.shards.iter().map(|s| IndexerShard::from(s)).collect(),
             state_changes: vec![],
         }
     }
@@ -81,8 +80,170 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
     }
 }
 
+impl From<&near_indexer::IndexerShard> for IndexerShard {
+    fn from(is: &near_indexer::IndexerShard) -> Self {
+        let id = is.shard_id;
+
+        let chunk: Option<IndexerChunk> = match &is.chunk {
+            None => None,
+            Some(c) => Some(IndexerChunk::from(c)),
+        };
+
+        IndexerShard {
+            shard_id: id,
+            chunk,
+            receipt_execution_outcomes: vec![], //todo:
+        }
+    }
+}
+
+impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
+    fn from(s: &near_indexer::IndexerChunkView) -> Self {
+        IndexerChunk {
+            author: s.author.clone(),
+            header: Some(ChunkHeader::from(s.header.clone())),
+            transactions: s
+                .transactions
+                .iter()
+                .map(|tx| IndexerTransactionWithOutcome::from(tx.clone()))
+                .collect(),
+            receipts: vec![], //todo:
+        }
+    }
+}
+
+impl From<near_indexer::IndexerTransactionWithOutcome> for IndexerTransactionWithOutcome {
+    fn from(tx: near_indexer::IndexerTransactionWithOutcome) -> Self {
+        IndexerTransactionWithOutcome {
+            transaction: Some(SignedTransaction::from(tx.transaction)),
+            outcome: None, //todo:
+        }
+    }
+}
+
+impl From<near_views::SignedTransactionView> for SignedTransaction {
+    fn from(tx: near_views::SignedTransactionView) -> Self {
+        SignedTransaction {
+            signer_id: tx.signer_id,
+            public_key: Some(PublicKey::from(tx.public_key.key_data())),
+            nonce: tx.nonce,
+            receiver_id: tx.receiver_id,
+            actions: tx.actions.into_iter().map(|a| Action::from(a)).collect(),
+            signature: None, //todo: need to find a way to make Signature::from work with near_crypto::Signature,
+            hash: Some(CryptoHash::from(tx.hash)),
+        }
+    }
+}
+
+impl From<near_views::ActionView> for Action {
+    fn from(a: near_views::ActionView) -> Self {
+        match a {
+            ActionView::CreateAccount => Action {
+                action: Some(action::Action::CreateAccount {
+                    0: CreateAccountAction {},
+                }),
+            },
+            ActionView::DeployContract { code } => Action {
+                action: Some(action::Action::DeployContract {
+                    0: DeployContractAction { code },
+                }),
+            },
+            ActionView::FunctionCall {
+                method_name,
+                args,
+                gas,
+                deposit,
+            } => Action {
+                action: Some(action::Action::FunctionCall {
+                    0: FunctionCallAction {
+                        method_name,
+                        args,
+                        gas,
+                        deposit: Some(BigInt::from(deposit)),
+                    },
+                }),
+            },
+            ActionView::Transfer { deposit } => Action {
+                action: Some(action::Action::Transfer {
+                    0: TransferAction {
+                        deposit: Some(BigInt::from(deposit)),
+                    },
+                }),
+            },
+            ActionView::Stake { stake, public_key } => Action {
+                action: Some(action::Action::Stake {
+                    0: StakeAction {
+                        stake: Some(BigInt::from(stake)),
+                        public_key: Some(PublicKey::from(public_key.key_data())),
+                    },
+                }),
+            },
+            ActionView::AddKey {
+                public_key,
+                access_key,
+            } => Action {
+                action: Some(action::Action::AddKey {
+                    0: AddKeyAction {
+                        public_key: Some(PublicKey::from(public_key.key_data())),
+                        access_key: Some(AccessKey::from(access_key)),
+                    },
+                }),
+            },
+            ActionView::DeleteKey { public_key } => Action {
+                action: Some(action::Action::DeleteKey {
+                    0: DeleteKeyAction {
+                        public_key: Some(PublicKey::from(public_key.key_data())),
+                    },
+                }),
+            },
+            ActionView::DeleteAccount { beneficiary_id } => Action {
+                action: Some(action::Action::DeleteAccount {
+                    0: DeleteAccountAction { beneficiary_id },
+                }),
+            },
+        }
+    }
+}
+
+impl From<near_views::AccessKeyView> for AccessKey {
+    fn from(k: AccessKeyView) -> Self {
+        AccessKey {
+            nonce: k.nonce,
+            permission: Some(AccessKeyPermission::from(k.permission)),
+        }
+    }
+}
+
+impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
+    fn from(p: AccessKeyPermissionView) -> Self {
+        match p {
+            AccessKeyPermissionView::FunctionCall {
+                allowance,
+                receiver_id,
+                method_names,
+            } => AccessKeyPermission {
+                permission: Some(access_key_permission::Permission::FunctionCall {
+                    0: FunctionCallPermission {
+                        allowance: match allowance {
+                            None => None,
+                            Some(a) => Some(BigInt::from(a)),
+                        },
+                        receiver_id,
+                        method_names,
+                    },
+                }),
+            },
+            AccessKeyPermissionView::FullAccess => AccessKeyPermission {
+                permission: Some(access_key_permission::Permission::FullAccess {
+                    0: FullAccessPermission {},
+                }),
+            },
+        }
+    }
+}
+
 impl From<near_views::ChunkHeaderView> for ChunkHeader {
-    fn from(ch: ChunkHeaderView) -> Self {
+    fn from(ch: near_views::ChunkHeaderView) -> Self {
         ChunkHeader {
             chunk_hash: Vec::from(ch.chunk_hash),
             prev_block_hash: Vec::from(ch.prev_block_hash),
