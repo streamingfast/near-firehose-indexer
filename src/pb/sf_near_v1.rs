@@ -392,21 +392,16 @@ pub struct Receipt {
     pub receiver_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
     pub receipt_id: ::core::option::Option<CryptoHash>,
-    #[prost(message, optional, tag = "4")]
-    pub receipt: ::core::option::Option<ReceiptEnum>,
+    #[prost(oneof = "receipt::Receipt", tags = "10, 11")]
+    pub receipt: ::core::option::Option<receipt::Receipt>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReceiptEnum {
-    #[prost(oneof = "receipt_enum::Receipt", tags = "1, 2")]
-    pub receipt: ::core::option::Option<receipt_enum::Receipt>,
-}
-/// Nested message and enum types in `ReceiptEnum`.
-pub mod receipt_enum {
+/// Nested message and enum types in `Receipt`.
+pub mod receipt {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Receipt {
-        #[prost(message, tag = "1")]
+        #[prost(message, tag = "10")]
         Action(super::ReceiptAction),
-        #[prost(message, tag = "2")]
+        #[prost(message, tag = "11")]
         Data(super::ReceiptData),
     }
 }

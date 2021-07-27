@@ -6,7 +6,9 @@ use near_indexer::near_primitives;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
-use near_indexer::near_primitives::views::ExecutionStatusView;
+use near_indexer::near_primitives::views::{
+    DataReceiverView, ExecutionStatusView, ReceiptEnumView,
+};
 use near_indexer::StreamerMessage;
 pub use sf_near_v1::*;
 use std::fmt::{Display, Formatter};
@@ -93,7 +95,74 @@ impl From<&near_indexer::IndexerShard> for IndexerShard {
         IndexerShard {
             shard_id: id,
             chunk,
-            receipt_execution_outcomes: vec![], //todo:
+            receipt_execution_outcomes: is
+                .receipt_execution_outcomes
+                .iter()
+                .map(|r| IndexerExecutionOutcomeWithReceipt::from(r))
+                .collect(),
+        }
+    }
+}
+
+impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
+    for IndexerExecutionOutcomeWithReceipt
+{
+    fn from(r: &near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
+        IndexerExecutionOutcomeWithReceipt {
+            execution_outcome: Some(ExecutionOutcomeWithIdView::from(
+                r.execution_outcome.clone(),
+            )),
+            receipt: Some(Receipt::from(r.receipt.clone())),
+        }
+    }
+}
+
+impl From<near_views::ReceiptView> for Receipt {
+    fn from(r: near_views::ReceiptView) -> Self {
+        Receipt {
+            predecessor_id: r.predecessor_id,
+            receiver_id: r.receiver_id,
+            receipt_id: Some(CryptoHash::from(r.receipt_id)),
+            receipt: match r.receipt {
+                ReceiptEnumView::Action {
+                    signer_id,
+                    signer_public_key,
+                    gas_price,
+                    output_data_receivers,
+                    input_data_ids,
+                    actions,
+                } => Some(receipt::Receipt::Action {
+                    0: ReceiptAction {
+                        signer_id,
+                        signer_public_key: Some(PublicKey::from(signer_public_key.key_data())),
+                        gas_price: Some(BigInt::from(gas_price)),
+                        output_data_receivers: output_data_receivers
+                            .into_iter()
+                            .map(|o| DataReceiver::from(o))
+                            .collect(),
+                        input_data_ids: input_data_ids
+                            .into_iter()
+                            .map(|i| CryptoHash::from(i))
+                            .collect(),
+                        actions: actions.into_iter().map(|a| Action::from(a)).collect(),
+                    },
+                }),
+                ReceiptEnumView::Data { data_id, data } => Some(receipt::Receipt::Data {
+                    0: ReceiptData {
+                        data_id: Some(CryptoHash::from(data_id)),
+                        data: data.unwrap_or(vec![]),
+                    },
+                }),
+            },
+        }
+    }
+}
+
+impl From<near_views::DataReceiverView> for DataReceiver {
+    fn from(d: DataReceiverView) -> Self {
+        DataReceiver {
+            data_id: Some(CryptoHash::from(d.data_id)),
+            receiver_id: d.receiver_id,
         }
     }
 }
