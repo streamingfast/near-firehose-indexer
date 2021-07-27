@@ -462,25 +462,20 @@ pub struct ExecutionOutcome {
     pub tokens_burnt: ::core::option::Option<BigInt>,
     #[prost(string, tag = "5")]
     pub executor_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "6")]
-    pub status: ::core::option::Option<ExecutionStatus>,
+    #[prost(oneof = "execution_outcome::Status", tags = "20, 21, 22, 23")]
+    pub status: ::core::option::Option<execution_outcome::Status>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ExecutionStatus {
-    #[prost(oneof = "execution_status::Status", tags = "1, 2, 3, 4")]
-    pub status: ::core::option::Option<execution_status::Status>,
-}
-/// Nested message and enum types in `ExecutionStatus`.
-pub mod execution_status {
+/// Nested message and enum types in `ExecutionOutcome`.
+pub mod execution_outcome {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Status {
-        #[prost(message, tag = "1")]
+        #[prost(message, tag = "20")]
         Unknown(super::UnknownExecutionStatus),
-        #[prost(message, tag = "2")]
+        #[prost(message, tag = "21")]
         Failure(super::FailureExecutionStatus),
-        #[prost(message, tag = "3")]
+        #[prost(message, tag = "22")]
         SuccessValue(super::SuccessValueExecutionStatus),
-        #[prost(message, tag = "4")]
+        #[prost(message, tag = "23")]
         SuccessReceiptId(super::SuccessReceiptIdExecutionStatus),
     }
 }
