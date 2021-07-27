@@ -7,7 +7,7 @@ use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
-    DataReceiverView, ExecutionStatusView, ReceiptEnumView,
+    DataReceiverView, ExecutionStatusView, ReceiptEnumView, ReceiptView,
 };
 use near_indexer::StreamerMessage;
 pub use sf_near_v1::*;
@@ -177,7 +177,7 @@ impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
                 .iter()
                 .map(|tx| IndexerTransactionWithOutcome::from(tx.clone()))
                 .collect(),
-            receipts: vec![], //todo:
+            receipts: s.receipts.into_iter().map(|r| Receipt::from(r)).collect(),
         }
     }
 }
@@ -197,7 +197,10 @@ impl From<near_indexer::IndexerExecutionOutcomeWithOptionalReceipt>
     fn from(o: near_indexer::IndexerExecutionOutcomeWithOptionalReceipt) -> Self {
         IndexerExecutionOutcomeWithOptionalReceipt {
             execution_outcome: Some(ExecutionOutcomeWithIdView::from(o.execution_outcome)),
-            receipt: None, //todo
+            receipt: match o.receipt {
+                None => None,
+                Some(r) => Some(Receipt::from(r)),
+            },
         }
     }
 }
