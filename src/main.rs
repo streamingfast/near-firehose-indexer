@@ -5,7 +5,6 @@ use actix;
 use clap::Clap;
 use configs::{init_logging, Opts, SubCommand};
 use near_indexer;
-use prost::Message;
 use tokio::sync::mpsc;
 use tracing::info;
 
