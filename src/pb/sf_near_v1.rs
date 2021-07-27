@@ -263,7 +263,9 @@ pub struct CryptoHash {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Signature {
-    #[prost(bytes = "vec", tag = "1")]
+    #[prost(enumeration = "SignatureType", tag = "1")]
+    pub r#type: i32,
+    #[prost(bytes = "vec", tag = "2")]
     pub bytes: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -785,6 +787,12 @@ pub struct FunctionCallPermission {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FullAccessPermission {}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SignatureType {
+    Ed25519 = 0,
+    Secp256k1 = 1,
+}
 ///todo: half baked
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
