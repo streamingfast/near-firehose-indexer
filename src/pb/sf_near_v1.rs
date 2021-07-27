@@ -493,18 +493,13 @@ pub struct SuccessReceiptIdExecutionStatus {
 pub struct UnknownExecutionStatus {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FailureExecutionStatus {
-    #[prost(message, optional, tag = "1")]
-    pub error: ::core::option::Option<TxExecutionError>,
+    #[prost(oneof = "failure_execution_status::Failure", tags = "1, 2")]
+    pub failure: ::core::option::Option<failure_execution_status::Failure>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TxExecutionError {
-    #[prost(oneof = "tx_execution_error::Error", tags = "1, 2")]
-    pub error: ::core::option::Option<tx_execution_error::Error>,
-}
-/// Nested message and enum types in `TxExecutionError`.
-pub mod tx_execution_error {
+/// Nested message and enum types in `FailureExecutionStatus`.
+pub mod failure_execution_status {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Error {
+    pub enum Failure {
         #[prost(message, tag = "1")]
         ActionError(super::ActionError),
         #[prost(enumeration = "super::InvalidTxError", tag = "2")]
@@ -515,54 +510,49 @@ pub mod tx_execution_error {
 pub struct ActionError {
     #[prost(uint64, tag = "1")]
     pub index: u64,
-    #[prost(message, optional, tag = "2")]
-    pub kind: ::core::option::Option<ActionErrorKind>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ActionErrorKind {
     #[prost(
-        oneof = "action_error_kind::Kind",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16"
+        oneof = "action_error::Kind",
+        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36"
     )]
-    pub kind: ::core::option::Option<action_error_kind::Kind>,
+    pub kind: ::core::option::Option<action_error::Kind>,
 }
-/// Nested message and enum types in `ActionErrorKind`.
-pub mod action_error_kind {
+/// Nested message and enum types in `ActionError`.
+pub mod action_error {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Kind {
-        #[prost(message, tag = "1")]
+        #[prost(message, tag = "21")]
         AccountAlreadyExist(super::AccountAlreadyExistsErrorKind),
-        #[prost(message, tag = "2")]
+        #[prost(message, tag = "22")]
         AccountDoesNotExist(super::AccountDoesNotExistErrorKind),
-        #[prost(message, tag = "3")]
+        #[prost(message, tag = "23")]
         CreateAccountOnlyByRegistrar(super::CreateAccountOnlyByRegistrarErrorKind),
-        #[prost(message, tag = "4")]
+        #[prost(message, tag = "24")]
         CreateAccountNotAllowed(super::CreateAccountNotAllowedErrorKind),
-        #[prost(message, tag = "5")]
+        #[prost(message, tag = "25")]
         ActorNoPermission(super::ActorNoPermissionErrorKind),
-        #[prost(message, tag = "6")]
+        #[prost(message, tag = "26")]
         DeleteKeyDoesNotExist(super::DeleteKeyDoesNotExistErrorKind),
-        #[prost(message, tag = "7")]
-        AddKeyDoesNotExists(super::AddKeyAlreadyExistsErrorKind),
-        #[prost(message, tag = "8")]
+        #[prost(message, tag = "27")]
+        AddKeyAlreadyExists(super::AddKeyAlreadyExistsErrorKind),
+        #[prost(message, tag = "28")]
         DeleteAccountStaking(super::DeleteAccountStakingErrorKind),
-        #[prost(message, tag = "9")]
+        #[prost(message, tag = "29")]
         LackBalanceForState(super::LackBalanceForStateErrorKind),
-        #[prost(message, tag = "10")]
+        #[prost(message, tag = "30")]
         TriesToUnstake(super::TriesToUnstakeErrorKind),
-        #[prost(message, tag = "11")]
+        #[prost(message, tag = "31")]
         TriesToStake(super::TriesToStakeErrorKind),
-        #[prost(message, tag = "12")]
+        #[prost(message, tag = "32")]
         InsufficientStake(super::InsufficientStakeErrorKind),
         ///todo: uncompleted
-        #[prost(message, tag = "13")]
+        #[prost(message, tag = "33")]
         FunctionCall(super::FunctionCallErrorKind),
         ///todo: uncompleted
-        #[prost(message, tag = "14")]
+        #[prost(message, tag = "34")]
         NewReceiptValidation(super::NewReceiptValidationErrorKind),
-        #[prost(message, tag = "15")]
+        #[prost(message, tag = "35")]
         OnlyImplicitAccountCreationAllowed(super::OnlyImplicitAccountCreationAllowedErrorKind),
-        #[prost(message, tag = "16")]
+        #[prost(message, tag = "36")]
         DeleteAccountWithLargeState(super::DeleteAccountWithLargeStateErrorKind),
     }
 }
