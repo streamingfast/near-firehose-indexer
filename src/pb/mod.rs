@@ -177,7 +177,12 @@ impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
                 .iter()
                 .map(|tx| IndexerTransactionWithOutcome::from(tx.clone()))
                 .collect(),
-            receipts: s.receipts.into_iter().map(|r| Receipt::from(r)).collect(),
+            receipts: s
+                .receipts
+                .clone()
+                .into_iter()
+                .map(|r| Receipt::from(r))
+                .collect(),
         }
     }
 }
