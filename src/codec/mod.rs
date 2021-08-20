@@ -1,22 +1,23 @@
-mod sf_near_v1;
+#[path = "sf.near.codec.v1.rs"]
+mod codec;
 
-use crate::pb::SignatureType::{Ed25519, Secp256k1};
+pub use codec::*;
 use near_crypto;
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
-    DataReceiverView, ExecutionStatusView, ReceiptEnumView, ReceiptView,
+    DataReceiverView, ExecutionStatusView, ReceiptEnumView,
 };
 use near_indexer::StreamerMessage;
-pub use sf_near_v1::*;
+
+use hex;
 use std::fmt::{Display, Formatter};
 
 impl From<&near_indexer::StreamerMessage> for BlockWrapper {
     fn from(sm: &StreamerMessage) -> Self {
         let h = sm.block.header.clone();
-        // if let Some(ap) = h.approvals.as_ref()[0] {}
 
         let block = Block {
             header: Some(BlockHeader::from(h)),
@@ -622,13 +623,13 @@ impl From<near_crypto::Signature> for Signature {
     fn from(sign: near_crypto::Signature) -> Self {
         match sign {
             near_crypto::Signature::ED25519(s) => Signature {
-                r#type: Ed25519.into(),
+                r#type: SignatureType::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
             } as Signature,
             near_crypto::Signature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {
-                    r#type: Secp256k1.into(),
+                    r#type: SignatureType::Secp256k1.into(),
                     bytes: data,
                 }
             }
@@ -679,12 +680,16 @@ impl From<near_primitives::hash::CryptoHash> for CryptoHash {
     }
 }
 
+impl Display for CryptoHash {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", hex::encode(&self.bytes))
+    }
+}
+
 impl Display for BlockWrapper {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "here block {}",
-            self.block.as_ref().unwrap().header.as_ref().unwrap().height
-        )
+        let header = self.block.as_ref().unwrap().header.as_ref().unwrap();
+
+        write!(f, "#{} ({})", header.height, header.hash.as_ref().unwrap())
     }
 }

@@ -2406,6 +2406,7 @@ version = "0.1.0"
 dependencies = [
  "actix",
  "clap",
+ "hex",
  "near-crypto 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "near-indexer",
  "openssl-probe",
