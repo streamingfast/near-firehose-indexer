@@ -7,7 +7,6 @@ use actix;
 use clap::Clap;
 use configs::{Opts, SubCommand};
 use near_indexer;
-use tokio::sync::mpsc;
 use tracing::info;
 
 fn main() {

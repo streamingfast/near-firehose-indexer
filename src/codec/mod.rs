@@ -17,10 +17,8 @@ use std::fmt::{Display, Formatter};
 
 impl From<&near_indexer::StreamerMessage> for BlockWrapper {
     fn from(sm: &StreamerMessage) -> Self {
-        let h = sm.block.header.clone();
-
         let block = Block {
-            header: Some(BlockHeader::from(h)),
+            header: Some(BlockHeader::from(&sm.block.header)),
             author: sm.block.author.clone(),
             chunks: sm
                 .block
@@ -30,6 +28,7 @@ impl From<&near_indexer::StreamerMessage> for BlockWrapper {
                 .map(|ch| ChunkHeader::from(ch))
                 .collect(),
         };
+
         BlockWrapper {
             block: Some(block),
             shards: sm.shards.iter().map(|s| IndexerShard::from(s)).collect(),
@@ -38,15 +37,19 @@ impl From<&near_indexer::StreamerMessage> for BlockWrapper {
     }
 }
 
-impl From<near_views::BlockHeaderView> for BlockHeader {
-    fn from(h: near_views::BlockHeaderView) -> Self {
+impl From<&near_views::BlockHeaderView> for BlockHeader {
+    fn from(h: &near_views::BlockHeaderView) -> Self {
+        let challenges_result = &h.challenges_result;
+        let validator_proposals = &h.validator_proposals;
+
         BlockHeader {
+            hash: Some(CryptoHash::from(h.hash)),
             height: h.height,
+            prev_hash: Some(CryptoHash::from(h.prev_hash)),
+            timestamp_nanosec: h.timestamp_nanosec,
             prev_height: 0, //todo: this is v3 feature, what that means?
             epoch_id: Some(CryptoHash::from(h.epoch_id)),
             next_epoch_id: Some(CryptoHash::from(h.next_epoch_id)),
-            hash: Some(CryptoHash::from(h.hash)),
-            prev_hash: Some(CryptoHash::from(h.prev_hash)),
             prev_state_root: Some(CryptoHash::from(h.prev_state_root)),
             chunk_receipts_root: Some(CryptoHash::from(h.chunk_receipts_root)),
             chunk_headers_root: Some(CryptoHash::from(h.chunk_headers_root)),
@@ -55,20 +58,17 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
             chunks_included: h.chunks_included,
             challenges_root: Some(CryptoHash::from(h.challenges_root)),
             timestamp: h.timestamp,
-            timestamp_nanosec: h.timestamp_nanosec,
             random_value: Some(CryptoHash::from(h.random_value)),
-            validator_proposals: h
-                .validator_proposals
+            validator_proposals: validator_proposals
                 .into_iter()
                 .map(|p| ValidatorStake::from(p))
                 .collect(),
-            chunk_mask: h.chunk_mask,
+            chunk_mask: h.chunk_mask.clone(),
             gas_price: Some(BigInt::from(h.gas_price)),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
             validator_reward: Some(BigInt::from(h.validator_reward)),
             total_supply: Some(BigInt::from(h.total_supply)),
-            challenges_result: h
-                .challenges_result
+            challenges_result: challenges_result
                 .into_iter()
                 .map(|cr| SlashedValidator::from(cr))
                 .collect(),
@@ -593,6 +593,8 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
 
 impl From<near_views::ChunkHeaderView> for ChunkHeader {
     fn from(ch: near_views::ChunkHeaderView) -> Self {
+        let validator_proposals = &ch.validator_proposals;
+
         ChunkHeader {
             chunk_hash: Vec::from(ch.chunk_hash),
             prev_block_hash: Vec::from(ch.prev_block_hash),
@@ -609,8 +611,7 @@ impl From<near_views::ChunkHeaderView> for ChunkHeader {
             balance_burnt: Some(BigInt::from(ch.balance_burnt)),
             outgoing_receipts_root: Vec::from(ch.outgoing_receipts_root),
             tx_root: Vec::from(ch.tx_root),
-            validator_proposals: ch
-                .validator_proposals
+            validator_proposals: validator_proposals
                 .into_iter()
                 .map(|vp| ValidatorStake::from(vp))
                 .collect(),
@@ -637,19 +638,19 @@ impl From<near_crypto::Signature> for Signature {
     }
 }
 
-impl From<near_primitives::challenge::SlashedValidator> for SlashedValidator {
-    fn from(sv: near_primitives::challenge::SlashedValidator) -> Self {
+impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
+    fn from(sv: &near_primitives::challenge::SlashedValidator) -> Self {
         SlashedValidator {
-            account_id: sv.account_id,
+            account_id: sv.account_id.clone(),
             is_double_sign: sv.is_double_sign,
         }
     }
 }
 
-impl From<near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
-    fn from(sv: near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
+impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
+    fn from(sv: &near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
         ValidatorStake {
-            account_id: sv.account_id,
+            account_id: sv.account_id.clone(),
             public_key: Some(PublicKey::from(sv.public_key.key_data())),
             stake: Some(BigInt::from(sv.stake)),
         }
