@@ -8,6 +8,8 @@ use clap::Clap;
 pub(crate) struct Opts {
     #[clap(short, long)]
     pub home: Option<std::path::PathBuf>,
+    #[clap(short, long)]
+    pub start_block: Option<u64>,
     #[clap(subcommand)]
     pub subcmd: SubCommand,
 }
