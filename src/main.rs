@@ -28,7 +28,7 @@ fn main() {
             let indexer_config = near_indexer::IndexerConfig {
                 home_dir,
                 // FIXME: We should configure that in the flags!
-                sync_mode: near_indexer::SyncModeEnum::BlockHeight(start_block),
+                sync_mode: near_indexer::SyncModeEnum::LatestSynced,
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
             };
 
