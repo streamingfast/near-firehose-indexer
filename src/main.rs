@@ -21,14 +21,19 @@ fn main() {
         .home
         .unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
 
+
+    let mut sync_mode = near_indexer::SyncModeEnum::LatestSynced;
     let start_block = opts.start_block.unwrap_or(0);
+    if start_block > 0 {
+        sync_mode = near_indexer::SyncModeEnum::BlockHeight(start_block)
+    }
+
     match opts.subcmd {
         SubCommand::Run => {
             info!(target: "main", "Running");
             let indexer_config = near_indexer::IndexerConfig {
                 home_dir,
-                // FIXME: We should configure that in the flags!
-                sync_mode: near_indexer::SyncModeEnum::LatestSynced,
+                sync_mode,
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
             };
 
