@@ -19,7 +19,7 @@ impl From<&near_indexer::StreamerMessage> for BlockWrapper {
     fn from(sm: &StreamerMessage) -> Self {
         let block = Block {
             header: Some(BlockHeader::from(&sm.block.header)),
-            author: sm.block.author.clone(),
+            author: sm.block.author.to_string(),
             chunks: sm
                 .block
                 .chunks
@@ -121,8 +121,8 @@ impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
 impl From<near_views::ReceiptView> for Receipt {
     fn from(r: near_views::ReceiptView) -> Self {
         Receipt {
-            predecessor_id: r.predecessor_id,
-            receiver_id: r.receiver_id,
+            predecessor_id: r.predecessor_id.to_string(),
+            receiver_id: r.receiver_id.to_string(),
             receipt_id: Some(CryptoHash::from(r.receipt_id)),
             receipt: match r.receipt {
                 ReceiptEnumView::Action {
@@ -134,7 +134,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     actions,
                 } => Some(receipt::Receipt::Action {
                     0: ReceiptAction {
-                        signer_id,
+                        signer_id: signer_id.to_string(),
                         signer_public_key: Some(PublicKey::from(signer_public_key.key_data())),
                         gas_price: Some(BigInt::from(gas_price)),
                         output_data_receivers: output_data_receivers
@@ -163,7 +163,7 @@ impl From<near_views::DataReceiverView> for DataReceiver {
     fn from(d: DataReceiverView) -> Self {
         DataReceiver {
             data_id: Some(CryptoHash::from(d.data_id)),
-            receiver_id: d.receiver_id,
+            receiver_id: d.receiver_id.to_string(),
         }
     }
 }
@@ -171,7 +171,7 @@ impl From<near_views::DataReceiverView> for DataReceiver {
 impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
     fn from(s: &near_indexer::IndexerChunkView) -> Self {
         IndexerChunk {
-            author: s.author.clone(),
+            author: s.author.to_string(),
             header: Some(ChunkHeader::from(s.header.clone())),
             transactions: s
                 .transactions
@@ -232,7 +232,7 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
                 .collect(),
             gas_burnt: o.gas_burnt,
             tokens_burnt: Some(BigInt::from(o.tokens_burnt)),
-            executor_id: o.executor_id,
+            executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
             //todo: meta data
         }
@@ -266,12 +266,16 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                     kind: Some(match ae.kind {
                                         ActionErrorKind::AccountAlreadyExists { account_id } => {
                                             action_error::Kind::AccountAlreadyExist {
-                                                0: AccountAlreadyExistsErrorKind { account_id },
+                                                0: AccountAlreadyExistsErrorKind {
+                                                    account_id: account_id.to_string(),
+                                                },
                                             }
                                         }
                                         ActionErrorKind::AccountDoesNotExist { account_id } => {
                                             action_error::Kind::AccountDoesNotExist {
-                                                0: AccountDoesNotExistErrorKind { account_id },
+                                                0: AccountDoesNotExistErrorKind {
+                                                    account_id: account_id.to_string(),
+                                                },
                                             }
                                         }
                                         ActionErrorKind::CreateAccountOnlyByRegistrar {
@@ -280,9 +284,10 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             predecessor_id,
                                         } => action_error::Kind::CreateAccountOnlyByRegistrar {
                                             0: CreateAccountOnlyByRegistrarErrorKind {
-                                                account_id,
-                                                registrar_account_id,
-                                                predecessor_id,
+                                                account_id: account_id.to_string(),
+                                                registrar_account_id: registrar_account_id
+                                                    .to_string(),
+                                                predecessor_id: predecessor_id.to_string(),
                                             },
                                         },
                                         ActionErrorKind::CreateAccountNotAllowed {
@@ -290,8 +295,8 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             predecessor_id,
                                         } => action_error::Kind::CreateAccountNotAllowed {
                                             0: CreateAccountNotAllowedErrorKind {
-                                                account_id,
-                                                predecessor_id,
+                                                account_id: account_id.to_string(),
+                                                predecessor_id: predecessor_id.to_string(),
                                             },
                                         },
                                         ActionErrorKind::ActorNoPermission {
@@ -299,8 +304,8 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             actor_id,
                                         } => action_error::Kind::ActorNoPermission {
                                             0: ActorNoPermissionErrorKind {
-                                                account_id,
-                                                actor_id,
+                                                account_id: account_id.to_string(),
+                                                actor_id: actor_id.to_string(),
                                             },
                                         },
                                         ActionErrorKind::DeleteKeyDoesNotExist {
@@ -308,7 +313,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             public_key,
                                         } => action_error::Kind::DeleteKeyDoesNotExist {
                                             0: DeleteKeyDoesNotExistErrorKind {
-                                                account_id,
+                                                account_id: account_id.to_string(),
                                                 public_key: Some(PublicKey::from(
                                                     public_key.key_data(),
                                                 )),
@@ -319,7 +324,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             public_key,
                                         } => action_error::Kind::AddKeyAlreadyExists {
                                             0: AddKeyAlreadyExistsErrorKind {
-                                                account_id,
+                                                account_id: account_id.to_string(),
                                                 public_key: Some(PublicKey::from(
                                                     public_key.key_data(),
                                                 )),
@@ -337,13 +342,15 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             amount,
                                         } => action_error::Kind::LackBalanceForState {
                                             0: LackBalanceForStateErrorKind {
-                                                account_id,
+                                                account_id: account_id.to_string(),
                                                 balance: Some(BigInt::from(amount)),
                                             },
                                         },
                                         ActionErrorKind::TriesToUnstake { account_id } => {
                                             action_error::Kind::TriesToUnstake {
-                                                0: TriesToUnstakeErrorKind { account_id },
+                                                0: TriesToUnstakeErrorKind {
+                                                    account_id: account_id.to_string(),
+                                                },
                                             }
                                         }
                                         ActionErrorKind::TriesToStake {
@@ -353,7 +360,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             balance,
                                         } => action_error::Kind::TriesToStake {
                                             0: TriesToStakeErrorKind {
-                                                account_id,
+                                                account_id: account_id.to_string(),
                                                 stake: Some(BigInt::from(stake)),
                                                 locked: Some(BigInt::from(locked)),
                                                 balance: Some(BigInt::from(balance)),
@@ -365,7 +372,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                             minimum_stake,
                                         } => action_error::Kind::InsufficientStake {
                                             0: InsufficientStakeErrorKind {
-                                                account_id,
+                                                account_id: account_id.to_string(),
                                                 stake: Some(BigInt::from(stake)),
                                                 minimum_stake: Some(BigInt::from(minimum_stake)),
                                             },
@@ -385,14 +392,16 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => {
                                             action_error::Kind::OnlyImplicitAccountCreationAllowed {
                                                 0: OnlyImplicitAccountCreationAllowedErrorKind {
-                                                    account_id,
+                                                    account_id: account_id.to_string(),
                                                 },
                                             }
                                         }
                                         ActionErrorKind::DeleteAccountWithLargeState {
                                             account_id,
                                         } => action_error::Kind::DeleteAccountWithLargeState {
-                                            0: DeleteAccountWithLargeStateErrorKind { account_id },
+                                            0: DeleteAccountWithLargeStateErrorKind {
+                                                account_id: account_id.to_string(),
+                                            },
                                         },
                                     }),
                                 },
@@ -473,10 +482,10 @@ impl From<near_primitives::merkle::MerklePath> for MerklePath {
 impl From<near_views::SignedTransactionView> for SignedTransaction {
     fn from(tx: near_views::SignedTransactionView) -> Self {
         SignedTransaction {
-            signer_id: tx.signer_id,
+            signer_id: tx.signer_id.to_string(),
             public_key: Some(PublicKey::from(tx.public_key.key_data())),
             nonce: tx.nonce,
-            receiver_id: tx.receiver_id,
+            receiver_id: tx.receiver_id.to_string(),
             actions: tx.actions.into_iter().map(|a| Action::from(a)).collect(),
             signature: None, //todo: need to find a way to make Signature::from work with near_crypto::Signature,
             hash: Some(CryptoHash::from(tx.hash)),
@@ -547,7 +556,9 @@ impl From<near_views::ActionView> for Action {
             },
             near_views::ActionView::DeleteAccount { beneficiary_id } => Action {
                 action: Some(action::Action::DeleteAccount {
-                    0: DeleteAccountAction { beneficiary_id },
+                    0: DeleteAccountAction {
+                        beneficiary_id: beneficiary_id.to_string(),
+                    },
                 }),
             },
         }
@@ -641,7 +652,7 @@ impl From<near_crypto::Signature> for Signature {
 impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
     fn from(sv: &near_primitives::challenge::SlashedValidator) -> Self {
         SlashedValidator {
-            account_id: sv.account_id.clone(),
+            account_id: sv.account_id.to_string(),
             is_double_sign: sv.is_double_sign,
         }
     }
@@ -650,7 +661,7 @@ impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
 impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
     fn from(sv: &near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
         ValidatorStake {
-            account_id: sv.account_id.clone(),
+            account_id: sv.account_id.to_string(),
             public_key: Some(PublicKey::from(sv.public_key.key_data())),
             stake: Some(BigInt::from(sv.stake)),
         }
