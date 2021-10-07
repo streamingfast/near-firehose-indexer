@@ -15,23 +15,19 @@ use near_indexer::StreamerMessage;
 use hex;
 use std::fmt::{Display, Formatter};
 
-impl From<&near_indexer::StreamerMessage> for BlockWrapper {
+impl From<&near_indexer::StreamerMessage> for Block {
     fn from(sm: &StreamerMessage) -> Self {
-        let block = Block {
+        Block {
             header: Some(BlockHeader::from(&sm.block.header)),
+            shards: sm.shards.iter().map(|s| IndexerShard::from(s)).collect(),
             author: sm.block.author.to_string(),
-            chunks: sm
+            chunk_headers: sm
                 .block
                 .chunks
                 .clone()
                 .into_iter()
                 .map(|ch| ChunkHeader::from(ch))
                 .collect(),
-        };
-
-        BlockWrapper {
-            block: Some(block),
-            shards: sm.shards.iter().map(|s| IndexerShard::from(s)).collect(),
             state_changes: vec![],
         }
     }
@@ -66,6 +62,7 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             chunk_mask: h.chunk_mask.clone(),
             gas_price: Some(BigInt::from(h.gas_price)),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
+            rent_paid: Some(BigInt::from(h.rent_paid)),
             validator_reward: Some(BigInt::from(h.validator_reward)),
             total_supply: Some(BigInt::from(h.total_supply)),
             challenges_result: challenges_result
@@ -698,9 +695,9 @@ impl Display for CryptoHash {
     }
 }
 
-impl Display for BlockWrapper {
+impl Display for Block {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let header = self.block.as_ref().unwrap().header.as_ref().unwrap();
+        let header = self.header.as_ref().unwrap();
 
         write!(f, "#{} ({})", header.height, header.hash.as_ref().unwrap())
     }

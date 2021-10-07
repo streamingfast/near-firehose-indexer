@@ -44,9 +44,8 @@ fn main() {
                 let mut stream = indexer.streamer();
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
-                        let wrap = codec::BlockWrapper::from(&streamer_message);
-
-                        dm::on_block(&wrap);
+                        let block = codec::Block::from(&streamer_message);
+                        dm::on_block(&block);
                     }
                 });
             });
