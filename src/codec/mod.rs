@@ -70,7 +70,9 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
                 .map(|cr| SlashedValidator::from(cr))
                 .collect(),
             last_final_block: Some(CryptoHash::from(h.last_final_block)),
+            last_final_block_height: h.last_final_block_height,
             last_ds_final_block: Some(CryptoHash::from(h.last_ds_final_block)),
+            last_ds_final_block_height: h.last_ds_final_block_height,
             next_bp_hash: Some(CryptoHash::from(h.next_bp_hash)),
             block_merkle_root: Some(CryptoHash::from(h.block_merkle_root)),
             epoch_sync_data_hash: vec![], //todo: this is v3 feature, what that means?

@@ -231,21 +231,25 @@ pub struct BlockHeader {
     pub total_supply: ::core::option::Option<BigInt>,
     #[prost(message, repeated, tag = "24")]
     pub challenges_result: ::prost::alloc::vec::Vec<SlashedValidator>,
-    #[prost(message, optional, tag = "25")]
-    pub last_final_block: ::core::option::Option<CryptoHash>,
+    #[prost(uint64, tag = "25")]
+    pub last_final_block_height: u64,
     #[prost(message, optional, tag = "26")]
-    pub last_ds_final_block: ::core::option::Option<CryptoHash>,
-    #[prost(message, optional, tag = "27")]
-    pub next_bp_hash: ::core::option::Option<CryptoHash>,
+    pub last_final_block: ::core::option::Option<CryptoHash>,
+    #[prost(uint64, tag = "27")]
+    pub last_ds_final_block_height: u64,
     #[prost(message, optional, tag = "28")]
+    pub last_ds_final_block: ::core::option::Option<CryptoHash>,
+    #[prost(message, optional, tag = "29")]
+    pub next_bp_hash: ::core::option::Option<CryptoHash>,
+    #[prost(message, optional, tag = "30")]
     pub block_merkle_root: ::core::option::Option<CryptoHash>,
-    #[prost(bytes = "vec", tag = "29")]
+    #[prost(bytes = "vec", tag = "31")]
     pub epoch_sync_data_hash: ::prost::alloc::vec::Vec<u8>,
-    #[prost(message, repeated, tag = "30")]
+    #[prost(message, repeated, tag = "32")]
     pub approvals: ::prost::alloc::vec::Vec<Signature>,
-    #[prost(message, optional, tag = "31")]
+    #[prost(message, optional, tag = "33")]
     pub signature: ::core::option::Option<Signature>,
-    #[prost(uint32, tag = "32")]
+    #[prost(uint32, tag = "34")]
     pub latest_protocol_version: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
