@@ -246,7 +246,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
             },
             ExecutionStatusView::SuccessValue(v) => execution_outcome::Status::SuccessValue {
                 0: SuccessValueExecutionStatus {
-                    value: Vec::from(v),
+                    value: base64::decode(v.as_str()).unwrap(),
                 },
             },
             ExecutionStatusView::SuccessReceiptId(v) => {
@@ -505,7 +505,7 @@ impl From<near_views::ActionView> for Action {
             near_views::ActionView::DeployContract { code } => Action {
                 action: Some(action::Action::DeployContract {
                     0: DeployContractAction {
-                        code: Vec::from(code),
+                        code: base64::decode(code.as_str()).unwrap(),
                     },
                 }),
             },
@@ -518,7 +518,7 @@ impl From<near_views::ActionView> for Action {
                 action: Some(action::Action::FunctionCall {
                     0: FunctionCallAction {
                         method_name,
-                        args: Vec::from(args),
+                        args: base64::decode(args.as_str()).unwrap(),
                         gas,
                         deposit: Some(BigInt::from(deposit)),
                     },

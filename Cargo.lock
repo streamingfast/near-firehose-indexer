@@ -2460,6 +2460,7 @@ name = "near-dm-indexer"
 version = "0.1.0"
 dependencies = [
  "actix",
+ "base64 0.11.0",
  "clap",
  "hex",
  "near-crypto 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
