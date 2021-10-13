@@ -477,8 +477,8 @@ pub mod execution_outcome {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuccessValueExecutionStatus {
-    #[prost(string, tag = "1")]
-    pub value: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "1")]
+    pub value: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuccessReceiptIdExecutionStatus {
@@ -694,15 +694,15 @@ pub mod action {
 pub struct CreateAccountAction {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeployContractAction {
-    #[prost(string, tag = "1")]
-    pub code: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "1")]
+    pub code: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FunctionCallAction {
     #[prost(string, tag = "1")]
     pub method_name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub args: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "2")]
+    pub args: ::prost::alloc::vec::Vec<u8>,
     #[prost(uint64, tag = "3")]
     pub gas: u64,
     #[prost(message, optional, tag = "4")]
