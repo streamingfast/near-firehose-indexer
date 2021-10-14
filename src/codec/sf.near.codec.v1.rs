@@ -224,32 +224,28 @@ pub struct BlockHeader {
     #[prost(uint64, tag = "20")]
     pub block_ordinal: u64,
     #[prost(message, optional, tag = "21")]
-    pub rent_paid: ::core::option::Option<BigInt>,
-    #[prost(message, optional, tag = "22")]
-    pub validator_reward: ::core::option::Option<BigInt>,
-    #[prost(message, optional, tag = "23")]
     pub total_supply: ::core::option::Option<BigInt>,
-    #[prost(message, repeated, tag = "24")]
+    #[prost(message, repeated, tag = "22")]
     pub challenges_result: ::prost::alloc::vec::Vec<SlashedValidator>,
-    #[prost(uint64, tag = "25")]
+    #[prost(uint64, tag = "23")]
     pub last_final_block_height: u64,
-    #[prost(message, optional, tag = "26")]
+    #[prost(message, optional, tag = "24")]
     pub last_final_block: ::core::option::Option<CryptoHash>,
-    #[prost(uint64, tag = "27")]
+    #[prost(uint64, tag = "25")]
     pub last_ds_final_block_height: u64,
-    #[prost(message, optional, tag = "28")]
+    #[prost(message, optional, tag = "26")]
     pub last_ds_final_block: ::core::option::Option<CryptoHash>,
-    #[prost(message, optional, tag = "29")]
+    #[prost(message, optional, tag = "27")]
     pub next_bp_hash: ::core::option::Option<CryptoHash>,
-    #[prost(message, optional, tag = "30")]
+    #[prost(message, optional, tag = "28")]
     pub block_merkle_root: ::core::option::Option<CryptoHash>,
-    #[prost(bytes = "vec", tag = "31")]
+    #[prost(bytes = "vec", tag = "29")]
     pub epoch_sync_data_hash: ::prost::alloc::vec::Vec<u8>,
-    #[prost(message, repeated, tag = "32")]
+    #[prost(message, repeated, tag = "30")]
     pub approvals: ::prost::alloc::vec::Vec<Signature>,
-    #[prost(message, optional, tag = "33")]
+    #[prost(message, optional, tag = "31")]
     pub signature: ::core::option::Option<Signature>,
-    #[prost(uint32, tag = "34")]
+    #[prost(uint32, tag = "32")]
     pub latest_protocol_version: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

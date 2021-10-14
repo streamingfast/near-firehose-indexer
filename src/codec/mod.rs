@@ -62,8 +62,6 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             chunk_mask: h.chunk_mask.clone(),
             gas_price: Some(BigInt::from(h.gas_price)),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
-            rent_paid: Some(BigInt::from(h.rent_paid)),
-            validator_reward: Some(BigInt::from(h.validator_reward)),
             total_supply: Some(BigInt::from(h.total_supply)),
             challenges_result: challenges_result
                 .into_iter()
