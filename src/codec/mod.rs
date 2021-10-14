@@ -24,8 +24,7 @@ impl From<&near_indexer::StreamerMessage> for Block {
             chunk_headers: sm
                 .block
                 .chunks
-                .clone()
-                .into_iter()
+                .iter()
                 .map(|ch| ChunkHeader::from(ch))
                 .collect(),
             state_changes: vec![],
@@ -88,15 +87,13 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
 
 impl From<&near_indexer::IndexerShard> for IndexerShard {
     fn from(is: &near_indexer::IndexerShard) -> Self {
-        let id = is.shard_id;
-
         let chunk: Option<IndexerChunk> = match &is.chunk {
             None => None,
             Some(c) => Some(IndexerChunk::from(c)),
         };
 
         IndexerShard {
-            shard_id: id,
+            shard_id: is.shard_id,
             chunk,
             receipt_execution_outcomes: is
                 .receipt_execution_outcomes
@@ -174,7 +171,7 @@ impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
     fn from(s: &near_indexer::IndexerChunkView) -> Self {
         IndexerChunk {
             author: s.author.to_string(),
-            header: Some(ChunkHeader::from(s.header.clone())),
+            header: Some(ChunkHeader::from(&s.header)),
             transactions: s
                 .transactions
                 .iter()
@@ -604,8 +601,8 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
     }
 }
 
-impl From<near_views::ChunkHeaderView> for ChunkHeader {
-    fn from(ch: near_views::ChunkHeaderView) -> Self {
+impl From<&near_views::ChunkHeaderView> for ChunkHeader {
+    fn from(ch: &near_views::ChunkHeaderView) -> Self {
         let validator_proposals = &ch.validator_proposals;
 
         ChunkHeader {
