@@ -74,8 +74,13 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             next_bp_hash: Some(CryptoHash::from(h.next_bp_hash)),
             block_merkle_root: Some(CryptoHash::from(h.block_merkle_root)),
             epoch_sync_data_hash: vec![], //todo: this is v3 feature, what that means?
-            approvals: vec![], //todo: need to find a way to make Signature::from work with near_crypto::Signature
-            signature: None, //todo: need to find a way to make Signature::from work with near_crypto::Signature
+            approvals: h
+                .clone()
+                .approvals
+                .into_iter()
+                .map(|s| s.unwrap().into())
+                .collect(),
+            signature: Some(h.signature.clone().into()),
             latest_protocol_version: h.latest_protocol_version,
         }
     }
@@ -132,7 +137,7 @@ impl From<near_views::ReceiptView> for Receipt {
                 } => Some(receipt::Receipt::Action {
                     0: ReceiptAction {
                         signer_id: signer_id.to_string(),
-                        signer_public_key: Some(PublicKey::from(signer_public_key.key_data())),
+                        signer_public_key: Some(PublicKey::from(signer_public_key)),
                         gas_price: Some(BigInt::from(gas_price)),
                         output_data_receivers: output_data_receivers
                             .into_iter()
@@ -231,7 +236,7 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
             tokens_burnt: Some(BigInt::from(o.tokens_burnt)),
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
-            //todo: meta data
+            //todo: metadata
         }
     }
 }
@@ -313,9 +318,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::DeleteKeyDoesNotExist {
                                             0: DeleteKeyDoesNotExistErrorKind {
                                                 account_id: account_id.to_string(),
-                                                public_key: Some(PublicKey::from(
-                                                    public_key.key_data(),
-                                                )),
+                                                public_key: Some(PublicKey::from(public_key)),
                                             },
                                         },
                                         ActionErrorKind::AddKeyAlreadyExists {
@@ -324,9 +327,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::AddKeyAlreadyExists {
                                             0: AddKeyAlreadyExistsErrorKind {
                                                 account_id: account_id.to_string(),
-                                                public_key: Some(PublicKey::from(
-                                                    public_key.key_data(),
-                                                )),
+                                                public_key: Some(PublicKey::from(public_key)),
                                             },
                                         },
                                         ActionErrorKind::DeleteAccountStaking { .. } => {
@@ -482,11 +483,11 @@ impl From<near_views::SignedTransactionView> for SignedTransaction {
     fn from(tx: near_views::SignedTransactionView) -> Self {
         SignedTransaction {
             signer_id: tx.signer_id.to_string(),
-            public_key: Some(PublicKey::from(tx.public_key.key_data())),
+            public_key: Some(PublicKey::from(tx.public_key)),
             nonce: tx.nonce,
             receiver_id: tx.receiver_id.to_string(),
             actions: tx.actions.into_iter().map(|a| Action::from(a)).collect(),
-            signature: None, //todo: need to find a way to make Signature::from work with near_crypto::Signature,
+            signature: Some(tx.signature.into()),
             hash: Some(CryptoHash::from(tx.hash)),
         }
     }
@@ -533,7 +534,7 @@ impl From<near_views::ActionView> for Action {
                 action: Some(action::Action::Stake {
                     0: StakeAction {
                         stake: Some(BigInt::from(stake)),
-                        public_key: Some(PublicKey::from(public_key.key_data())),
+                        public_key: Some(PublicKey::from(public_key)),
                     },
                 }),
             },
@@ -543,7 +544,7 @@ impl From<near_views::ActionView> for Action {
             } => Action {
                 action: Some(action::Action::AddKey {
                     0: AddKeyAction {
-                        public_key: Some(PublicKey::from(public_key.key_data())),
+                        public_key: Some(PublicKey::from(public_key)),
                         access_key: Some(AccessKey::from(access_key)),
                     },
                 }),
@@ -551,7 +552,7 @@ impl From<near_views::ActionView> for Action {
             near_views::ActionView::DeleteKey { public_key } => Action {
                 action: Some(action::Action::DeleteKey {
                     0: DeleteKeyAction {
-                        public_key: Some(PublicKey::from(public_key.key_data())),
+                        public_key: Some(PublicKey::from(public_key)),
                     },
                 }),
             },
@@ -627,22 +628,43 @@ impl From<near_views::ChunkHeaderView> for ChunkHeader {
                 .into_iter()
                 .map(|vp| ValidatorStake::from(vp))
                 .collect(),
-            signature: None, //todo: need to find a way to make Signature::from work with near_crypto::Signature
+            signature: Some(ch.signature.into()),
         }
     }
 }
 
-impl From<near_crypto::Signature> for Signature {
-    fn from(sign: near_crypto::Signature) -> Self {
+impl From<near_crypto::signature::Signature> for Signature {
+    fn from(sign: near_crypto::signature::Signature) -> Self {
         match sign {
-            near_crypto::Signature::ED25519(s) => Signature {
-                r#type: SignatureType::Ed25519.into(),
+            near_crypto::signature::Signature::ED25519(s) => Signature {
+                r#type: CurveKind::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
             } as Signature,
-            near_crypto::Signature::SECP256K1(s) => {
+            near_crypto::signature::Signature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {
-                    r#type: SignatureType::Secp256k1.into(),
+                    r#type: CurveKind::Secp256k1.into(),
+                    bytes: data,
+                }
+            }
+        }
+    }
+}
+
+impl From<near_crypto::signature::PublicKey> for PublicKey {
+    fn from(key: near_crypto::signature::PublicKey) -> Self {
+        match key {
+            near_crypto::signature::PublicKey::ED25519(s) => {
+                let data = Vec::from(<[u8; 32]>::from(s));
+                PublicKey {
+                    r#type: CurveKind::Ed25519.into(),
+                    bytes: data,
+                }
+            }
+            near_crypto::signature::PublicKey::SECP256K1(s) => {
+                let data = Vec::from(<[u8; 64]>::from(s));
+                PublicKey {
+                    r#type: CurveKind::Secp256k1.into(),
                     bytes: data,
                 }
             }
@@ -663,7 +685,7 @@ impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for
     fn from(sv: &near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
         ValidatorStake {
             account_id: sv.account_id.to_string(),
-            public_key: Some(PublicKey::from(sv.public_key.key_data())),
+            public_key: Some(PublicKey::from(sv.public_key.clone())),
             stake: Some(BigInt::from(sv.stake)),
         }
     }
@@ -673,14 +695,6 @@ impl From<u128> for BigInt {
     fn from(i: u128) -> Self {
         BigInt {
             bytes: Vec::from(i.to_be_bytes()),
-        }
-    }
-}
-
-impl From<&[u8]> for PublicKey {
-    fn from(data: &[u8]) -> Self {
-        PublicKey {
-            bytes: Vec::from(data),
         }
     }
 }

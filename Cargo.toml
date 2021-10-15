@@ -20,7 +20,9 @@ tracing = "0.1.13"
 tracing-subscriber = "0.2.4"
 
 near-indexer = { git = "https://github.com/streamingfast/nearcore", branch="feature/final_block_height_1_21_1" } # base on 1.21.0
-near-crypto = "0.1.0"
+#near-indexer = { path = "/home/colin/code/dfuse/nearcore/chain/indexer" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", branch="feature/final_block_height_1_21_1" } # base on 1.21.0
+#near-crypto = { path = "/home/colin/code/dfuse/nearcore/core/crypto" }
 
 prost = "0.8"
 prost-types = "0.8"
