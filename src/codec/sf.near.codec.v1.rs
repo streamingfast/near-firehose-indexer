@@ -456,6 +456,8 @@ pub struct ExecutionOutcome {
     pub tokens_burnt: ::core::option::Option<BigInt>,
     #[prost(string, tag = "5")]
     pub executor_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "ExecutionMetadata", tag = "6")]
+    pub metadata: i32,
     #[prost(oneof = "execution_outcome::Status", tags = "20, 21, 22, 23")]
     pub status: ::core::option::Option<execution_outcome::Status>,
 }
@@ -773,6 +775,11 @@ pub struct FullAccessPermission {}
 pub enum CurveKind {
     Ed25519 = 0,
     Secp256k1 = 1,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ExecutionMetadata {
+    V1 = 0,
 }
 ///todo: half baked
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

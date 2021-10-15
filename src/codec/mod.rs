@@ -233,7 +233,11 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
             tokens_burnt: Some(BigInt::from(o.tokens_burnt)),
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
-            //todo: metadata
+            metadata: match o.metadata {
+                near_primitives::transaction::ExecutionMetadata::ExecutionMetadataV1 => {
+                    ExecutionMetadata::V1.into()
+                }
+            },
         }
     }
 }
