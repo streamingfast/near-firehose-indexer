@@ -629,7 +629,7 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
                 .into_iter()
                 .map(|vp| ValidatorStake::from(vp))
                 .collect(),
-            signature: Some(ch.signature.into()),
+            signature: Some(ch.signature.clone().into()),
         }
     }
 }
