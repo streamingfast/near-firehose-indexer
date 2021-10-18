@@ -378,14 +378,61 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                 minimum_stake: Some(BigInt::from(minimum_stake)),
                                             },
                                         },
-                                        ActionErrorKind::FunctionCallError(_) => {
+                                        ActionErrorKind::FunctionCallError(fce) => {
                                             action_error::Kind::FunctionCall {
-                                                0: FunctionCallErrorKind {},
+                                                0: FunctionCallErrorKind { error: match fce {
+                                                    near_vm_errors::FunctionCallErrorSer::CompilationError(_) => {
+                                                        FunctionCallErrorSer::CompilationError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::LinkError { .. } => {
+                                                        FunctionCallErrorSer::LinkError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::MethodResolveError(_) => {
+                                                        FunctionCallErrorSer::MethodResolveError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::WasmTrap(_) => {
+                                                        FunctionCallErrorSer::WasmTrap.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::WasmUnknownError => {
+                                                        FunctionCallErrorSer::WasmUnknownError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::HostError(_) => {
+                                                        FunctionCallErrorSer::HostError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::_EVMError => {
+                                                        FunctionCallErrorSer::EvmError.into()
+                                                    }
+                                                    near_vm_errors::FunctionCallErrorSer::ExecutionError(_) => {
+                                                        FunctionCallErrorSer::ExecutionError.into()
+                                                    }
+                                                } },
                                             }
                                         }
-                                        ActionErrorKind::NewReceiptValidationError(..) => {
+                                        ActionErrorKind::NewReceiptValidationError(rve) => {
                                             action_error::Kind::NewReceiptValidation {
-                                                0: NewReceiptValidationErrorKind {},
+                                                0: NewReceiptValidationErrorKind { error: match rve {
+                                                    near_errors::ReceiptValidationError::InvalidPredecessorId { .. } => {
+                                                        ReceiptValidationError::InvalidPredecessorId.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::InvalidReceiverId { .. } => {
+                                                        ReceiptValidationError::InvalidReceiverAccountId.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::InvalidSignerId { .. } => {
+                                                        ReceiptValidationError::InvalidSignerAccountId.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::InvalidDataReceiverId { .. } => {
+                                                        ReceiptValidationError::InvalidDataReceiverId.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::ReturnedValueLengthExceeded { .. } => {
+                                                        ReceiptValidationError::ReturnedValueLengthExceeded.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::NumberInputDataDependenciesExceeded { .. } => {
+                                                        ReceiptValidationError::NumberInputDataDependenciesExceeded.into()
+                                                    }
+                                                    near_errors::ReceiptValidationError::ActionsValidation(_) => {
+                                                        ReceiptValidationError::ActionsValidationError.into()
+                                                    }
+                                                }}
                                             }
                                         }
                                         ActionErrorKind::OnlyImplicitAccountCreationAllowed {

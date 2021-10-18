@@ -638,9 +638,15 @@ pub struct InsufficientStakeErrorKind {
     pub minimum_stake: ::core::option::Option<BigInt>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FunctionCallErrorKind {}
+pub struct FunctionCallErrorKind {
+    #[prost(enumeration = "FunctionCallErrorSer", tag = "1")]
+    pub error: i32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NewReceiptValidationErrorKind {}
+pub struct NewReceiptValidationErrorKind {
+    #[prost(enumeration = "ReceiptValidationError", tag = "1")]
+    pub error: i32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OnlyImplicitAccountCreationAllowedErrorKind {
     #[prost(string, tag = "1")]
@@ -781,7 +787,32 @@ pub enum CurveKind {
 pub enum ExecutionMetadata {
     V1 = 0,
 }
-///todo: half baked
+///todo: add more detail?
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FunctionCallErrorSer {
+    CompilationError = 0,
+    LinkError = 1,
+    MethodResolveError = 2,
+    WasmTrap = 3,
+    WasmUnknownError = 4,
+    HostError = 5,
+    EvmError = 6,
+    ExecutionError = 7,
+}
+///todo: add more detail?
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ReceiptValidationError {
+    InvalidPredecessorId = 0,
+    InvalidReceiverAccountId = 1,
+    InvalidSignerAccountId = 2,
+    InvalidDataReceiverId = 3,
+    ReturnedValueLengthExceeded = 4,
+    NumberInputDataDependenciesExceeded = 5,
+    ActionsValidationError = 6,
+}
+///todo: add more detail?
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum InvalidTxError {

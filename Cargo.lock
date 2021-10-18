@@ -2440,6 +2440,7 @@ dependencies = [
  "hex",
  "near-crypto",
  "near-indexer",
+ "near-vm-errors",
  "openssl-probe",
  "prost",
  "prost-types",
