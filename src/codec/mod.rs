@@ -8,7 +8,7 @@ use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
-    DataReceiverView, ExecutionStatusView, ExecutionMetadataView, ReceiptEnumView,
+    DataReceiverView, ExecutionMetadataView, ExecutionStatusView, ReceiptEnumView,
 };
 use near_indexer::StreamerMessage;
 
@@ -77,7 +77,10 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
                 .clone()
                 .approvals
                 .into_iter()
-                .map(|s| s.unwrap().into())
+                .filter_map(|s| match s {
+                    None => { None }
+                    Some(sig) => { Some(sig.into()) }
+                })
                 .collect(),
             signature: Some(h.signature.clone().into()),
             latest_protocol_version: h.latest_protocol_version,
@@ -234,9 +237,7 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
             metadata: match o.metadata {
-                ExecutionMetadataView { .. } => {
-                    ExecutionMetadata::V1.into()
-                }
+                ExecutionMetadataView { .. } => ExecutionMetadata::V1.into(),
             },
         }
     }

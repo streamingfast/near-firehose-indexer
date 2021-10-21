@@ -540,10 +540,8 @@ pub mod action_error {
         TriesToStake(super::TriesToStakeErrorKind),
         #[prost(message, tag = "32")]
         InsufficientStake(super::InsufficientStakeErrorKind),
-        ///todo: uncompleted
         #[prost(message, tag = "33")]
         FunctionCall(super::FunctionCallErrorKind),
-        ///todo: uncompleted
         #[prost(message, tag = "34")]
         NewReceiptValidation(super::NewReceiptValidationErrorKind),
         #[prost(message, tag = "35")]
