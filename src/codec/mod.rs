@@ -8,7 +8,7 @@ use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
-    DataReceiverView, ExecutionStatusView, ReceiptEnumView,
+    DataReceiverView, ExecutionStatusView, ExecutionMetadataView, ReceiptEnumView,
 };
 use near_indexer::StreamerMessage;
 
@@ -234,7 +234,7 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
             metadata: match o.metadata {
-                near_primitives::transaction::ExecutionMetadata::ExecutionMetadataV1 => {
+                ExecutionMetadataView { .. } => {
                     ExecutionMetadata::V1.into()
                 }
             },
