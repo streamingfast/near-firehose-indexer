@@ -337,7 +337,7 @@ pub struct IndexerShard {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct IndexerExecutionOutcomeWithReceipt {
     #[prost(message, optional, tag = "1")]
-    pub execution_outcome: ::core::option::Option<ExecutionOutcomeWithIdView>,
+    pub execution_outcome: ::core::option::Option<ExecutionOutcomeWithId>,
     #[prost(message, optional, tag = "2")]
     pub receipt: ::core::option::Option<Receipt>,
 }
@@ -379,7 +379,7 @@ pub struct SignedTransaction {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct IndexerExecutionOutcomeWithOptionalReceipt {
     #[prost(message, optional, tag = "1")]
-    pub execution_outcome: ::core::option::Option<ExecutionOutcomeWithIdView>,
+    pub execution_outcome: ::core::option::Option<ExecutionOutcomeWithId>,
     #[prost(message, optional, tag = "2")]
     pub receipt: ::core::option::Option<Receipt>,
 }
@@ -434,7 +434,7 @@ pub struct DataReceiver {
     pub receiver_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ExecutionOutcomeWithIdView {
+pub struct ExecutionOutcomeWithId {
     #[prost(message, optional, tag = "1")]
     pub proof: ::core::option::Option<MerklePath>,
     #[prost(message, optional, tag = "2")]

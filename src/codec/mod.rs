@@ -112,7 +112,7 @@ impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
 {
     fn from(r: &near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
         IndexerExecutionOutcomeWithReceipt {
-            execution_outcome: Some(ExecutionOutcomeWithIdView::from(
+            execution_outcome: Some(ExecutionOutcomeWithId::from(
                 r.execution_outcome.clone(),
             )),
             receipt: Some(Receipt::from(r.receipt.clone())),
@@ -204,7 +204,7 @@ impl From<near_indexer::IndexerExecutionOutcomeWithOptionalReceipt>
 {
     fn from(o: near_indexer::IndexerExecutionOutcomeWithOptionalReceipt) -> Self {
         IndexerExecutionOutcomeWithOptionalReceipt {
-            execution_outcome: Some(ExecutionOutcomeWithIdView::from(o.execution_outcome)),
+            execution_outcome: Some(ExecutionOutcomeWithId::from(o.execution_outcome)),
             receipt: match o.receipt {
                 None => None,
                 Some(r) => Some(Receipt::from(r)),
@@ -212,9 +212,9 @@ impl From<near_indexer::IndexerExecutionOutcomeWithOptionalReceipt>
         }
     }
 }
-impl From<near_views::ExecutionOutcomeWithIdView> for ExecutionOutcomeWithIdView {
+impl From<near_views::ExecutionOutcomeWithIdView> for ExecutionOutcomeWithId {
     fn from(o: near_views::ExecutionOutcomeWithIdView) -> Self {
-        ExecutionOutcomeWithIdView {
+        ExecutionOutcomeWithId {
             proof: Some(MerklePath::from(o.proof)),
             block_hash: Some(CryptoHash::from(o.block_hash)),
             id: Some(CryptoHash::from(o.id)),
