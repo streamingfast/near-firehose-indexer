@@ -78,8 +78,8 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
                 .approvals
                 .into_iter()
                 .filter_map(|s| match s {
-                    None => { None }
-                    Some(sig) => { Some(sig.into()) }
+                    None => None,
+                    Some(sig) => Some(sig.into()),
                 })
                 .collect(),
             signature: Some(h.signature.clone().into()),
