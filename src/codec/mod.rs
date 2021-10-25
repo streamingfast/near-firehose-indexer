@@ -112,9 +112,7 @@ impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
 {
     fn from(r: &near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
         IndexerExecutionOutcomeWithReceipt {
-            execution_outcome: Some(ExecutionOutcomeWithId::from(
-                r.execution_outcome.clone(),
-            )),
+            execution_outcome: Some(ExecutionOutcomeWithId::from(r.execution_outcome.clone())),
             receipt: Some(Receipt::from(r.receipt.clone())),
         }
     }
