@@ -18,7 +18,7 @@ tokio = { version = "1.1", features = ["sync"] }
 tracing = "0.1.13"
 tracing-subscriber = "0.2.4"
 
-near-indexer = { git = "https://github.com/near/nearcore", rev="4dbc9f8bbe88c8d2b64a557ecae285fbe568710f" } # 1.21.1 september 8th
+near-indexer = { git = "https://github.com/near/nearcore", rev="5a6fb2bd28eca69d38a1f85e7f5fe520cdedbca5" } # 1.22.0
 near-crypto = "0.1.0"
 
 prost = "0.8"
