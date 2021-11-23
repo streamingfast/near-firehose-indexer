@@ -15,6 +15,7 @@ use near_indexer::StreamerMessage;
 use hex;
 use std::fmt::{Display, Formatter};
 use near_indexer::near_primitives::types::BlockHeight;
+use near_indexer::near_primitives::views::validator_stake_view::ValidatorStakeView;
 
 impl From<&near_indexer::StreamerMessage> for Block {
     fn from(sm: &StreamerMessage) -> Self {
@@ -734,11 +735,16 @@ impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
 
 impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
     fn from(sv: &near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
-        ValidatorStake {
-            account_id: sv.account_id.to_string(),
-            public_key: Some(PublicKey::from(sv.public_key.clone())),
-            stake: Some(BigInt::from(sv.stake)),
+        match sv {
+            near_primitives::views::validator_stake_view::ValidatorStakeView::V1(v) => {
+                ValidatorStake {
+                    account_id: v.account_id.to_string(),
+                    public_key: Some(PublicKey::from(v.public_key.clone())),
+                    stake: Some(BigInt::from(v.stake)),
+                }
+            }
         }
+
     }
 }
 
