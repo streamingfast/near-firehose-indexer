@@ -19,9 +19,15 @@ tokio = { version = "1.1", features = ["sync"] }
 tracing = "0.1.13"
 tracing-subscriber = "0.2.4"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff"} # branch="feature/final_block_height_1_22_0"
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff" } # branch="feature/final_block_height_1_22_0"
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff" } # branch="feature/final_block_height_1_22_0"
+near-store = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"] } # branch="feature/final_block_height_1_22_0"
+near-chain = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"] } # branch="feature/final_block_height_1_22_0"
+near-primitives = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"]}
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82"} # branch="feature/final_block_height_1_22_0"
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82" } # branch="feature/final_block_height_1_22_0"
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82" } # branch="feature/final_block_height_1_22_0"
+near-epoch-manager = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"] } # branch="feature/final_block_height_1_22_0"
+near-client = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"] } # branch="feature/final_block_height_1_22_0"
+nearcore = { git = "https://github.com/streamingfast/nearcore", rev="bd363ff82", features = ["protocol_feature_block_header_v3"]} # branch="feature/final_block_height_1_22_0"
 
 prost = "0.8"
 prost-types = "0.8"
@@ -29,3 +35,6 @@ tonic = "0.5.0"
 
 [build-dependencies]
 tonic-build = "0.5.0"
+
+[features]
+default = ["nearcore/protocol_feature_block_header_v3", "near-primitives/protocol_feature_block_header_v3", "near-chain/protocol_feature_block_header_v3", "near-store/protocol_feature_block_header_v3", "near-epoch-manager/protocol_feature_block_header_v3", "near-client/protocol_feature_block_header_v3"]
