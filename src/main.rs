@@ -22,7 +22,7 @@ fn main() {
         .unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
 
 
-    let mut sync_mode = near_indexer::SyncModeEnum::LatestSynced;
+    let mut sync_mode = near_indexer::SyncModeEnum::FromInterruption;
     let start_block = opts.start_block.unwrap_or(0);
     if start_block > 0 {
         sync_mode = near_indexer::SyncModeEnum::BlockHeight(start_block)
