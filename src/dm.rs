@@ -13,7 +13,7 @@ pub fn on_block(block: &codec::Block) {
         block.shards.iter().map(|shard| shard.receipt_execution_outcomes.len()).sum::<usize>(),
     );
 
-    record_block(block);
+    // record_block(block);
 }
 
 fn record_block(block: &codec::Block) {
