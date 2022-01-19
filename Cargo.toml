@@ -33,9 +33,9 @@ prost = "0.8"
 prost-types = "0.8"
 tonic = "0.5.0"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="7733db6debae7e9e9cd8109ad75391f75f76f24b" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="7733db6debae7e9e9cd8109ad75391f75f76f24b" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="7733db6debae7e9e9cd8109ad75391f75f76f24b" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="3373d2607b42cd47493c43269d1d89d6ab0071e0" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="3373d2607b42cd47493c43269d1d89d6ab0071e0" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="3373d2607b42cd47493c43269d1d89d6ab0071e0" }
 
 
 [build-dependencies]
