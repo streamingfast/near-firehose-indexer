@@ -1,8 +1,10 @@
 use clap::Clap;
 
+const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
+
 #[derive(Clap, Debug)]
 #[clap(
-    version = "0.1",
+    version = VERSION.unwrap_or("unknown"),
     author = "StreamingFast Developers <dev@streamingfast.io>"
 )]
 pub(crate) struct Opts {

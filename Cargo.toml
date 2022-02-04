@@ -4,7 +4,7 @@ members = ["deepmind-pb"]
 [package]
 name = "near-dm-indexer"
 version = "1.24.0-rc.3"
-authors = ["billettc <charles@cbillette.com>"]
+authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
