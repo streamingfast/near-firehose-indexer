@@ -3,7 +3,7 @@ members = ["deepmind-pb"]
 
 [package]
 name = "near-dm-indexer"
-version = "1.24.0-rc.3"
+version = "1.24.0-rc.3.1"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
@@ -33,9 +33,9 @@ prost = "0.8"
 prost-types = "0.8"
 tonic = "0.5.0"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="0d1369e999c67cd4cae9d448d536814ecd1f9f9d" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="0d1369e999c67cd4cae9d448d536814ecd1f9f9d" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="0d1369e999c67cd4cae9d448d536814ecd1f9f9d" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="155ba7381b518670e1ec60ff8ce1ba94740bed71" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="155ba7381b518670e1ec60ff8ce1ba94740bed71" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="155ba7381b518670e1ec60ff8ce1ba94740bed71" }
 
 
 [build-dependencies]
