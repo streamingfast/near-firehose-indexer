@@ -35,12 +35,19 @@ jobs:
             ~/.cargo/git
           key: release-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.toml') }}
 
+      - name: Check Packages
+        run: |
+          echo "Clang which: `which clang`"
+          apt-get install libclang-dev
+          rustup toolchain list
+          rustup target list
+
       - name: Build target
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --release --target ${{ matrix.target }}
+          args: --release
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
