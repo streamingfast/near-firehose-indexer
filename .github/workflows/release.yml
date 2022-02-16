@@ -49,28 +49,29 @@ jobs:
         with:
           path: |
             ./llvm
-          key: llvm-3.9
+          key: llvm-10
+
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
-          version: "3.9"
+          version: "10"
           cached: ${{ steps.cache-llvm.outputs.cache-hit }}
 
       - name: Check LLVM
+        env:
+          LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
         run: |
           echo "Clang which: `which clang`"
-          ls ${{ env.LLVM_PATH }}/lib
-
-      - name: Symlink libclang.so (Linux)
-        if: contains(matrix.os, 'ubuntu')
-        run: sudo ln -s libclang-10.so.1 /lib/x86_64-linux-gnu/libclang.so
-        working-directory: ${{ env.LLVM_PATH }}/lib
+          ls /usr/local/bin/llvm-*
+          ls /usr/lib/x86_64-linux-gnu/libclang*
+          ls ${{ env.LLVM_PATH }}
+          file ${{ env.LLVM_PATH }}/lib/libclang.so
 
       - name: Build target
         uses: actions-rs/cargo@v1
         env:
-          LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
+          LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib/libclang.so
         with:
           use-cross: true
           command: build
