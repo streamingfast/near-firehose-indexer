@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         rust: [stable]
-        target: [x86_64-unknown-linux-gnu]
 
     steps:
       - name: Checkout Code
@@ -25,7 +24,6 @@ jobs:
           toolchain: ${{ matrix.rust }}
           components: rustfmt
           override: true
-          target: ${{ matrix.target }}
 
       - uses: actions/cache@v2
         name: Cache cargo registry
@@ -33,15 +31,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: release-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.toml') }}
-
-      # - name: Check Packages
-      #   run: |
-      #     echo "Clang which: `which clang`"
-      #     #sudo apt-get install -y libclang-dev
-      #     #sudo ln -s /usr/lib/x86_64-linux-gnu/libclang-10.so.1 /usr/lib/libclang-10.so
-      #     rustup toolchain list
-      #     rustup target list
+          key: release-cargo-${{ hashFiles('**/Cargo.toml') }}
 
       - name: Cache LLVM and Clang
         uses: actions/cache@v2
@@ -57,27 +47,23 @@ jobs:
           version: "10"
           cached: ${{ steps.cache-llvm.outputs.cache-hit }}
 
-      # - name: Check LLVM
-      #   env:
-      #     LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
-      #   run: |
-      #     set +e
-      #     echo "Clang which: `which clang`"
-      #     ls /usr/lib/x86_64-linux-gnu/libclang*
-      #     ls ${{ env.LLVM_PATH }}
-      #     file ${{ env.LLVM_PATH }}/lib/libclang.so
-
       - name: Build target
         uses: actions-rs/cargo@v1
         with:
+          # We cannot use `cross` tool right now. The reason is that we require some
+          # local libraries, `libclang.so` specifically. The `cross` tool runs a Docker
+          # container which does not have the library in question. We will need to wait to
+          # have support of https://github.com/cross-rs/cross/pull/635 to be able to cross
+          # compile properly.
+          # use-cross: true
           command: build
           args: --release
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
-          name: linux-${{ matrix.target }}
-          path: ./target/${{ matrix.target }}/release/near-dm-indexer
+          name: linux-x86_64-unknown-linux-gnu
+          path: ./target/release/near-dm-indexer
 
   release:
     name: Release
