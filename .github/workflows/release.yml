@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    name: Build Release
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust: [stable]
+        target: [x86_64-unknown-linux-gnu]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          components: rustfmt
+          override: true
+          target: ${{ matrix.target }}
+
+      - uses: actions/cache@v2
+        name: Cache cargo registry
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: release-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-${{ matrix.target }}
+          path: ./target/${{ matrix.target }}/release/near-dm-indexer
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set Env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Generate Change Log
+        id: changelog
+        run: |
+          chmod 755 ./.github/generate_change_log.sh
+          CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION}})
+
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            ${{ env.CHANGELOG }}
+          draft: false
+          prerelease: false
+
+      - name: Download Artifacts (x86_64-unknown-linux-gnu)
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-x86_64-unknown-linux-gnu
+          path: ./linux-x86_64-unknown-linux-gnu
+
+      - name: Check Downloaded Files
+        run: ls
+
+      - name: Upload Release Asset - Linux x86_64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./linux-x86_64-unknown-linux-gnu
+          asset_name: near-dm-indexer-linux-x86-64
+          asset_content_type: application/octet-stream
