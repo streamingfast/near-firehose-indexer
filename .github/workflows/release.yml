@@ -38,7 +38,7 @@ jobs:
       - name: Check Packages
         run: |
           echo "Clang which: `which clang`"
-          apt-get install libclang-dev
+          sudo apt-get install -y libclang-dev
           rustup toolchain list
           rustup target list
 
