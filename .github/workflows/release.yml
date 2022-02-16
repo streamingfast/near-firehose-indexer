@@ -38,12 +38,16 @@ jobs:
       - name: Check Packages
         run: |
           echo "Clang which: `which clang`"
+          ls /usr/lib/x86_64-linux-gnu/
           sudo apt-get install -y libclang-dev
+          sudo ln -s /usr/lib/x86_64-linux-gnu/libclang-10.so.1 /usr/lib/libclang-10.so
           rustup toolchain list
           rustup target list
 
       - name: Build target
         uses: actions-rs/cargo@v1
+        env:
+          LIBCLANG_PATH: /usr/lib/llvm-10/lib
         with:
           use-cross: true
           command: build
