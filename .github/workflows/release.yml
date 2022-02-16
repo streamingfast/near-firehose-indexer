@@ -51,29 +51,25 @@ jobs:
             ./llvm
           key: llvm-10
 
-
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: "10"
           cached: ${{ steps.cache-llvm.outputs.cache-hit }}
 
-      - name: Check LLVM
-        env:
-          LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
-        run: |
-          set +e
-          echo "Clang which: `which clang`"
-          ls /usr/lib/x86_64-linux-gnu/libclang*
-          ls ${{ env.LLVM_PATH }}
-          file ${{ env.LLVM_PATH }}/lib/libclang.so
+      # - name: Check LLVM
+      #   env:
+      #     LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
+      #   run: |
+      #     set +e
+      #     echo "Clang which: `which clang`"
+      #     ls /usr/lib/x86_64-linux-gnu/libclang*
+      #     ls ${{ env.LLVM_PATH }}
+      #     file ${{ env.LLVM_PATH }}/lib/libclang.so
 
       - name: Build target
         uses: actions-rs/cargo@v1
-        env:
-          LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib/libclang.so
         with:
-          use-cross: true
           command: build
           args: --release
 
