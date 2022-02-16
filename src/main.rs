@@ -21,7 +21,6 @@ fn main() {
         .home
         .unwrap_or(std::path::PathBuf::from(near_indexer::get_default_home()));
 
-
     let mut sync_mode = near_indexer::SyncModeEnum::FromInterruption;
     let start_block = opts.start_block.unwrap_or(0);
     if start_block > 0 {

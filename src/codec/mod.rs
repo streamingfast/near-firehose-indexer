@@ -43,8 +43,8 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             prev_hash: Some(CryptoHash::from(h.prev_hash)),
             timestamp_nanosec: h.timestamp_nanosec,
             prev_height: match h.prev_height {
-                None => { 0 }
-                Some(ph) => { ph.into() }
+                None => 0,
+                Some(ph) => ph.into(),
             },
             epoch_id: Some(CryptoHash::from(h.epoch_id)),
             next_epoch_id: Some(CryptoHash::from(h.next_epoch_id)),
@@ -742,7 +742,6 @@ impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for
                 }
             }
         }
-
     }
 }
 
