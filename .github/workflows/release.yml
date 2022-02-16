@@ -62,8 +62,8 @@ jobs:
         env:
           LIBCLANG_PATH: ${{ env.LLVM_PATH }}/lib
         run: |
+          set +e
           echo "Clang which: `which clang`"
-          ls /usr/local/bin/llvm-*
           ls /usr/lib/x86_64-linux-gnu/libclang*
           ls ${{ env.LLVM_PATH }}
           file ${{ env.LLVM_PATH }}/lib/libclang.so
