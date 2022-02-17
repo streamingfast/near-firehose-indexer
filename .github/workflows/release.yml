@@ -95,32 +95,23 @@ jobs:
 
       - name: Sanitize Downloaded Files
         run: |
-          set +e
+          # We downloaded all the artifacts previously uploaded and we put them in
+          # the 'binaries' folder. In this folder, the layout is:
+          #
+          #  binaries
+          #  ├── linux-arm64-unknown-linux-gnu
+          #  │   └── near-dm-indexer
+          #  └── linux-x86_64-unknown-linux-gnu
+          #      └── near-dm-indexer
+          #
+          # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
+          # step. The 'near-dm-indexer' file name is the filename of the uploaded 'path' field,
+          # we used './target/release/near-dm-indexer' in the upload step so the file name here
+          # is 'near-dm-indexer'.
 
           download_path="${{steps.download-artifacts.outputs.download-path}}"
 
-          pwd
-          ls
-          echo $download_path
-          ls $download_path
-          file $download_path
-          mv "$download_path/linux-x86_64-unknown-linux-gnu" "$download_path/near-dm-indexer-x86-64"
-
-          echo "file \$download_path/near-dm-indexer-x86-64"
-          file "$download_path/near-dm-indexer-x86-64"
-          echo ""
-
-          echo "ls \$download_path"
-          ls "$download_path"
-          echo ""
-
-          echo "file \$download_path/**/*"
-          file "$download_path"/**/*
-          echo ""
-
-          echo "file \$download_path/*"
-          file "$download_path"/*
-          echo ""
+          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-dm-indexer" "$download_path/near-dm-indexer-x86_64-unknown-linux-gnu"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
