@@ -87,17 +87,24 @@ jobs:
           echo "$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Download Artifacts (x86_64-unknown-linux-gnu)
+      - name: Download All Artifacts
+        id: download-artifacts
         uses: actions/download-artifact@v2
         with:
-          name: linux-x86_64-unknown-linux-gnu
           path: ./binaries
 
       - name: Sanitize Downloaded Files
         run: |
+          set +e
+
+          download_path="${{steps.download-artifacts.outputs.download-path}}"
+
+          pwd
           ls
-          mv linux-x86_64-unknown-linux-gnu near-dm-indexer-x86-64
-        working-directory: ./binaries
+          echo $download_path
+          ls $download_path
+          file $download_path
+          mv ./binaries/linux-x86_64-unknown-linux-gnu ./binaries/near-dm-indexer-x86-64
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
