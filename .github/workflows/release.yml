@@ -81,7 +81,7 @@ jobs:
         id: changelog
         run: |
           chmod 755 ./.github/generate_change_log.sh
-          CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION}})
+          CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION }})
 
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG" >> $GITHUB_ENV
@@ -116,8 +116,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${GITHUB_REF#refs/tags/}
-          tag_name: ${GITHUB_REF#refs/tags/}
+          name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
           body: ${{ env.CHANGELOG }}
