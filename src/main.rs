@@ -39,7 +39,8 @@ fn main() {
             let system = actix::System::new();
 
             system.block_on(async move {
-                let indexer = near_indexer::Indexer::new(indexer_config);
+                let indexer =
+                    near_indexer::Indexer::new(indexer_config).expect("Failed to initiate Indexer");
                 let mut stream = indexer.streamer();
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
