@@ -10,9 +10,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix = "=0.11.0-beta.2"
+actix = "^0.13.0"
 actix-codec = "=0.4.0"
-actix_derive = "=0.6.0-beta.1"
+actix_derive = "^0.6.0"
 actix-tls = "=3.0.0-beta.6"
 actix-http = "=3.0.0-beta.6"
 actix-server = "=2.0.0-beta.6"
@@ -36,9 +36,9 @@ tonic = "0.5.0"
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.25.0-dm" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.25.0-dm" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.25.0-dm" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.26.0-rc.1-dm" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.26.0-rc.1-dm" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.26.0-rc.1-dm" }
 
 [build-dependencies]
 tonic-build = "0.5.0"
