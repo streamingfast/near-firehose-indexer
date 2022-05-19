@@ -1110,7 +1110,7 @@ dependencies = [
 [[package]]
 name = "delay-detector"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "cpu-time",
  "tracing",
@@ -2149,7 +2149,7 @@ dependencies = [
 [[package]]
 name = "near-account-id"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "serde",
@@ -2158,7 +2158,7 @@ dependencies = [
 [[package]]
 name = "near-cache"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "lru",
 ]
@@ -2166,7 +2166,7 @@ dependencies = [
 [[package]]
 name = "near-chain"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "borsh",
@@ -2194,7 +2194,7 @@ dependencies = [
 [[package]]
 name = "near-chain-configs"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "anyhow",
  "chrono",
@@ -2212,7 +2212,7 @@ dependencies = [
 [[package]]
 name = "near-chain-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "anyhow",
  "chrono",
@@ -2225,7 +2225,7 @@ dependencies = [
 [[package]]
 name = "near-chunks"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "borsh",
@@ -2251,7 +2251,7 @@ dependencies = [
 [[package]]
 name = "near-chunks-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "near-chain-primitives",
  "near-primitives",
@@ -2260,7 +2260,7 @@ dependencies = [
 [[package]]
 name = "near-client"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "actix-rt",
@@ -2301,7 +2301,7 @@ dependencies = [
 [[package]]
 name = "near-client-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "chrono",
@@ -2318,7 +2318,7 @@ dependencies = [
 [[package]]
 name = "near-crypto"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "arrayref",
  "blake2",
@@ -2377,7 +2377,7 @@ dependencies = [
 [[package]]
 name = "near-epoch-manager"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "near-cache",
@@ -2398,7 +2398,7 @@ dependencies = [
 [[package]]
 name = "near-indexer"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "anyhow",
@@ -2421,7 +2421,7 @@ dependencies = [
 [[package]]
 name = "near-indexer-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "near-primitives",
  "serde",
@@ -2431,7 +2431,7 @@ dependencies = [
 [[package]]
 name = "near-jsonrpc"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "actix-cors",
@@ -2459,7 +2459,7 @@ dependencies = [
 [[package]]
 name = "near-jsonrpc-client"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix-http",
  "awc",
@@ -2474,7 +2474,7 @@ dependencies = [
 [[package]]
 name = "near-jsonrpc-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "near-chain-configs",
@@ -2496,7 +2496,7 @@ dependencies = [
 [[package]]
 name = "near-metrics"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "lazy_static",
  "prometheus",
@@ -2506,7 +2506,7 @@ dependencies = [
 [[package]]
 name = "near-network"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "anyhow",
@@ -2538,7 +2538,7 @@ dependencies = [
 [[package]]
 name = "near-network-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "anyhow",
@@ -2554,7 +2554,7 @@ dependencies = [
 [[package]]
 name = "near-performance-metrics"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "bitflags",
@@ -2571,7 +2571,7 @@ dependencies = [
 [[package]]
 name = "near-performance-metrics-macros"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "quote",
  "syn",
@@ -2580,7 +2580,7 @@ dependencies = [
 [[package]]
 name = "near-pool"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "near-crypto",
@@ -2593,7 +2593,7 @@ dependencies = [
 [[package]]
 name = "near-primitives"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "byteorder",
@@ -2619,7 +2619,7 @@ dependencies = [
 [[package]]
 name = "near-primitives-core"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "base64 0.11.0",
  "borsh",
@@ -2635,7 +2635,7 @@ dependencies = [
 [[package]]
 name = "near-rate-limiter"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "bytes",
@@ -2649,7 +2649,7 @@ dependencies = [
 [[package]]
 name = "near-rosetta-rpc"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "actix-cors",
@@ -2678,7 +2678,7 @@ dependencies = [
 [[package]]
 name = "near-rpc-error-core"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "quote",
  "serde",
@@ -2688,7 +2688,7 @@ dependencies = [
 [[package]]
 name = "near-rpc-error-macro"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "near-rpc-error-core",
  "serde",
@@ -2698,12 +2698,12 @@ dependencies = [
 [[package]]
 name = "near-stable-hasher"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 
 [[package]]
 name = "near-store"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "byteorder",
@@ -2729,7 +2729,7 @@ dependencies = [
 [[package]]
 name = "near-telemetry"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "actix-web",
@@ -2746,7 +2746,7 @@ dependencies = [
 [[package]]
 name = "near-vm-errors"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "near-account-id",
@@ -2757,7 +2757,7 @@ dependencies = [
 [[package]]
 name = "near-vm-logic"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "base64 0.13.0",
  "borsh",
@@ -2777,7 +2777,7 @@ dependencies = [
 [[package]]
 name = "near-vm-runner"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "anyhow",
  "borsh",
@@ -2810,7 +2810,7 @@ dependencies = [
 [[package]]
 name = "nearcore"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "actix",
  "actix-rt",
@@ -2880,7 +2880,7 @@ dependencies = [
 [[package]]
 name = "node-runtime"
 version = "0.0.0"
-source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-rc.3-dm#924f5e57fae9a9a748431ad4b7fb7f3ccbd627a0"
+source = "git+https://github.com/streamingfast/nearcore?rev=1.26.0-dm#34c40b2fbd2f3f2f089e718de6ce66a9b3f6b8ac"
 dependencies = [
  "borsh",
  "byteorder",
