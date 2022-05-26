@@ -28,22 +28,6 @@ dependencies = [
 
 [[package]]
 name = "actix-codec"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d5dbeb2d9e51344cb83ca7cc170f1217f9fe25bfc50160e6e200b5c31c1019a"
-dependencies = [
- "bitflags",
- "bytes",
- "futures-core",
- "futures-sink",
- "log",
- "pin-project-lite",
- "tokio",
- "tokio-util 0.6.9",
-]
-
-[[package]]
-name = "actix-codec"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57a7559404a7f3573127aab53c08ce37a6c6a315c374a31070f3c91cd1b4a7fe"
@@ -80,7 +64,7 @@ version = "3.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a5885cb81a0d4d0d322864bea1bb6c2a8144626b4fdc625d4c51eba197e7797a"
 dependencies = [
- "actix-codec 0.5.0",
+ "actix-codec",
  "actix-rt",
  "actix-service",
  "actix-tls",
@@ -182,7 +166,7 @@ version = "3.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fde0cf292f7cdc7f070803cb9a0d45c018441321a78b1042ffbbb81ec333297"
 dependencies = [
- "actix-codec 0.5.0",
+ "actix-codec",
  "actix-rt",
  "actix-service",
  "actix-utils",
@@ -211,7 +195,7 @@ version = "4.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4e5ebffd51d50df56a3ae0de0e59487340ca456f05dd0b90c0a7a6dd6a74d31"
 dependencies = [
- "actix-codec 0.5.0",
+ "actix-codec",
  "actix-http",
  "actix-macros",
  "actix-router",
@@ -433,7 +417,7 @@ version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "65c60c44fbf3c8cee365e86b97d706e513b733c4eeb16437b45b88d2fffe889a"
 dependencies = [
- "actix-codec 0.5.0",
+ "actix-codec",
  "actix-http",
  "actix-rt",
  "actix-service",
@@ -2453,31 +2437,49 @@ name = "near-dm-indexer"
 version = "1.25.0"
 dependencies = [
  "actix",
- "actix-codec 0.4.0",
- "actix-http",
- "actix-server",
- "actix-service",
- "actix-tls",
- "actix-utils",
+ "actix-rt",
  "actix-web",
- "actix-web-codegen",
- "actix_derive",
- "base64 0.11.0",
+ "anyhow",
+ "awc",
+ "base64 0.13.0",
+ "borsh",
+ "byteorder",
+ "chrono",
  "clap",
+ "dirs",
+ "easy-ext",
+ "futures",
  "hex",
+ "hyper",
+ "hyper-tls",
+ "indicatif",
  "itertools",
+ "lazy-static-include",
  "near-crypto",
  "near-indexer",
+ "near-rust-allocator-proxy",
  "near-vm-errors",
+ "num-rational",
+ "once_cell",
  "openssl-probe",
- "prost 0.8.0",
- "prost-types 0.8.0",
+ "prometheus",
+ "prost 0.10.4",
+ "prost-types 0.10.1",
+ "rand 0.7.3",
+ "rayon",
+ "rlimit",
+ "serde",
+ "serde_ignored",
  "serde_json",
+ "smart-default",
+ "strum",
+ "tempfile",
+ "thiserror",
  "tokio",
- "tonic",
  "tonic-build",
  "tracing",
  "tracing-subscriber 0.2.25",
+ "xz2",
 ]
 
 [[package]]
@@ -2843,6 +2845,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "near-rust-allocator-proxy"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be44da452581a4f2e7870d86886f50605853943ded9b6a7975495914645cdca4"
+dependencies = [
+ "backtrace",
+ "nix",
+ "tracing",
+]
+
+[[package]]
 name = "near-stable-hasher"
 version = "0.0.0"
 source = "git+https://github.com/streamingfast/nearcore?rev=1.27.0-rc.1-dm#c24bd954a7dab65a830306c85353882c8009b831"
@@ -2920,7 +2933,7 @@ dependencies = [
  "near-vm-errors",
  "ripemd",
  "serde",
- "sha2 0.9.9",
+ "sha2 0.10.2",
  "sha3",
 ]
 
@@ -3665,6 +3678,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "prost"
+version = "0.10.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71adf41db68aa0daaefc69bb30bcd68ded9b9abaad5d1fbb6304c4fb390e083e"
+dependencies = [
+ "bytes",
+ "prost-derive 0.10.1",
+]
+
+[[package]]
 name = "prost-build"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3709,6 +3732,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "prost-derive"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b670f45da57fb8542ebdbb6105a925fe571b67f9e7ed9f47a06a84e72b4e7cc"
+dependencies = [
+ "anyhow",
+ "itertools",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "prost-types"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3726,6 +3762,16 @@ checksum = "534b7a0e836e3c482d2693070f982e39e7611da9695d4d1f5a4b186b51faef0a"
 dependencies = [
  "bytes",
  "prost 0.9.0",
+]
+
+[[package]]
+name = "prost-types"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d0a014229361011dc8e69c8a1ec6c2e8d0f2af7c91e3ea3f5b2170298461e68"
+dependencies = [
+ "bytes",
+ "prost 0.10.4",
 ]
 
 [[package]]
