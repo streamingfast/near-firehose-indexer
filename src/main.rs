@@ -4,7 +4,7 @@ mod dm;
 mod logging;
 
 use actix;
-use clap::Clap;
+use clap::Parser;
 use configs::{Opts, SubCommand};
 use near_indexer;
 use tracing::info;

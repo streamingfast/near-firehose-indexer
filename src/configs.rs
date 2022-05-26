@@ -1,8 +1,8 @@
-use clap::Clap;
+use clap::{Parser, Subcommand};
 
 const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
 
-#[derive(Clap, Debug)]
+#[derive(Parser)]
 #[clap(
     version = VERSION.unwrap_or("unknown"),
     author = "StreamingFast Developers <dev@streamingfast.io>"
@@ -16,7 +16,7 @@ pub(crate) struct Opts {
     pub subcmd: SubCommand,
 }
 
-#[derive(Clap, Debug)]
+#[derive(Subcommand, Debug)]
 pub(crate) enum SubCommand {
     Run,
 }

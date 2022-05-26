@@ -3,13 +3,21 @@ members = ["deepmind-pb"]
 
 [package]
 name = "near-dm-indexer"
-version = "1.25.0"
+version = "1.27.0"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = { version = "3.1.6", features = ["derive"] }
+hex = "0.4.3"
+base64 = "0.13.0"
+prost = "0.10.4"
+prost-types = "0.10.1"
+openssl-probe = "0.1.4"
+tracing-subscriber = "0.2.4"
+
 anyhow = "1.0.51"
 awc = "3.0.0"
 actix = "0.13.0"
@@ -18,6 +26,7 @@ actix-rt = "2"
 byteorder = "1.2"
 easy-ext = "0.2"
 chrono = { version = "0.4.4", features = ["serde"] }
+enum-map = "=2.1.0"
 futures = "0.3"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5.0"
@@ -42,14 +51,6 @@ indicatif = "0.15.0"
 xz2 = "0.1.6"
 rlimit = "0.7"
 strum = "0.24"
-
-clap = "3.1.18"
-hex = "0.4.3"
-base64 = "0.13.0"
-prost = "0.10.4"
-prost-types = "0.10.1"
-openssl-probe = "0.1.4"
-tracing-subscriber = "0.2.4"
 
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
