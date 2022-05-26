@@ -220,7 +220,7 @@ dependencies = [
  "actix-service",
  "actix-tls",
  "actix-utils",
- "actix-web-codegen 4.0.0",
+ "actix-web-codegen",
  "ahash",
  "bytes",
  "bytestring",
@@ -244,17 +244,6 @@ dependencies = [
  "socket2",
  "time 0.3.9",
  "url",
-]
-
-[[package]]
-name = "actix-web-codegen"
-version = "0.5.0-beta.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f138ac357a674c3b480ddb7bbd894b13c1b6e8927d728bc9ea5e17eee2f8fc9"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -2471,11 +2460,10 @@ dependencies = [
  "actix-tls",
  "actix-utils",
  "actix-web",
- "actix-web-codegen 0.5.0-beta.2",
+ "actix-web-codegen",
  "actix_derive",
  "base64 0.11.0",
  "clap",
- "clap_derive",
  "hex",
  "itertools",
  "near-crypto",
