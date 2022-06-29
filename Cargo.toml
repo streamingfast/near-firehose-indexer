@@ -18,6 +18,7 @@ prost-types = "0.10.1"
 openssl-probe = "0.1.4"
 tracing-subscriber = "0.2.4"
 
+parking_lot = "0.12.1"
 anyhow = "1.0.51"
 awc = "3.0.0"
 actix = "0.13.0"
@@ -55,9 +56,9 @@ strum = "0.24"
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.27.0-dm" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.27.0-dm" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.27.0-dm" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.1-dm" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.1-dm" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.1-dm" }
 
 [build-dependencies]
 tonic-build = "0.5.0"
