@@ -56,9 +56,9 @@ strum = "0.24"
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.2-dm" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.2-dm" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.2-dm" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.3-dm" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.3-dm" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-rc.3-dm" }
 
 [build-dependencies]
 tonic-build = "0.5.0"
