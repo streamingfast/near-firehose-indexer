@@ -52,13 +52,14 @@ indicatif = "0.15.0"
 xz2 = "0.1.6"
 rlimit = "0.7"
 strum = "0.24"
+rustix = "0.33.7"
 
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-dm" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-dm" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.28.0-dm" }
+near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.1-dm" }
+near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.1-dm" }
+near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.1-dm" }
 
 [build-dependencies]
 tonic-build = "0.5.0"
