@@ -12,8 +12,6 @@ use near_indexer::near_primitives::views::{
 };
 use near_indexer::StreamerMessage;
 
-use rustix::path::Arg;
-
 use hex;
 use std::fmt::{Display, Formatter};
 
@@ -254,7 +252,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
             },
             ExecutionStatusView::SuccessValue(v) => execution_outcome::Status::SuccessValue {
                 0: SuccessValueExecutionStatus {
-                    value: base64::decode(v.as_str().unwrap()).unwrap(),
+                    value: v.into(),
                 },
             },
             ExecutionStatusView::SuccessReceiptId(v) => {
@@ -555,9 +553,7 @@ impl From<near_views::ActionView> for Action {
             },
             near_views::ActionView::DeployContract { code } => Action {
                 action: Some(action::Action::DeployContract {
-                    0: DeployContractAction {
-                        code: base64::decode(code.as_str().unwrap()).unwrap(),
-                    },
+                    0: DeployContractAction { code: code.into() },
                 }),
             },
             near_views::ActionView::FunctionCall {
@@ -569,7 +565,7 @@ impl From<near_views::ActionView> for Action {
                 action: Some(action::Action::FunctionCall {
                     0: FunctionCallAction {
                         method_name,
-                        args: base64::decode(args.as_str().unwrap()).unwrap(),
+                        args: args.into(),
                         gas,
                         deposit: Some(BigInt::from(deposit)),
                     },
