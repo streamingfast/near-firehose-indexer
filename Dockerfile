@@ -21,6 +21,5 @@ RUN mkdir /tmp/s5cmd && \
 
 
 COPY near-dm-indexer-x86_64-unknown-linux-gnu /app/near-dm-indexer
-COPY neard-x86_64-unknown-linux-gnu /app/neard
 
 ENV PATH "$PATH:/app"
