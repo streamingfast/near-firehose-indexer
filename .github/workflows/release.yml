@@ -5,8 +5,12 @@ on:
     tags:
       - "*.*.*"
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
-  build:
+  build-indexer:
     name: Build Release
     runs-on: ubuntu-latest
 
@@ -49,6 +53,11 @@ jobs:
 
       - name: Build target
         uses: actions-rs/cargo@v1
+        env:
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: '1'
+          CARGO_PROFILE_RELEASE_LTO: 'fat'
+          CARGO_BUILD_RUSTFLAGS: '-D warnings'
+          NEAR_RELEASE_BUILD: 'release'
         with:
           # We cannot use `cross` tool right now. The reason is that we require some
           # local libraries, `libclang.so` specifically. The `cross` tool runs a Docker
@@ -64,6 +73,72 @@ jobs:
         with:
           name: linux-x86_64-unknown-linux-gnu
           path: ./target/release/near-dm-indexer
+  build-neard:
+    name: Build Release
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust: [stable]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          repository: 'github/streamingfast/nearcore'
+          ref: ${{ github.ref }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          components: rustfmt
+          override: true
+
+      - uses: actions/cache@v2
+        name: Cache cargo registry
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: release-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: Cache LLVM and Clang
+        uses: actions/cache@v2
+        id: cache-llvm
+        with:
+          path: |
+            ./llvm
+          key: llvm-10
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "10"
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        env:
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: '1'
+          CARGO_PROFILE_RELEASE_LTO: 'fat'
+          CARGO_BUILD_RUSTFLAGS: '-D warnings'
+          NEAR_RELEASE_BUILD: 'release'
+        with:
+          # We cannot use `cross` tool right now. The reason is that we require some
+          # local libraries, `libclang.so` specifically. The `cross` tool runs a Docker
+          # container which does not have the library in question. We will need to wait to
+          # have support of https://github.com/cross-rs/cross/pull/635 to be able to cross
+          # compile properly.
+          # use-cross: true
+          command: build
+          args: --release -p neard
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-x86_64-unknown-linux-gnu
+          path: ./target/release/neard
 
   release:
     name: Release
@@ -112,6 +187,27 @@ jobs:
           download_path="${{steps.download-artifacts.outputs.download-path}}"
 
           mv "$download_path/linux-x86_64-unknown-linux-gnu/near-dm-indexer" "$download_path/near-dm-indexer-x86_64-unknown-linux-gnu"
+          mv "$download_path/linux-x86_64-unknown-linux-gnu/neard" "$download_path/neard-x86_64-unknown-linux-gnu"
+
+      - name: Generate docker tags/labels from github build context
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=tag
+            type=sha,prefix=,enable=true
+          flavor: |
+            latest=${{ startsWith(github.ref, 'refs/tags/') }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ${{steps.download-artifacts.outputs.download-path}}
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
