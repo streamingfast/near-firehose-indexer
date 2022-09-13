@@ -21,7 +21,7 @@ fn record_block(block: &codec::Block) {
     let header = block.header.as_ref().unwrap();
 
     println!(
-        "DMLOG BLOCK {height:} {hash:} {hex:}",
+        "FIRE BLOCK {height:} {hash:} {hex:}",
         height = header.height,
         hash = header.hash.as_ref().unwrap(),
         hex = hex::encode(bytes),
