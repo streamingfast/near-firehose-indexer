@@ -143,7 +143,7 @@ jobs:
 
   release:
     name: Release
-    needs: build
+    needs: [build-indexer, build-neard]
     runs-on: ubuntu-latest
 
     steps:
