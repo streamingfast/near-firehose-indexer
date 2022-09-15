@@ -3,12 +3,12 @@ name: Release
 on:
   push:
     tags:
-      - "*"
+      - "*-dm"
   workflow_dispatch:
     inputs:
       core_version:
         description: 'version of nearcore'
-        required: true
+        required: false
         default: 'latest'
         type: string
 
