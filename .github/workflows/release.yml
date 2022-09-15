@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       core_version:
-        description: 'version of nearcore'
+        description: 'version of nearcore (optional: if not provided, will be inferred from tag)'
         required: false
         default: 'latest'
         type: string
@@ -98,15 +98,28 @@ jobs:
       - name: Set Env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Print Env
-        id: extract_branch
+      - name: Core Version From Input
+        if: ${{ github.event.inputs.core_version != 'latest' }}
+        id: extract_core_version
         shell: bash
         run: |
-          echo "$(echo ${CORE_VERSION})"
-          echo "$(echo ${RELEASE_VERSION})"
-          echo "CORE_VERSION=${CORE_VERSION}" >> $GITHUB_ENV
+          echo "CORE_VERSION=$(echo ${CORE_VERSION_INPUT}" >> $GITHUB_ENV
         env:
-          CORE_VERSION: ${{ github.event.inputs.core_version }}
+          CORE_VERSION_INPUT: ${{ github.event.inputs.core_version }}
+
+      - name: Core Version From Tag
+        if: ${{ github.event.inputs.core_version == 'latest' }} && ${{ startsWith(github.ref, 'refs/tags/') }}
+        id: extract_core_version_from_tag
+        shell: bash
+        run: |
+          echo "CORE_VERSION=$(echo ${RELEASE_VERSION} | sed -E 's/-rc\.[0-9]+(-dm)?//')" >> $GITHUB_ENV
+
+      - name: Core Version Default Value
+        if: ${{ github.event.inputs.core_version == 'latest' }} && ${{ !startsWith(github.ref, 'refs/tags/') }}
+        id: extract_core_version_from_tag
+        shell: bash
+        run: |
+          echo "CORE_VERSION=latest" >> $GITHUB_ENV          
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -176,8 +189,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             CORE_VERSION=${{ env.CORE_VERSION }}
-        env:
-          CORE_VERSION: ${{ github.event.inputs.core_version }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
