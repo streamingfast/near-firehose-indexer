@@ -165,7 +165,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            CORE_VERSION=${{ env.CORE_VERSION }}          
+            CORE_VERSION=${{ env.CORE_VERSION }}
+        env:
+          CORE_VERSION: ${{ github.event.inputs.indexer_version }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
