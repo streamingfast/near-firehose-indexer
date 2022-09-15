@@ -100,7 +100,7 @@ jobs:
 
       - name: Core Version From Input
         if: ${{ github.event.inputs.core_version != 'latest' }}
-        id: extract_core_version
+        id: extract_core_version_from_input
         shell: bash
         run: |
           echo "CORE_VERSION=$(echo ${CORE_VERSION_INPUT}" >> $GITHUB_ENV
@@ -116,7 +116,7 @@ jobs:
 
       - name: Core Version Default Value
         if: ${{ github.event.inputs.core_version == 'latest' }} && ${{ !startsWith(github.ref, 'refs/tags/') }}
-        id: extract_core_version_from_tag
+        id: default_core_version
         shell: bash
         run: |
           echo "CORE_VERSION=latest" >> $GITHUB_ENV          
