@@ -14,7 +14,7 @@ RUN rm /etc/localtime && ln -snf /usr/share/zoneinfo/America/Montreal /etc/local
 # s5cmd is a CLI tool to manipulate S3 store (Needed to sync NEAR Foundation backup(s))
 RUN mkdir /tmp/s5cmd && \
   cd /tmp/s5cmd && \
-  wget -O s5cmd.tar.gz https://github.com/peak/s5cmd/releases/download/v1.4.0/s5cmd_1.4.0_Linux-64bit.tar.gz && \
+  wget -O s5cmd.tar.gz https://github.com/peak/s5cmd/releases/download/v2.0.0/s5cmd_2.0.0_Linux-64bit.tar.gz && \
   tar -xzvf s5cmd.tar.gz && \
   cp s5cmd /usr/bin/ && \
   cd / && \
