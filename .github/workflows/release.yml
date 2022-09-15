@@ -167,7 +167,7 @@ jobs:
           build-args: |
             CORE_VERSION=${{ env.CORE_VERSION }}
         env:
-          CORE_VERSION: ${{ github.event.inputs.indexer_version }}
+          CORE_VERSION: ${{ github.event.inputs.core_version }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
