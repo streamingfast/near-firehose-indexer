@@ -5,6 +5,12 @@ on:
     tags:
       - "*"
   workflow_dispatch:
+    inputs:
+      core_version:
+        description: 'version of nearcore'
+        required: true
+        default: 'latest'
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -158,6 +164,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CORE_VERSION=${{ env.CORE_VERSION }}          
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
