@@ -11,8 +11,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 
 RUN rm /etc/localtime && ln -snf /usr/share/zoneinfo/America/Montreal /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
-RUN apt update && apt-get -y install ca-certificates libssl1.1 && rm -rf /var/cache/apt/*
-
 # s5cmd is a CLI tool to manipulate S3 store (Needed to sync NEAR Foundation backup(s))
 RUN mkdir /tmp/s5cmd && \
   cd /tmp/s5cmd && \
