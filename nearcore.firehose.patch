@@ -1,3 +1,11 @@
+##
+##
+######################################################################################
+# THIS PATCH IS MEANT TO APPLY NEEDED CHANGES TO THE NEARCORE PROJECT
+# See instructions in the BUILD.md file
+######################################################################################
+##
+##
 Index: core/crypto/src/lib.rs
 IDEA additional info:
 Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
