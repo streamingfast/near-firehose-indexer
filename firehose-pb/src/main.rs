@@ -6,5 +6,5 @@ fn main() {
             &["sf/near/codec/v1/codec.proto"],
             &["../proto", "../proto-near"],
         )
-        .unwrap_or_else(|e| panic!("Failed to compile near dm proto(s) {:?}", e));
+        .unwrap_or_else(|e| panic!("Failed to compile near NEAR firehose proto(s) {:?}", e));
 }

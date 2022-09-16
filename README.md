@@ -69,5 +69,5 @@ are part of parent folder all at the same depth.
 To re-generate the Rust bindings of the definitions, use:
 
 ```
-cargo run -p deepmind-pb
+cargo run -p firehose-pb
 ```
