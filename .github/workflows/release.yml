@@ -157,7 +157,7 @@ jobs:
           # is 'near-dm-indexer'.
 
           download_path="${{steps.download-artifacts.outputs.download-path}}"
-
+          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-dm-indexer"
           mv "$download_path/linux-x86_64-unknown-linux-gnu/near-dm-indexer" "$download_path/near-dm-indexer-x86_64-unknown-linux-gnu"
 
       - name: Log in to the Container registry
