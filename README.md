@@ -53,7 +53,7 @@ $ cargo run --release -- --home-dir ~/.near/localnet init
 ```
 $ cargo run --release -- --home-dir ~/.near/localnet init
 
-near-dm-indexer --home-dir ./near-home-mainnet run
+near-firehose-indexer --home-dir ./near-home-mainnet run
 ```
 
 ### Protobuf Definitions

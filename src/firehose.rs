@@ -4,7 +4,7 @@ use tracing::info;
 pub fn on_block(block: &codec::Block) {
     // FIXME: Apply stats like approach (#Height, Block Count, Total Transactions, Total Receipts, etc..)
     info!(
-        target: "dm",
+        target: "firehose",
         "Block {} Shards: {}, Transactions: {}, Receipts: {}, ExecutionOutcomes: {}",
         block,
         block.shards.len(),

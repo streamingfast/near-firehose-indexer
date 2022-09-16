@@ -21,8 +21,8 @@ RUN mkdir /tmp/s5cmd && \
   rm -rf /tmp/s5cmd
 
 
-COPY near-dm-indexer-x86_64-unknown-linux-gnu /app/near-dm-indexer
-RUN chmod +x /app/near-dm-indexer
+COPY near-firehose-indexer-x86_64-unknown-linux-gnu /app/near-firehose-indexer
+RUN chmod +x /app/near-firehose-indexer
 COPY --from=nearcore /usr/local/bin/neard /app/neard
 
 ENV PATH "$PATH:/app"

@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "*-dm"
+      - "*-fire"
   workflow_dispatch:
     inputs:
       core_version:
@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux-x86_64-unknown-linux-gnu
-          path: ./target/release/near-dm-indexer
+          path: ./target/release/near-firehose-indexer
 
   release:
     name: Release
@@ -109,7 +109,7 @@ jobs:
         id: extract_core_version_from_tag
         shell: bash
         run: |
-          echo CORE_VERSION=$(echo "${RELEASE_VERSION}" | sed -E 's/-rc\.[0-9]+(-dm)?//') >> $GITHUB_ENV         
+          echo CORE_VERSION=$(echo "${RELEASE_VERSION}" | sed -E 's/-rc\.[0-9]+(-fire)?//') >> $GITHUB_ENV         
 
       - name: Core Version From Input
         if: ${{ github.event.inputs.core_version != '' }}
@@ -147,18 +147,18 @@ jobs:
           #
           #  binaries
           #  ├── linux-arm64-unknown-linux-gnu
-          #  │   └── near-dm-indexer
+          #  │   └── near-firehose-indexer
           #  └── linux-x86_64-unknown-linux-gnu
-          #      └── near-dm-indexer
+          #      └── near-firehose-indexer
           #
           # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
-          # step. The 'near-dm-indexer' file name is the filename of the uploaded 'path' field,
-          # we used './target/release/near-dm-indexer' in the upload step so the file name here
-          # is 'near-dm-indexer'.
+          # step. The 'near-firehose-indexer' file name is the filename of the uploaded 'path' field,
+          # we used './target/release/near-firehose-indexer' in the upload step so the file name here
+          # is 'near-firehose-indexer'.
 
           download_path="${{steps.download-artifacts.outputs.download-path}}"
-          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-dm-indexer"
-          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-dm-indexer" "$download_path/near-dm-indexer-x86_64-unknown-linux-gnu"
+          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-firehose-indexer"
+          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-firehose-indexer" "$download_path/near-firehose-indexer-x86_64-unknown-linux-gnu"
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9

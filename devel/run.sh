@@ -31,7 +31,7 @@ main() {
     set +e
   fi
 
-  near_dm_indexer_bin=${NEAR_DM_INDEXER_BIN:-"../target/debug/near-dm-indexer"}
+  near_firehose_indexer_bin=${NEAR_FIREHOSE_INDEXER_BIN:-"../target/debug/near-firehose-indexer"}
 
   config_dir="$network"
   run_dir="run/$network"
@@ -43,7 +43,7 @@ main() {
   cp "$config_dir/config.json" "$run_dir/"
   cp "$config_dir/node_key.json" "$run_dir/"
 
-  RUST_BACKTRACE=1 "$near_dm_indexer_bin" -h "$ROOT/$run_dir" run
+  RUST_BACKTRACE=1 "$near_firehose_indexer_bin" -h "$ROOT/$run_dir" run
 }
 
 usage_error() {
