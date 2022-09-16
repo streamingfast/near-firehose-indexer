@@ -703,17 +703,15 @@ impl From<near_crypto::signature::PublicKey> for PublicKey {
     fn from(key: near_crypto::signature::PublicKey) -> Self {
         match key {
             near_crypto::signature::PublicKey::ED25519(s) => {
-                let data = Vec::from(<[u8; 32]>::from(s));
                 PublicKey {
                     r#type: CurveKind::Ed25519.into(),
-                    bytes: data,
+                    bytes: s.0.into(),
                 }
             }
             near_crypto::signature::PublicKey::SECP256K1(s) => {
-                let data = Vec::from(<[u8; 64]>::from(s));
                 PublicKey {
                     r#type: CurveKind::Secp256k1.into(),
-                    bytes: data,
+                    bytes: s.as_ref().into(),
                 }
             }
         }
