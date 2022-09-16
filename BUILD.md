@@ -17,6 +17,8 @@ git tag <target release>-firehose # tag our changes
 git push --atomic origin /dm/<target release> <target release>-firehose # push our changes
 ```
 
+NOTE (2022-09-16): A [PR](https://github.com/near/nearcore/pull/7628) is opened to merge our changes into the upstream project.  If that is merged, we can remove the patch and just use the upstream project. 
+
 ## Building the Near Firehose Indexer
 
 Using the tag from the previous step, we can now build the Near Firehose Indexer.  This is done by doing the following:
