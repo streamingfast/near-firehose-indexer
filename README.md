@@ -1,15 +1,15 @@
-# NEAR Deepmind Indexer
+# NEAR Firehose Indexer
 
-Near Deepmind Indexer is an application that leverages [Near Indexer's micro-framework](https://github.com/near/nearcore/tree/master/chain/indexer) to output protobuf files
+Near Firehose Indexer is an application that leverages [Near Indexer's micro-framework](https://github.com/near/nearcore/tree/master/chain/indexer) to output protobuf files
 
 ## Requirements
 
 Before you proceed, make sure you have the following software installed:
 * [rustup](https://rustup.rs/) or Rust version that is mentioned in `rust-toolchain` file in the root of nearcore project.
 
-## Configuring NEAR Deepmind Indexer
+## Configuring NEAR Firehose Indexer
 
-To run the NEAR Deepmind Indexer connected to a network we need to have configs and keys prepopulated. The configs and keys must be placed in a home directory, which has the following structure:
+To run the NEAR Firehose Indexer connected to a network we need to have configs and keys prepopulated. The configs and keys must be placed in a home directory, which has the following structure:
 
 homedir
 ├── config.json     *required - node configuration file*
