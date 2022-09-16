@@ -1,0 +1,38 @@
+Index: core/crypto/src/lib.rs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/crypto/src/lib.rs b/core/crypto/src/lib.rs
+--- a/core/crypto/src/lib.rs	(revision fa305730a0b1fe048c26ff528a0e188a3796df2e)
++++ b/core/crypto/src/lib.rs	(revision c24bd954a7dab65a830306c85353882c8009b831)
+@@ -17,7 +17,7 @@
+ pub mod key_conversion;
+ mod key_file;
+ pub mod randomness;
+-mod signature;
++pub mod signature;
+ mod signer;
+ mod test_utils;
+ pub mod vrf;
+Index: core/crypto/src/signature.rs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/crypto/src/signature.rs b/core/crypto/src/signature.rs
+--- a/core/crypto/src/signature.rs	(revision fa305730a0b1fe048c26ff528a0e188a3796df2e)
++++ b/core/crypto/src/signature.rs	(revision c24bd954a7dab65a830306c85353882c8009b831)
+@@ -158,6 +158,12 @@
+     }
+ }
+
++impl From<ED25519PublicKey> for [u8; ed25519_dalek::PUBLIC_KEY_LENGTH] {
++    fn from(data: ED25519PublicKey) -> [u8; ed25519_dalek::PUBLIC_KEY_LENGTH] {
++        data.0
++    }
++}
++
+ impl TryFrom<&[u8]> for ED25519PublicKey {
+     type Error = crate::errors::ParseKeyError;
+
