@@ -28,8 +28,8 @@ Using the tag from the previous step, we can now build the Near Firehose Indexer
 ```bash
 git add .
 git commit -m "update near to <target release>-firehose"
-git tag <target release>-firehose
-git push --atomic origin /dm/<target release> <target release>-firehose
+git tag <target release>-fire
+git push --atomic origin develop <target release>-fire
 ```
 
 Pushing this commit will automatically trigger a build in our CI/CD pipeline which will build the Near Firehose Indexer and publish it to our docker repository. (Note: This build takes approximately 30 minutes at the time of this writing)
