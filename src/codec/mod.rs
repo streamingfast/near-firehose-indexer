@@ -702,18 +702,14 @@ impl From<near_crypto::signature::Signature> for Signature {
 impl From<near_crypto::signature::PublicKey> for PublicKey {
     fn from(key: near_crypto::signature::PublicKey) -> Self {
         match key {
-            near_crypto::signature::PublicKey::ED25519(s) => {
-                PublicKey {
-                    r#type: CurveKind::Ed25519.into(),
-                    bytes: s.0.into(),
-                }
-            }
-            near_crypto::signature::PublicKey::SECP256K1(s) => {
-                PublicKey {
-                    r#type: CurveKind::Secp256k1.into(),
-                    bytes: s.as_ref().into(),
-                }
-            }
+            near_crypto::signature::PublicKey::ED25519(s) => PublicKey {
+                r#type: CurveKind::Ed25519.into(),
+                bytes: s.0.into(),
+            },
+            near_crypto::signature::PublicKey::SECP256K1(s) => PublicKey {
+                r#type: CurveKind::Secp256k1.into(),
+                bytes: s.as_ref().into(),
+            },
         }
     }
 }
