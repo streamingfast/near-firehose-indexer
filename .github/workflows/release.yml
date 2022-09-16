@@ -109,7 +109,7 @@ jobs:
         id: extract_core_version_from_tag
         shell: bash
         run: |
-          echo CORE_VERSION=$(echo "${RELEASE_VERSION}" | sed -E 's/-rc\.[0-9]+(-fire)?//') >> $GITHUB_ENV         
+          echo CORE_VERSION=$(echo "${RELEASE_VERSION}" | sed -E 's/-rc\.[0-9]+//' | sed -E 's/-fire//' | sed -E 's/-hotfix[0-9]*//' | sed -E 's/-patch[0-9]*//') >> $GITHUB_ENV         
 
       - name: Core Version From Input
         if: ${{ github.event.inputs.core_version != '' }}
