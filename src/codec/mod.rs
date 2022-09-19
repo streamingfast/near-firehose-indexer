@@ -2,7 +2,8 @@
 mod codec;
 
 pub use codec::*;
-use near_crypto;
+use near_crypto::PublicKey as NearPublicKey;
+use near_crypto::Signature as NearSignature;
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
@@ -111,7 +112,7 @@ impl From<&near_indexer::IndexerShard> for IndexerShard {
 }
 
 impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
-    for IndexerExecutionOutcomeWithReceipt
+for IndexerExecutionOutcomeWithReceipt
 {
     fn from(r: &near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
         IndexerExecutionOutcomeWithReceipt {
@@ -201,7 +202,7 @@ impl From<near_indexer::IndexerTransactionWithOutcome> for IndexerTransactionWit
 }
 
 impl From<near_indexer::IndexerExecutionOutcomeWithOptionalReceipt>
-    for IndexerExecutionOutcomeWithOptionalReceipt
+for IndexerExecutionOutcomeWithOptionalReceipt
 {
     fn from(o: near_indexer::IndexerExecutionOutcomeWithOptionalReceipt) -> Self {
         IndexerExecutionOutcomeWithOptionalReceipt {
@@ -252,7 +253,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
             },
             ExecutionStatusView::SuccessValue(v) => execution_outcome::Status::SuccessValue {
                 0: SuccessValueExecutionStatus {
-                    value: base64::decode(v.as_str()).unwrap(),
+                    value: v.into(),
                 },
             },
             ExecutionStatusView::SuccessReceiptId(v) => {
@@ -553,9 +554,7 @@ impl From<near_views::ActionView> for Action {
             },
             near_views::ActionView::DeployContract { code } => Action {
                 action: Some(action::Action::DeployContract {
-                    0: DeployContractAction {
-                        code: base64::decode(code.as_str()).unwrap(),
-                    },
+                    0: DeployContractAction { code: code.into() },
                 }),
             },
             near_views::ActionView::FunctionCall {
@@ -567,7 +566,7 @@ impl From<near_views::ActionView> for Action {
                 action: Some(action::Action::FunctionCall {
                     0: FunctionCallAction {
                         method_name,
-                        args: base64::decode(args.as_str()).unwrap(),
+                        args: args.into(),
                         gas,
                         deposit: Some(BigInt::from(deposit)),
                     },
@@ -683,14 +682,14 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
     }
 }
 
-impl From<near_crypto::signature::Signature> for Signature {
-    fn from(sign: near_crypto::signature::Signature) -> Self {
-        match sign {
-            near_crypto::signature::Signature::ED25519(s) => Signature {
+impl From<NearSignature> for Signature {
+    fn from(sig: NearSignature) -> Self {
+        match sig {
+            NearSignature::ED25519(s) => Signature {
                 r#type: CurveKind::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
             } as Signature,
-            near_crypto::signature::Signature::SECP256K1(s) => {
+            NearSignature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {
                     r#type: CurveKind::Secp256k1.into(),
@@ -701,23 +700,17 @@ impl From<near_crypto::signature::Signature> for Signature {
     }
 }
 
-impl From<near_crypto::signature::PublicKey> for PublicKey {
-    fn from(key: near_crypto::signature::PublicKey) -> Self {
+impl From<NearPublicKey> for PublicKey {
+    fn from(key: NearPublicKey) -> Self {
         match key {
-            near_crypto::signature::PublicKey::ED25519(s) => {
-                let data = Vec::from(<[u8; 32]>::from(s));
-                PublicKey {
-                    r#type: CurveKind::Ed25519.into(),
-                    bytes: data,
-                }
-            }
-            near_crypto::signature::PublicKey::SECP256K1(s) => {
-                let data = Vec::from(<[u8; 64]>::from(s));
-                PublicKey {
-                    r#type: CurveKind::Secp256k1.into(),
-                    bytes: data,
-                }
-            }
+            NearPublicKey::ED25519(s) => PublicKey {
+                r#type: CurveKind::Ed25519.into(),
+                bytes: s.0.into(),
+            },
+            NearPublicKey::SECP256K1(s) => PublicKey {
+                r#type: CurveKind::Secp256k1.into(),
+                bytes: s.as_ref().into(),
+            },
         }
     }
 }

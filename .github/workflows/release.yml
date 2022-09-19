@@ -3,12 +3,26 @@ name: Release
 on:
   push:
     tags:
-      - "*.*.*"
+      - "*-fire"
+  workflow_dispatch:
+    inputs:
+      core_version:
+        description: 'version of nearcore (optional: if not provided, will be inferred from tag)'
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  build-indexer:
     name: Build Release
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     strategy:
       matrix:
@@ -49,6 +63,11 @@ jobs:
 
       - name: Build target
         uses: actions-rs/cargo@v1
+        env:
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: '1'
+          CARGO_PROFILE_RELEASE_LTO: 'fat'
+          CARGO_BUILD_RUSTFLAGS: '-D warnings'
+          NEAR_RELEASE_BUILD: 'release'
         with:
           # We cannot use `cross` tool right now. The reason is that we require some
           # local libraries, `libclang.so` specifically. The `cross` tool runs a Docker
@@ -63,22 +82,50 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux-x86_64-unknown-linux-gnu
-          path: ./target/release/near-dm-indexer
+          path: ./target/release/near-firehose-indexer
 
   release:
     name: Release
-    needs: build
+    needs: [build-indexer]
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - name: Set Env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Core Version Default Value
+        if: ${{ github.event.inputs.core_version == '' && !startsWith(github.ref, 'refs/tags/') }}
+        id: default_core_version
+        shell: bash
+        run: |
+          echo CORE_VERSION=latest >> $GITHUB_ENV 
+
+      - name: Core Version From Tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        id: extract_core_version_from_tag
+        shell: bash
+        run: |
+          echo CORE_VERSION=$(echo "${RELEASE_VERSION}" | sed -E 's/-rc\.[0-9]+//' | sed -E 's/-fire//' | sed -E 's/-hotfix[0-9]*//' | sed -E 's/-patch[0-9]*//') >> $GITHUB_ENV         
+
+      - name: Core Version From Input
+        if: ${{ github.event.inputs.core_version != '' }}
+        id: extract_core_version_from_input
+        shell: bash
+        run: |
+          echo CORE_VERSION=$(echo "${CORE_VERSION_INPUT}") >> $GITHUB_ENV
+        env:
+          CORE_VERSION_INPUT: ${{ github.event.inputs.core_version }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Generate Change Log
         id: changelog
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: |
           chmod 755 ./.github/generate_change_log.sh
           CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION }})
@@ -100,21 +147,51 @@ jobs:
           #
           #  binaries
           #  ├── linux-arm64-unknown-linux-gnu
-          #  │   └── near-dm-indexer
+          #  │   └── near-firehose-indexer
           #  └── linux-x86_64-unknown-linux-gnu
-          #      └── near-dm-indexer
+          #      └── near-firehose-indexer
           #
           # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
-          # step. The 'near-dm-indexer' file name is the filename of the uploaded 'path' field,
-          # we used './target/release/near-dm-indexer' in the upload step so the file name here
-          # is 'near-dm-indexer'.
+          # step. The 'near-firehose-indexer' file name is the filename of the uploaded 'path' field,
+          # we used './target/release/near-firehose-indexer' in the upload step so the file name here
+          # is 'near-firehose-indexer'.
 
           download_path="${{steps.download-artifacts.outputs.download-path}}"
+          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-firehose-indexer"
+          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-firehose-indexer" "$download_path/near-firehose-indexer-x86_64-unknown-linux-gnu"
 
-          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-dm-indexer" "$download_path/near-dm-indexer-x86_64-unknown-linux-gnu"
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate docker tags/labels from github build context
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=tag
+            type=sha,prefix=,enable=true
+          flavor: |
+            latest=${{ startsWith(github.ref, 'refs/tags/') }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ${{steps.download-artifacts.outputs.download-path}}
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CORE_VERSION=${{ env.CORE_VERSION }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         with:
           name: ${{ env.RELEASE_VERSION }}
           tag_name: ${{ env.RELEASE_VERSION }}
