@@ -2,7 +2,8 @@
 mod codec;
 
 pub use codec::*;
-use near_crypto;
+use near_crypto::Signature as NearSignature;
+use near_crypto::PublicKey as NearPublicKey;
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
@@ -681,14 +682,14 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
     }
 }
 
-impl From<near_crypto::signature::Signature> for Signature {
-    fn from(sign: near_crypto::signature::Signature) -> Self {
-        match sign {
-            near_crypto::signature::Signature::ED25519(s) => Signature {
+impl From<NearSignature> for Signature {
+    fn from(sig: NearSignature) -> Self {
+        match sig {
+            NearSignature::ED25519(s) => Signature {
                 r#type: CurveKind::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
             } as Signature,
-            near_crypto::signature::Signature::SECP256K1(s) => {
+            NearSignature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {
                     r#type: CurveKind::Secp256k1.into(),
@@ -699,14 +700,14 @@ impl From<near_crypto::signature::Signature> for Signature {
     }
 }
 
-impl From<near_crypto::signature::PublicKey> for PublicKey {
-    fn from(key: near_crypto::signature::PublicKey) -> Self {
+impl From<NearPublicKey> for PublicKey {
+    fn from(key: NearPublicKey) -> Self {
         match key {
-            near_crypto::signature::PublicKey::ED25519(s) => PublicKey {
+            NearPublicKey::ED25519(s) => PublicKey {
                 r#type: CurveKind::Ed25519.into(),
                 bytes: s.0.into(),
             },
-            near_crypto::signature::PublicKey::SECP256K1(s) => PublicKey {
+            NearPublicKey::SECP256K1(s) => PublicKey {
                 r#type: CurveKind::Secp256k1.into(),
                 bytes: s.as_ref().into(),
             },

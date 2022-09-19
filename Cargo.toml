@@ -57,9 +57,9 @@ rustix = "0.33.7"
 # Added to get rid of a dependencies error even if we do not use it
 itertools = "0.10.3"
 
-near-indexer = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.3-fire" }
-near-crypto = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.3-fire" }
-near-vm-errors = { git = "https://github.com/streamingfast/nearcore", rev="1.29.0-rc.3-fire" }
+near-indexer = { git = "https://github.com/near/nearcore", rev="1.29.0-rc.3" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="1.29.0-rc.3" }
+near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.29.0-rc.3" }
 
 [build-dependencies]
 tonic-build = "0.5.0"
