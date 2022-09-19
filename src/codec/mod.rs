@@ -2,8 +2,8 @@
 mod codec;
 
 pub use codec::*;
-use near_crypto::Signature as NearSignature;
 use near_crypto::PublicKey as NearPublicKey;
+use near_crypto::Signature as NearSignature;
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
