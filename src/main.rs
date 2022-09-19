@@ -1,6 +1,6 @@
 mod codec;
 mod configs;
-mod dm;
+mod firehose;
 mod logging;
 
 use actix;
@@ -45,7 +45,7 @@ fn main() {
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
                         let block = codec::Block::from(&streamer_message);
-                        dm::on_block(&block);
+                        firehose::on_block(&block);
                     }
                 });
             });

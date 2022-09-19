@@ -4,7 +4,7 @@ use tracing::info;
 pub fn on_block(block: &codec::Block) {
     // FIXME: Apply stats like approach (#Height, Block Count, Total Transactions, Total Receipts, etc..)
     info!(
-        target: "dm",
+        target: "firehose",
         "Block {} Shards: {}, Transactions: {}, Receipts: {}, ExecutionOutcomes: {}",
         block,
         block.shards.len(),
@@ -21,7 +21,7 @@ fn record_block(block: &codec::Block) {
     let header = block.header.as_ref().unwrap();
 
     println!(
-        "DMLOG BLOCK {height:} {hash:} {hex:}",
+        "FIRE BLOCK {height:} {hash:} {hex:}",
         height = header.height,
         hash = header.hash.as_ref().unwrap(),
         hex = hex::encode(bytes),
