@@ -29,7 +29,7 @@ ${CHANGE_LOG}\n
 ## Checksums\n
 |    Assets    | Sha256 Checksum  |\n
 | :-----------: |------------|\n
-| near-dm-indexer-linux-x86-64 | ${LINUX_X86_64_BIN_SUM} |\n
+| near-firehose-indexer-linux-x86-64 | ${LINUX_X86_64_BIN_SUM} |\n
 END
 )
 

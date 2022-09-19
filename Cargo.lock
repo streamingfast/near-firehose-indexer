@@ -1134,17 +1134,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "deepmind-pb"
-version = "0.1.0"
-dependencies = [
- "num-traits",
- "prost 0.9.0",
- "prost-types 0.9.0",
- "tonic",
- "tonic-build",
-]
-
-[[package]]
 name = "delay-detector"
 version = "0.0.0"
 source = "git+https://github.com/near/nearcore?rev=1.28.1#33b7689172de387cd1bc5728cdf7f34246f8434c"
@@ -1380,6 +1369,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3fcf0cee53519c866c09b5de1f6c56ff9d647101f81c1964fa632e148896cdf"
 dependencies = [
  "instant",
+]
+
+[[package]]
+name = "firehose-pb"
+version = "0.1.0"
+dependencies = [
+ "num-traits",
+ "prost 0.9.0",
+ "prost-types 0.9.0",
+ "tonic",
+ "tonic-build",
 ]
 
 [[package]]
@@ -2424,7 +2424,28 @@ dependencies = [
 ]
 
 [[package]]
-name = "near-dm-indexer"
+name = "near-epoch-manager"
+version = "0.0.0"
+source = "git+https://github.com/near/nearcore?rev=1.28.1#33b7689172de387cd1bc5728cdf7f34246f8434c"
+dependencies = [
+ "borsh",
+ "near-cache",
+ "near-chain",
+ "near-chain-configs",
+ "near-crypto",
+ "near-primitives",
+ "near-store",
+ "num-rational",
+ "primitive-types",
+ "rand 0.6.5",
+ "rand 0.7.3",
+ "serde_json",
+ "smart-default",
+ "tracing",
+]
+
+[[package]]
+name = "near-firehose-indexer"
 version = "1.27.0"
 dependencies = [
  "actix",
@@ -2473,27 +2494,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber 0.2.25",
  "xz2",
-]
-
-[[package]]
-name = "near-epoch-manager"
-version = "0.0.0"
-source = "git+https://github.com/near/nearcore?rev=1.28.1#33b7689172de387cd1bc5728cdf7f34246f8434c"
-dependencies = [
- "borsh",
- "near-cache",
- "near-chain",
- "near-chain-configs",
- "near-crypto",
- "near-primitives",
- "near-store",
- "num-rational",
- "primitive-types",
- "rand 0.6.5",
- "rand 0.7.3",
- "serde_json",
- "smart-default",
- "tracing",
 ]
 
 [[package]]

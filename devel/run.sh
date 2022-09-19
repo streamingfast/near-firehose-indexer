@@ -31,7 +31,7 @@ main() {
     set +e
   fi
 
-  near_dm_indexer_bin=${NEAR_DM_INDEXER_BIN:-"../target/debug/near-dm-indexer"}
+  near_dm_indexer_bin=${NEAR_DM_INDEXER_BIN:-"../target/debug/near-firehose-indexer"}
 
   config_dir="$network"
   run_dir="run/$network"

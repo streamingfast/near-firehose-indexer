@@ -1,9 +1,9 @@
 [package]
-name = "deepmind-pb"
+name = "firehose-pb"
 version = "0.1.0"
 
 [[bin]]
-name = "deepmind-pb"
+name = "firehose-pb"
 path = "src/main.rs"
 
 [dependencies]

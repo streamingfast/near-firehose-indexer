@@ -53,7 +53,7 @@ $ cargo run --release -- --home-dir ~/.near/localnet init
 ```
 $ cargo run --release -- --home-dir ~/.near/localnet init
 
-near-dm-indexer --home-dir ./near-home-mainnet run
+near-firehose-indexer --home-dir ./near-home-mainnet run
 ```
 
 ### Protobuf Definitions
@@ -69,5 +69,5 @@ are part of parent folder all at the same depth.
 To re-generate the Rust bindings of the definitions, use:
 
 ```
-cargo run -p deepmind-pb
+cargo run -p firehose-pb
 ```
