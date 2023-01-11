@@ -34,6 +34,7 @@ fn main() {
                 home_dir,
                 sync_mode,
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
+                validate_genesis: false,
             };
 
             let system = actix::System::new();
