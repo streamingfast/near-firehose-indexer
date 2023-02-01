@@ -36,13 +36,18 @@ fn main() {
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
                 validate_genesis: false,
             };
+            info!(target: "main", "Indexer config initiated");
 
             let system = actix::System::new();
+            info!(target: "main", "Actix system initiated");
 
             system.block_on(async move {
-                let indexer =
-                    near_indexer::Indexer::new(indexer_config).expect("Failed to initiate Indexer");
+                let indexer = near_indexer::Indexer::new(indexer_config).expect("Failed to initiate Indexer");
+                info!(target: "main", "Indexer initiated");
+
                 let mut stream = indexer.streamer();
+                info!(target: "main", "Streamer initiated");
+
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
                         let block = codec::Block::from(&streamer_message);
