@@ -51,8 +51,9 @@ fn main() {
 
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
-                        let block = codec::Block::from(&streamer_message);
-                        firehose::on_block(&block);
+                        // let block = codec::Block::from(&streamer_message);
+                        //firehose::on_block(&block);
+                        info!("{:?}", streamer_message.block.header.height);
                     }
                 });
             });
