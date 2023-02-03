@@ -2515,6 +2515,8 @@ dependencies = [
  "prost 0.10.4",
  "prost-types 0.10.1",
  "rand 0.7.3",
+ "rayon",
+ "rkyv",
  "rlimit",
  "rustix",
  "serde",
