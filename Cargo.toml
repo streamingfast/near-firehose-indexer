@@ -3,7 +3,7 @@ members = ["firehose-pb"]
 
 [package]
 name = "near-firehose-indexer"
-version = "0.0.0"
+version = "1.31.0"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
