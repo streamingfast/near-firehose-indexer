@@ -21,9 +21,9 @@ rkyv = "=0.7.38"
 tracing = { version = "0.1.36", features = ["std"] }
 tracing-subscriber = { version = "0.3.15", features = ["env-filter", "fmt", "registry", "std"] }
 
-near-indexer = { git = "https://github.com/near/nearcore", rev="1.31.0-rc.4" }
-near-crypto = { git = "https://github.com/near/nearcore", rev="1.31.0-rc.4" }
-near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.31.0-rc.4" }
+near-indexer = { git = "https://github.com/near/nearcore", rev="1.31.0" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="1.31.0" }
+near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.31.0" }
 
 [build-dependencies]
 tonic-build = "0.8.4"
