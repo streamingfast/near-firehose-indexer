@@ -1710,6 +1710,9 @@ name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "http"
@@ -1922,17 +1925,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4345964bb142484797b161f473a503a434de77149dd8c7427788c6e13379388"
 
 [[package]]
-name = "lazy-static-include"
-version = "3.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e559d5071cbb9743796593a892d96a7cc411d90aad711f57cc7dcbbf3893c10c"
-dependencies = [
- "lazy_static",
- "manifest-dir-macros",
- "syn",
-]
-
-[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2102,27 +2094,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b823e83b2affd8f40a9ee8c29dbc56404c1e34cd2710921f2801e2cf29527afa"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "manifest-dir-macros"
-version = "0.1.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f08150cf2bab1fc47c2196f4f41173a27fcd0f684165e5458c0046b53a472e2f"
-dependencies = [
- "once_cell",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "matchers"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f099785f7595cc4b4553a174ce30dd7589ef93391ff414dbb67f62392b9e0ce1"
-dependencies = [
- "regex-automata",
 ]
 
 [[package]]
@@ -2459,55 +2430,21 @@ dependencies = [
 
 [[package]]
 name = "near-firehose-indexer"
-version = "1.27.0"
+version = "0.0.0"
 dependencies = [
  "actix",
- "actix-rt",
- "actix-web",
- "anyhow",
- "awc",
- "base64",
- "borsh",
- "byteorder",
- "chrono",
  "clap",
- "dirs",
- "easy-ext",
- "enum-map",
- "futures",
  "hex",
- "hyper",
- "hyper-tls",
- "indicatif",
- "itertools",
- "lazy-static-include",
  "near-crypto",
  "near-indexer",
- "near-rust-allocator-proxy",
  "near-vm-errors",
- "num-rational",
- "once_cell",
+ "openssl",
  "openssl-probe",
- "parking_lot 0.12.1",
- "prometheus 0.11.0",
- "prost 0.10.4",
- "prost-types 0.10.1",
- "rand 0.7.3",
- "rayon",
- "rlimit",
- "rustix",
- "serde",
- "serde_ignored",
- "serde_json",
- "smart-default",
- "strum",
- "tempfile",
- "thiserror",
- "tokio",
+ "prost 0.11.6",
+ "prost-types 0.11.6",
  "tonic-build 0.5.2",
  "tracing",
- "tracing-subscriber 0.2.25",
- "xz2",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -2571,7 +2508,7 @@ dependencies = [
  "serde_json",
  "tokio",
  "tracing",
- "tracing-subscriber 0.3.15",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -2695,7 +2632,7 @@ dependencies = [
  "opentelemetry",
  "opentelemetry-otlp",
  "opentelemetry-semantic-conventions",
- "prometheus 0.13.1",
+ "prometheus",
  "strum",
  "thiserror",
  "tokio",
@@ -2703,7 +2640,7 @@ dependencies = [
  "tracing-appender",
  "tracing-opentelemetry",
  "tracing-serde",
- "tracing-subscriber 0.3.15",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -2840,17 +2777,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "near-rust-allocator-proxy"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be44da452581a4f2e7870d86886f50605853943ded9b6a7975495914645cdca4"
-dependencies = [
- "backtrace",
- "nix 0.23.1",
- "tracing",
-]
-
-[[package]]
 name = "near-stable-hasher"
 version = "0.0.0"
 source = "git+https://github.com/near/nearcore?rev=1.30.1#e2bf95c0737f7e80c70e77ae82b439342119148a"
@@ -2935,7 +2861,7 @@ dependencies = [
  "near-vm-errors",
  "ripemd",
  "serde",
- "sha2 0.9.9",
+ "sha2 0.10.2",
  "sha3",
  "zeropool-bn",
 ]
@@ -3040,19 +2966,6 @@ dependencies = [
  "cfg-if 0.1.10",
  "libc",
  "void",
-]
-
-[[package]]
-name = "nix"
-version = "0.23.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9f866317acbd3a240710c63f065ffb1e4fd466259045ccb504130b7f668f35c6"
-dependencies = [
- "bitflags",
- "cc",
- "cfg-if 1.0.0",
- "libc",
- "memoffset",
 ]
 
 [[package]]
@@ -3422,17 +3335,6 @@ dependencies = [
 
 [[package]]
 name = "parking_lot"
-version = "0.11.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d17b78036a60663b797adeaee46f5c9dfebb86948d1255007a1d6be0271ff99"
-dependencies = [
- "instant",
- "lock_api 0.4.7",
- "parking_lot_core 0.8.5",
-]
-
-[[package]]
-name = "parking_lot"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3742b2c103b9f06bc9fff0a37ff4912935851bee6d36f3c02bcc755bcfec228f"
@@ -3451,20 +3353,6 @@ dependencies = [
  "cloudabi",
  "libc",
  "redox_syscall 0.1.57",
- "smallvec",
- "winapi",
-]
-
-[[package]]
-name = "parking_lot_core"
-version = "0.8.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d76e8e1493bcac0d2766c42737f34458f1c8c50c0d23bcb24ea953affb273216"
-dependencies = [
- "cfg-if 1.0.0",
- "instant",
- "libc",
- "redox_syscall 0.2.16",
  "smallvec",
  "winapi",
 ]
@@ -3618,21 +3506,6 @@ dependencies = [
 
 [[package]]
 name = "prometheus"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8425533e7122f0c3cc7a37e6244b16ad3a2cc32ae7ac6276e2a75da0d9c200d"
-dependencies = [
- "cfg-if 1.0.0",
- "fnv",
- "lazy_static",
- "parking_lot 0.11.2",
- "protobuf 2.27.1",
- "regex",
- "thiserror",
-]
-
-[[package]]
-name = "prometheus"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cface98dfa6d645ea4c789839f176e4b072265d085bfcc48eaa8d137f58d3c39"
@@ -3668,12 +3541,12 @@ dependencies = [
 
 [[package]]
 name = "prost"
-version = "0.10.4"
+version = "0.11.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71adf41db68aa0daaefc69bb30bcd68ded9b9abaad5d1fbb6304c4fb390e083e"
+checksum = "21dc42e00223fc37204bd4aa177e69420c604ca4a183209a8f9de30c6d934698"
 dependencies = [
  "bytes",
- "prost-derive 0.10.1",
+ "prost-derive 0.11.6",
 ]
 
 [[package]]
@@ -3742,9 +3615,9 @@ dependencies = [
 
 [[package]]
 name = "prost-derive"
-version = "0.10.1"
+version = "0.11.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b670f45da57fb8542ebdbb6105a925fe571b67f9e7ed9f47a06a84e72b4e7cc"
+checksum = "8bda8c0881ea9f722eb9629376db3d0b903b462477c1aafcb0566610ac28ac5d"
 dependencies = [
  "anyhow",
  "itertools",
@@ -3775,12 +3648,12 @@ dependencies = [
 
 [[package]]
 name = "prost-types"
-version = "0.10.1"
+version = "0.11.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d0a014229361011dc8e69c8a1ec6c2e8d0f2af7c91e3ea3f5b2170298461e68"
+checksum = "a5e0526209433e96d83d750dd81a99118edbc55739e7e61a46764fd2ad537788"
 dependencies = [
  "bytes",
- "prost 0.10.4",
+ "prost 0.11.6",
 ]
 
 [[package]]
@@ -5105,7 +4978,7 @@ checksum = "09d48f71a791638519505cefafe162606f706c25592e4bde4d97600c0195312e"
 dependencies = [
  "crossbeam-channel",
  "time 0.3.13",
- "tracing-subscriber 0.3.15",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -5161,7 +5034,7 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
- "tracing-subscriber 0.3.15",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -5176,34 +5049,12 @@ dependencies = [
 
 [[package]]
 name = "tracing-subscriber"
-version = "0.2.25"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e0d2eaa99c3c2e41547cfa109e910a68ea03823cccad4a0525dcbc9b01e8c71"
-dependencies = [
- "ansi_term",
- "chrono",
- "lazy_static",
- "matchers 0.0.1",
- "regex",
- "serde",
- "serde_json",
- "sharded-slab",
- "smallvec",
- "thread_local",
- "tracing",
- "tracing-core",
- "tracing-log",
- "tracing-serde",
-]
-
-[[package]]
-name = "tracing-subscriber"
 version = "0.3.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60db860322da191b40952ad9affe65ea23e7dd6a5c442c2c42865810c6ab8e6b"
 dependencies = [
  "ansi_term",
- "matchers 0.1.0",
+ "matchers",
  "once_cell",
  "regex",
  "sharded-slab",
@@ -5506,7 +5357,7 @@ dependencies = [
  "indexmap",
  "lazy_static",
  "libc",
- "nix 0.15.0",
+ "nix",
  "page_size",
  "parking_lot 0.10.2",
  "rustc_version 0.2.3",
@@ -5547,7 +5398,7 @@ dependencies = [
  "dynasmrt",
  "lazy_static",
  "libc",
- "nix 0.15.0",
+ "nix",
  "serde",
  "serde_derive",
  "smallvec",
