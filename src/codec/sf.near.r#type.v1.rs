@@ -11,6 +11,17 @@ pub struct Block {
     #[prost(message, repeated, tag = "5")]
     pub state_changes: ::prost::alloc::vec::Vec<StateChangeWithCause>,
 }
+/// HeaderOnlyBlock is a standard [Block] structure where all other fields are
+/// removed so that hydrating that object from a [Block] bytes payload will
+/// drastically reduced allocated memory required to hold the full block.
+///
+/// This can be used to unpack a [Block] when only the [BlockHeader] information
+/// is required and greatly reduced required memory.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HeaderOnlyBlock {
+    #[prost(message, optional, tag = "2")]
+    pub header: ::core::option::Option<BlockHeader>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StateChangeWithCause {
     #[prost(message, optional, tag = "1")]
@@ -508,7 +519,7 @@ pub struct ActionError {
     pub index: u64,
     #[prost(
         oneof = "action_error::Kind",
-        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36"
+        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42"
     )]
     pub kind: ::core::option::Option<action_error::Kind>,
 }
@@ -548,6 +559,20 @@ pub mod action_error {
         OnlyImplicitAccountCreationAllowed(super::OnlyImplicitAccountCreationAllowedErrorKind),
         #[prost(message, tag = "36")]
         DeleteAccountWithLargeState(super::DeleteAccountWithLargeStateErrorKind),
+        #[prost(message, tag = "37")]
+        DelegateActionInvalidSignature(super::DelegateActionInvalidSignatureKind),
+        #[prost(message, tag = "38")]
+        DelegateActionSenderDoesNotMatchTxReceiver(
+            super::DelegateActionSenderDoesNotMatchTxReceiverKind,
+        ),
+        #[prost(message, tag = "39")]
+        DelegateActionExpired(super::DelegateActionExpiredKind),
+        #[prost(message, tag = "40")]
+        DelegateActionAccessKeyError(super::DelegateActionAccessKeyErrorKind),
+        #[prost(message, tag = "41")]
+        DelegateActionInvalidNonce(super::DelegateActionInvalidNonceKind),
+        #[prost(message, tag = "42")]
+        DelegateActionNonceTooLarge(super::DelegateActionNonceTooLargeKind),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -656,6 +681,37 @@ pub struct DeleteAccountWithLargeStateErrorKind {
     pub account_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionInvalidSignatureKind {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionSenderDoesNotMatchTxReceiverKind {
+    #[prost(string, tag = "1")]
+    pub sender_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub receiver_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionExpiredKind {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionAccessKeyErrorKind {
+    /// InvalidAccessKeyError
+    #[prost(enumeration = "InvalidTxError", tag = "1")]
+    pub error: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionInvalidNonceKind {
+    #[prost(uint64, tag = "1")]
+    pub delegate_nonce: u64,
+    #[prost(uint64, tag = "2")]
+    pub ak_nonce: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionNonceTooLargeKind {
+    #[prost(uint64, tag = "1")]
+    pub delegate_nonce: u64,
+    #[prost(uint64, tag = "2")]
+    pub upper_bound: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MerklePath {
     #[prost(message, repeated, tag = "1")]
     pub path: ::prost::alloc::vec::Vec<MerklePathItem>,
@@ -669,7 +725,7 @@ pub struct MerklePathItem {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Action {
-    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
+    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9")]
     pub action: ::core::option::Option<action::Action>,
 }
 /// Nested message and enum types in `Action`.
@@ -692,6 +748,8 @@ pub mod action {
         DeleteKey(super::DeleteKeyAction),
         #[prost(message, tag = "8")]
         DeleteAccount(super::DeleteAccountAction),
+        #[prost(message, tag = "9")]
+        Delegate(super::SignedDelegateAction),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -740,6 +798,28 @@ pub struct DeleteKeyAction {
 pub struct DeleteAccountAction {
     #[prost(string, tag = "1")]
     pub beneficiary_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SignedDelegateAction {
+    #[prost(message, optional, tag = "1")]
+    pub signature: ::core::option::Option<Signature>,
+    #[prost(message, optional, tag = "2")]
+    pub delegate_action: ::core::option::Option<DelegateAction>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateAction {
+    #[prost(string, tag = "1")]
+    pub sender_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub receiver_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub actions: ::prost::alloc::vec::Vec<Action>,
+    #[prost(uint64, tag = "4")]
+    pub nonce: u64,
+    #[prost(uint64, tag = "5")]
+    pub max_block_height: u64,
+    #[prost(message, optional, tag = "6")]
+    pub public_key: ::core::option::Option<PublicKey>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccessKey {

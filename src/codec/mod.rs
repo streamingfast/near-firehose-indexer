@@ -1,4 +1,4 @@
-#[path = "sf.near.codec.v1.rs"]
+#[path = "sf.near.r#type.v1.rs"]
 mod codec;
 
 pub use codec::*;
@@ -454,6 +454,48 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                 account_id: account_id.to_string(),
                                             },
                                         },
+                                        ActionErrorKind::DelegateActionInvalidSignature => {
+                                            action_error::Kind::DelegateActionInvalidSignature {
+                                                0: Default::default(),
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionSenderDoesNotMatchTxReceiver {
+                                            sender_id,
+                                            receiver_id,
+                                        } => {
+                                            action_error::Kind::DelegateActionSenderDoesNotMatchTxReceiver {
+                                                0: DelegateActionSenderDoesNotMatchTxReceiverKind {
+                                                    sender_id: sender_id.to_string(),
+                                                    receiver_id: receiver_id.to_string()
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionExpired => {
+                                            action_error::Kind::DelegateActionExpired {
+                                                0: Default::default(),
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionAccessKeyError(_) => {
+                                            action_error::Kind::DelegateActionAccessKeyError {
+                                                0: Default::default(),
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionInvalidNonce { delegate_nonce, ak_nonce} => {
+                                            action_error::Kind::DelegateActionInvalidNonce {
+                                                0: DelegateActionInvalidNonceKind {
+                                                    delegate_nonce: delegate_nonce.into(),
+                                                    ak_nonce: ak_nonce.into(),
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionNonceTooLarge { delegate_nonce, upper_bound } => {
+                                            action_error::Kind::DelegateActionNonceTooLarge {
+                                                0: DelegateActionNonceTooLargeKind {
+                                                    delegate_nonce: delegate_nonce.into(),
+                                                    upper_bound: upper_bound.into(),
+                                                },
+                                            }
+                                        }
                                     }),
                                 },
                             })
@@ -612,7 +654,37 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::Delegate {
+                delegate_action,
+                signature,
+            } => Action {
+                action: Some(action::Action::Delegate {
+                    0: SignedDelegateAction {
+                        delegate_action: Some(DelegateAction {
+                            sender_id: delegate_action.sender_id.to_string(),
+                            receiver_id: delegate_action.receiver_id.to_string(),
+                            actions: delegate_action
+                                .actions
+                                .into_iter()
+                                .map(|a| a.into())
+                                .collect(),
+                            nonce: delegate_action.nonce.into(),
+                            max_block_height: delegate_action.max_block_height.into(),
+                            public_key: Some(PublicKey::from(delegate_action.public_key)),
+                        }),
+                        signature: Some(signature.into()),
+                    },
+                }),
+            },
         }
+    }
+}
+
+impl From<near_indexer::near_primitives::delegate_action::NonDelegateAction> for Action {
+    fn from(value: near_primitives::delegate_action::NonDelegateAction) -> Self {
+        let near_act: near_primitives::transaction::Action = value.into();
+        let near_act_view: near_views::ActionView = near_act.into();
+        near_act_view.into()
     }
 }
 
