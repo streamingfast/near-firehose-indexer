@@ -680,9 +680,11 @@ impl From<near_views::ActionView> for Action {
     }
 }
 
-impl From<near_primitives::delegate_action::NonDelegateAction> for Action {
+impl From<near_indexer::near_primitives::delegate_action::NonDelegateAction> for Action {
     fn from(value: near_primitives::delegate_action::NonDelegateAction) -> Self {
-        value.into()
+        let near_act: near_primitives::transaction::Action = value.into();
+        let near_act_view: near_views::ActionView = near_act.into();
+        near_act_view.into()
     }
 }
 
