@@ -3,7 +3,7 @@ members = ["firehose-pb"]
 
 [package]
 name = "near-firehose-indexer"
-version = "1.32.0-rc.2"
+version = "1.32.1"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
@@ -21,9 +21,9 @@ rkyv = "=0.7.38"
 tracing = { version = "0.1.36", features = ["std"] }
 tracing-subscriber = { version = "0.3.15", features = ["env-filter", "fmt", "registry", "std"] }
 
-near-indexer = { git = "https://github.com/near/nearcore", rev="1.32.0-rc.2" }
-near-crypto = { git = "https://github.com/near/nearcore", rev="1.32.0-rc.2" }
-near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.32.0-rc.2" }
+near-indexer = { git = "https://github.com/near/nearcore", rev="1.32.1" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="1.32.1" }
+near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.32.1" }
 
 [build-dependencies]
 tonic-build = "0.8.4"
