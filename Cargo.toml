@@ -3,7 +3,7 @@ members = ["firehose-pb"]
 
 [package]
 name = "near-firehose-indexer"
-version = "1.33.0"
+version = "1.34.0-rc.1"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
@@ -23,9 +23,9 @@ tracing-subscriber = { version = "0.3.15", features = ["env-filter", "fmt", "reg
 
 # 944dd70ebae4b4603677d7969807f11bcd353588 = 1.33.0 tag on the nearcore repo. they messed up the release, and using the tag
 # here does not work, so i am pointing to their commit directly
-near-indexer = { git = "https://github.com/near/nearcore", rev="944dd70ebae4b4603677d7969807f11bcd353588" }
-near-crypto = { git = "https://github.com/near/nearcore", rev="944dd70ebae4b4603677d7969807f11bcd353588" }
-near-vm-errors = { git = "https://github.com/near/nearcore", rev="944dd70ebae4b4603677d7969807f11bcd353588" }
+near-indexer = { git = "https://github.com/near/nearcore", rev="1.34.0-rc.1" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="1.34.0-rc.1" }
+near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.34.0-rc.1" }
 
 [build-dependencies]
 tonic-build = "0.8.4"
