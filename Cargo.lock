@@ -2808,6 +2808,10 @@ dependencies = [
  "tonic-build 0.8.4",
  "tracing",
  "tracing-subscriber",
+ "wasmer-compiler-near",
+ "wasmer-compiler-singlepass-near",
+ "wasmer-engine-near",
+ "wasmer-engine-universal-near",
 ]
 
 [[package]]
