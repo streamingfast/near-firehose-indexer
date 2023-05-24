@@ -1,7 +1,7 @@
 ARG CORE_VERSION=latest
 
 FROM docker.io/nearprotocol/nearcore:$CORE_VERSION as nearcore
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
        apt-get -y install -y \
