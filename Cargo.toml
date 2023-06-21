@@ -3,13 +3,14 @@ members = ["firehose-pb"]
 
 [package]
 name = "near-firehose-indexer"
-version = "1.34.0"
+version = "1.35.0-rc.1"
 authors = ["StreamingFast Developers <dev@streamingfast.io>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+tokio = { version = "~1.28", features = ["fs", "macros", "net", "rt-multi-thread", "sync", "time"] }
 actix = "0.13.0"
 clap = { version = "3.1.6", features = ["derive"] }
 hex = { version = "0.4.2", features = ["serde"] }
@@ -21,10 +22,9 @@ rkyv = "=0.7.38"
 tracing = { version = "0.1.36", features = ["std"] }
 tracing-subscriber = { version = "0.3.15", features = ["env-filter", "fmt", "registry", "std"] }
 
-# 78b86501
-near-indexer = { git = "https://github.com/near/nearcore", rev="1.34.0" }
-near-crypto = { git = "https://github.com/near/nearcore", rev="1.34.0" }
-near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.34.0" }
+near-indexer = { git = "https://github.com/near/nearcore", rev="1.35.0-rc.1" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="1.35.0-rc.1" }
+near-vm-errors = { git = "https://github.com/near/nearcore", rev="1.35.0-rc.1" }
 
 [build-dependencies]
 tonic-build = "0.8.4"
