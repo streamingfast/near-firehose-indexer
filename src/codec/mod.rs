@@ -384,29 +384,29 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         ActionErrorKind::FunctionCallError(fce) => {
                                             action_error::Kind::FunctionCall {
                                                 0: FunctionCallErrorKind { error: match fce {
-                                                    near_vm_errors::FunctionCallErrorSer::CompilationError(_) => {
+                                                    near_errors::FunctionCallError::CompilationError(_) => {
                                                         FunctionCallErrorSer::CompilationError.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::LinkError { .. } => {
+                                                    near_errors::FunctionCallError::LinkError { .. } => {
                                                         FunctionCallErrorSer::LinkError.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::MethodResolveError(_) => {
+                                                    near_errors::FunctionCallError::MethodResolveError(_) => {
                                                         FunctionCallErrorSer::MethodResolveError.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::WasmTrap(_) => {
+                                                    near_errors::FunctionCallError::WasmTrap(_) => {
                                                         FunctionCallErrorSer::WasmTrap.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::WasmUnknownError => {
+                                                    near_errors::FunctionCallError::WasmUnknownError => {
                                                         FunctionCallErrorSer::WasmUnknownError.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::HostError(_) => {
+                                                    near_errors::FunctionCallError::HostError(_) => {
                                                         FunctionCallErrorSer::HostError.into()
                                                     }
-                                                    near_vm_errors::FunctionCallErrorSer::_EVMError => {
-                                                        FunctionCallErrorSer::EvmError.into()
-                                                    }
-                                                    near_vm_errors::FunctionCallErrorSer::ExecutionError(_) => {
+                                                    near_errors::FunctionCallError::ExecutionError(_) => {
                                                         FunctionCallErrorSer::ExecutionError.into()
+                                                    }
+                                                    near_errors::FunctionCallError::_EVMError => {
+                                                        FunctionCallErrorSer::EvmError.into()
                                                     }
                                                 } },
                                             }
