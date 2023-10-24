@@ -4,12 +4,6 @@ on:
   push:
     tags:
       - "*-fire"
-  workflow_dispatch:
-    inputs:
-      core_version:
-        description: 'version of nearcore (optional: if not provided, will be inferred from tag)'
-        required: false
-        type: string
 
 env:
   REGISTRY: ghcr.io
