@@ -54,7 +54,9 @@ RUN mkdir /tmp/s5cmd && \
   rm -rf /tmp/s5cmd
 
 
-COPY --from=build /tmp/target/releaase/near-firehose-indexer /app/neard
+RUN ls -la /tmp/target
+
+COPY --from=build /tmp/target/near-firehose-indexer /app/neard
 RUN chmod +x /app/near-firehose-indexer
 
 ENV PATH "$PATH:/app"
