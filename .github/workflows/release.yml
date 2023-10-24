@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*-fire"
+  workflow_dispatch: {}
 
 env:
   REGISTRY: ghcr.io
