@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*-fire"
+  workflow_dispatch:
+    inputs:
+      core_version:
+        description: 'version of nearcore (optional: if not provided, will be inferred from tag)'
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-20.04
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Set Env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Generate Change Log
+        id: changelog
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          chmod 755 ./.github/generate_change_log.sh
+          CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION }})
+
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Download All Artifacts
+        id: download-artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: ./binaries
+
+#      - name: Sanitize Downloaded Files
+#        run: |
+#          # We downloaded all the artifacts previously uploaded and we put them in
+#          # the 'binaries' folder. In this folder, the layout is:
+#          #
+#          #  binaries
+#          #  ├── linux-arm64-unknown-linux-gnu
+#          #  │   └── near-firehose-indexer
+#          #  └── linux-x86_64-unknown-linux-gnu
+#          #      └── near-firehose-indexer
+#          #
+#          # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
+#          # step. The 'near-firehose-indexer' file name is the filename of the uploaded 'path' field,
+#          # we used './target/release/near-firehose-indexer' in the upload step so the file name here
+#          # is 'near-firehose-indexer'.
+#
+#          download_path="${{steps.download-artifacts.outputs.download-path}}"
+#          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-firehose-indexer"
+#          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-firehose-indexer" "$download_path/near-firehose-indexer-x86_64-unknown-linux-gnu"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate docker tags/labels from github build context
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=tag
+            type=sha,prefix=,enable=true
+          flavor: |
+            latest=${{ startsWith(github.ref, 'refs/tags/') }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ${{steps.download-artifacts.outputs.download-path}}
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CORE_VERSION=${{ env.CORE_VERSION }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        with:
+          name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
+          body: ${{ env.CHANGELOG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          files: |
+            ${{steps.download-artifacts.outputs.download-path}}/*
