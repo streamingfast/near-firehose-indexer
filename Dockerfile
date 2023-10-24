@@ -30,6 +30,8 @@ COPY . .
 
 RUN CARGO_TARGET_DIR=/tmp/target make release
 
+RUN ls -la /tmp/target
+
 FROM ubuntu:20.04
 
 ENV TZ="Etc/UTC"
@@ -54,7 +56,6 @@ RUN mkdir /tmp/s5cmd && \
   rm -rf /tmp/s5cmd
 
 
-RUN ls -la /tmp/target
 
 COPY --from=build /tmp/target/near-firehose-indexer /app/neard
 RUN chmod +x /app/near-firehose-indexer
