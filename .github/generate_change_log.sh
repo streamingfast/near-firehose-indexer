@@ -21,15 +21,9 @@ while read line; do
     fi
 done < ${change_log_file}
 
-LINUX_X86_64_BIN_SUM="$(checksum ./linux-x86_64-unknown-linux-gnu)"
-
 OUTPUT=$(cat <<-END
 ## Changelog\n
 ${CHANGE_LOG}\n
-## Checksums\n
-|    Assets    | Sha256 Checksum  |\n
-| :-----------: |------------|\n
-| near-firehose-indexer-linux-x86-64 | ${LINUX_X86_64_BIN_SUM} |\n
 END
 )
 
