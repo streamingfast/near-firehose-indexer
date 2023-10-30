@@ -15,7 +15,6 @@ actix = "0.13.0"
 clap = { version = "3.1.6", features = ["derive"] }
 hex = { version = "0.4.2", features = ["serde"] }
 openssl = { version = "0.10", features = ["vendored"] }
-getrandom = { version = "0.2.9", features = ["js"] }
 openssl-probe = "0.1.4"
 prost = "0.11.6"
 prost-types = "0.11.6"
