@@ -28,3 +28,13 @@ Let's say Near releases a new version of nearcore with tag `1.99.0-rc.3`
 ### Then what?
 
 If everything has gone as planned, the Github action will have built a Docker image and notified the cloudbuild-notif Slack channel.  You can now use this image in order to build the bundle image in the `firehose-near` project, using the `Build Docker Image` Github action.
+
+### Where to deploy?
+
+In the release notes on nearcore, you will see a note which indicates where to deploy in the `CODE_COLOR` section.  This section is of the form `CODE_{color}_{TESTNET/MAINNET}`, where the color represents the urgency of the release.  
+
+For example, `CODE_RED_MAINNET` means that the release is urgent and should be deployed to mainnet as soon as possible.  `CODE_YELLOW_TESTNET` means that the release is not urgent, but should be deployed to testnet as soon as possible.  `CODE_GREEN_TESTNET` means that the release is not urgent, and can be deployed to testnet at your leisure.
+
+If the `PROTOCOL_UPGRADE` section is set to `TRUE`, then this is a required upgrade and should be done as soon as possible because otherwise the node will be unable to get blocks from the network.
+
+If the `DATABASE_UPGRADE` section is set to `TRUE`, this means when the node is started, it will perform a database upgrade.  This means that when the node starts, it might take some time for blocks to start flowing.  This is normal and expected behavior.  If you are not sure if the migration still happening or not, you can perform `dstat` on the node and see if there are still disk operations happening.  If there are, then the migration is likely still happening.
