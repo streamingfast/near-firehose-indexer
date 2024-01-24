@@ -680,8 +680,8 @@ impl From<near_views::ActionView> for Action {
     }
 }
 
-impl From<near_indexer::near_primitives::delegate_action::NonDelegateAction> for Action {
-    fn from(value: near_primitives::delegate_action::NonDelegateAction) -> Self {
+impl From<near_indexer::near_primitives::action::delegate::NonDelegateAction> for Action {
+    fn from(value: near_primitives::action::delegate::NonDelegateAction) -> Self {
         let near_act: near_primitives::transaction::Action = value.into();
         let near_act_view: near_views::ActionView = near_act.into();
         near_act_view.into()
@@ -750,6 +750,24 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
                 .map(|vp| ValidatorStake::from(vp))
                 .collect(),
             signature: Some(ch.signature.clone().into()),
+        }
+    }
+}
+
+impl From<Box<NearSignature>> for Signature {
+    fn from(sig: Box<NearSignature>) -> Self {
+        match *sig {
+            NearSignature::ED25519(s) => Signature {
+                r#type: CurveKind::Ed25519.into(),
+                bytes: Vec::from(s.to_bytes()),
+            } as Signature,
+            NearSignature::SECP256K1(s) => {
+                let data = Vec::from(<[u8; 65]>::from(s));
+                Signature {
+                    r#type: CurveKind::Secp256k1.into(),
+                    bytes: data,
+                }
+            }
         }
     }
 }
