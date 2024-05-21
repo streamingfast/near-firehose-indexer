@@ -519,7 +519,7 @@ pub struct ActionError {
     pub index: u64,
     #[prost(
         oneof = "action_error::Kind",
-        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42"
+        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43"
     )]
     pub kind: ::core::option::Option<action_error::Kind>,
 }
@@ -573,6 +573,8 @@ pub mod action_error {
         DelegateActionInvalidNonce(super::DelegateActionInvalidNonceKind),
         #[prost(message, tag = "42")]
         DelegateActionNonceTooLarge(super::DelegateActionNonceTooLargeKind),
+        #[prost(message, tag = "43")]
+        NonRefundableTransferToExistingAccount(super::NonRefundableTransferToExistingAccountKind),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -710,6 +712,11 @@ pub struct DelegateActionNonceTooLargeKind {
     pub delegate_nonce: u64,
     #[prost(uint64, tag = "2")]
     pub upper_bound: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NonRefundableTransferToExistingAccountKind {
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MerklePath {

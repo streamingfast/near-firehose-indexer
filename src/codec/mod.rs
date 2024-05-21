@@ -136,6 +136,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     output_data_receivers,
                     input_data_ids,
                     actions,
+                    ..
                 } => Some(receipt::Receipt::Action {
                     0: ReceiptAction {
                         signer_id: signer_id.to_string(),
@@ -152,7 +153,7 @@ impl From<near_views::ReceiptView> for Receipt {
                         actions: actions.into_iter().map(|a| Action::from(a)).collect(),
                     },
                 }),
-                ReceiptEnumView::Data { data_id, data } => Some(receipt::Receipt::Data {
+                ReceiptEnumView::Data { data_id, data, .. } => Some(receipt::Receipt::Data {
                     0: ReceiptData {
                         data_id: Some(CryptoHash::from(data_id)),
                         data: data.unwrap_or(vec![]),
@@ -322,7 +323,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::DeleteKeyDoesNotExist {
                                             0: DeleteKeyDoesNotExistErrorKind {
                                                 account_id: account_id.to_string(),
-                                                public_key: Some(PublicKey::from(public_key)),
+                                                public_key: Some(PublicKey::from(*public_key)),
                                             },
                                         },
                                         ActionErrorKind::AddKeyAlreadyExists {
@@ -331,7 +332,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::AddKeyAlreadyExists {
                                             0: AddKeyAlreadyExistsErrorKind {
                                                 account_id: account_id.to_string(),
-                                                public_key: Some(PublicKey::from(public_key)),
+                                                public_key: Some(PublicKey::from(*public_key)),
                                             },
                                         },
                                         ActionErrorKind::DeleteAccountStaking { .. } => {
@@ -496,6 +497,13 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                 },
                                             }
                                         }
+                                        ActionErrorKind::NonRefundableTransferToExistingAccount {
+                                            account_id,
+                                        } => action_error::Kind::NonRefundableTransferToExistingAccount {
+                                            0: NonRefundableTransferToExistingAccountKind {
+                                                account_id: account_id.to_string(),
+                                            },
+                                        },
                                     }),
                                 },
                             })
