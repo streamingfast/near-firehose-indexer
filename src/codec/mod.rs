@@ -253,9 +253,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                 0: UnknownExecutionStatus {},
             },
             ExecutionStatusView::SuccessValue(v) => execution_outcome::Status::SuccessValue {
-                0: SuccessValueExecutionStatus {
-                    value: v.into(),
-                },
+                0: SuccessValueExecutionStatus { value: v.into() },
             },
             ExecutionStatusView::SuccessReceiptId(v) => {
                 execution_outcome::Status::SuccessReceiptId {
@@ -436,6 +434,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                     near_errors::ReceiptValidationError::ActionsValidation(_) => {
                                                         ReceiptValidationError::ActionsValidationError.into()
                                                     }
+                                                    near_primitives::errors::ReceiptValidationError::ReceiptSizeExceeded { .. } => {
+                                                        ReceiptValidationError::ReceiptSizeExceeded.into()
+                                                    }
                                                 }}
                                             }
                                         }
@@ -553,6 +554,18 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                     near_errors::InvalidTxError::TransactionSizeExceeded {
                                         ..
                                     } => InvalidTxError::TransactionSizeExceeded.into(),
+                                    near_primitives::errors::InvalidTxError::InvalidTransactionVersion {..} => {
+                                        InvalidTxError::InvalidTransactionVersion.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::StorageError(_) => {
+                                        InvalidTxError::StorageError.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::ShardCongested {..} => {
+                                        InvalidTxError::ShardCongested.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::ShardStuck {..} => {
+                                        InvalidTxError::ShardStuck.into()
+                                    }
                                 },
                             })
                         }

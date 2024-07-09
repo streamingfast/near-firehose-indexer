@@ -896,6 +896,7 @@ pub enum ReceiptValidationError {
     ReturnedValueLengthExceeded = 4,
     NumberInputDataDependenciesExceeded = 5,
     ActionsValidationError = 6,
+    ReceiptSizeExceeded = 7,
 }
 ///todo: add more detail?
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -915,6 +916,10 @@ pub enum InvalidTxError {
     Expired = 11,
     ActionsValidation = 12,
     TransactionSizeExceeded = 13,
+    InvalidTransactionVersion = 14,
+    StorageError = 15,
+    ShardCongested = 16,
+    ShardStuck = 17,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
