@@ -21,9 +21,13 @@ fn record_block(block: &codec::Block) {
     let header = block.header.as_ref().unwrap();
 
     println!(
-        "FIRE BLOCK {height:} {hash:} {hex:}",
+        "FIRE BLOCK {height:} {hash:} {parent_height:} {parent_hash:} {lib:} {timestamp:} {hex:}",
         height = header.height,
         hash = header.hash.as_ref().unwrap(),
+        parent_height = header.prev_height,
+        parent_hash = header.prev_hash.as_ref().unwrap(),
+        lib = header.last_final_block.as_ref().unwrap(),
+        timestamp = header.timestamp,
         hex = hex::encode(bytes),
     );
 }
