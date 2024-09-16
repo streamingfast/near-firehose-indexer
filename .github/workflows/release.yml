@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - "*-fire"
-  workflow_dispatch: {}
+  workflow_dispatch: { }
 
 env:
   REGISTRY: ghcr.io
@@ -39,27 +39,27 @@ jobs:
 
       - name: Download All Artifacts
         id: download-artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
-#      - name: Sanitize Downloaded Files
-#        run: |
-#          # We downloaded all the artifacts previously uploaded and we put them in
-#          # the 'binaries' folder. In this folder, the layout is:
-#          #
-#          #  binaries
-#          #  ├── linux-arm64-unknown-linux-gnu
-#          #  │   └── near-firehose-indexer
-#          #  └── linux-x86_64-unknown-linux-gnu
-#          #      └── near-firehose-indexer
-#          #
-#          # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
-#          # step. The 'near-firehose-indexer' file name is the filename of the uploaded 'path' field,
-#          # we used './target/release/near-firehose-indexer' in the upload step so the file name here
-#          # is 'near-firehose-indexer'.
-#
-#          download_path="${{steps.download-artifacts.outputs.download-path}}"
-#          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-firehose-indexer"
-#          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-firehose-indexer" "$download_path/near-firehose-indexer-x86_64-unknown-linux-gnu"
+      #      - name: Sanitize Downloaded Files
+      #        run: |
+      #          # We downloaded all the artifacts previously uploaded and we put them in
+      #          # the 'binaries' folder. In this folder, the layout is:
+      #          #
+      #          #  binaries
+      #          #  ├── linux-arm64-unknown-linux-gnu
+      #          #  │   └── near-firehose-indexer
+      #          #  └── linux-x86_64-unknown-linux-gnu
+      #          #      └── near-firehose-indexer
+      #          #
+      #          # The sub-folder name comes from the 'name' field of the 'actions/upload-artifact@v2'
+      #          # step. The 'near-firehose-indexer' file name is the filename of the uploaded 'path' field,
+      #          # we used './target/release/near-firehose-indexer' in the upload step so the file name here
+      #          # is 'near-firehose-indexer'.
+      #
+      #          download_path="${{steps.download-artifacts.outputs.download-path}}"
+      #          chmod +x "${download_path}/linux-x86_64-unknown-linux-gnu/near-firehose-indexer"
+      #          mv "$download_path/linux-x86_64-unknown-linux-gnu/near-firehose-indexer" "$download_path/near-firehose-indexer-x86_64-unknown-linux-gnu"
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
