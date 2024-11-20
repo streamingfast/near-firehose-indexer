@@ -105,7 +105,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e01ed3140b2f8d422c68afa1ed2e85d996ea619c988ac834d255db32138655cb"
 dependencies = [
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -243,7 +243,7 @@ dependencies = [
  "actix-router",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -254,7 +254,7 @@ checksum = "7c7db3d5a9718568e4cf4a537cfd7070e6e6ff7481510d0237fb529ac850f6d3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -448,7 +448,7 @@ checksum = "16e62a023e7c117e27523144c5d2459f4397fcc3cab0085af8e2224f643a0193"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -459,7 +459,7 @@ checksum = "c6fa2087f2753a7da8cc1c0dbfcf89579dd57458e36769de5ac750b4671737ca"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -540,7 +540,7 @@ dependencies = [
  "rust-ini",
  "serde",
  "serde-xml-rs",
- "thiserror",
+ "thiserror 1.0.61",
  "time",
  "url",
 ]
@@ -551,7 +551,7 @@ version = "0.25.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42fed2b9fca70f2908268d057a607f2a906f47edbf856ea8587de9038d264e22"
 dependencies = [
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -665,7 +665,7 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shlex",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -799,7 +799,7 @@ dependencies = [
  "proc-macro-crate 3.1.0",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
  "syn_derive",
 ]
 
@@ -1046,7 +1046,7 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1411,7 +1411,7 @@ checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1435,7 +1435,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "strsim 0.11.1",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1446,7 +1446,7 @@ checksum = "733cabb43482b1a1b53eee8583c2b9e8684d592215ea83efd305dd31bc2f0178"
 dependencies = [
  "darling_core",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1476,7 +1476,7 @@ checksum = "62d671cc41a825ebabc75757b62d3d168c577f9149b2d49ece1dad1f72119d25"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1487,7 +1487,7 @@ checksum = "67e77553c4162a157adbf834ebae5b415acbecbeafc7a74b0e886657506a7611"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1689,7 +1689,7 @@ checksum = "f282cfdfe92516eb26c2af8589c274c7c17681f5ecc03c18255fe741c6aa64eb"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1710,7 +1710,7 @@ dependencies = [
  "darling",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1778,7 +1778,7 @@ dependencies = [
  "dissimilar",
  "num-traits",
  "prefix-sum-vec",
- "thiserror",
+ "thiserror 1.0.61",
  "wasm-encoder 0.27.0",
  "wasmparser 0.105.0",
  "wasmprinter",
@@ -1918,7 +1918,7 @@ checksum = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -2634,7 +2634,7 @@ checksum = "5cf92c10c7e361d6b99666ec1c6f9805b0bea2c3bd8c78dc6fe98ac5bd78db11"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -2808,8 +2808,8 @@ dependencies = [
 
 [[package]]
 name = "near-async"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "derive_more",
@@ -2828,26 +2828,26 @@ dependencies = [
 
 [[package]]
 name = "near-async-derive"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
 name = "near-cache"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "lru 0.12.3",
 ]
 
 [[package]]
 name = "near-chain"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "assert_matches",
@@ -2860,6 +2860,7 @@ dependencies = [
  "itertools 0.10.5",
  "itoa",
  "lru 0.12.3",
+ "more-asserts",
  "near-async",
  "near-cache",
  "near-chain-configs",
@@ -2887,16 +2888,16 @@ dependencies = [
  "serde",
  "strum",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
+ "tokio",
  "tracing",
- "yansi",
 ]
 
 [[package]]
 name = "near-chain-configs"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "anyhow",
  "bytesize",
@@ -2919,21 +2920,21 @@ dependencies = [
 
 [[package]]
 name = "near-chain-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-crypto",
  "near-primitives",
  "near-time",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
  "tracing",
 ]
 
 [[package]]
 name = "near-chunks"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "borsh 1.5.0",
@@ -2964,8 +2965,8 @@ dependencies = [
 
 [[package]]
 name = "near-chunks-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-chain-primitives",
  "near-primitives",
@@ -2973,8 +2974,8 @@ dependencies = [
 
 [[package]]
 name = "near-client"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "actix-rt",
@@ -3022,17 +3023,19 @@ dependencies = [
  "strum",
  "sysinfo",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
  "tokio",
+ "tokio-stream",
+ "tokio-util 0.7.11",
  "tracing",
  "yansi",
 ]
 
 [[package]]
 name = "near-client-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "chrono",
@@ -3045,27 +3048,26 @@ dependencies = [
  "serde",
  "serde_json",
  "strum",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
  "tracing",
- "yansi",
 ]
 
 [[package]]
 name = "near-config-utils"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "anyhow",
  "json_comments",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
 ]
 
 [[package]]
 name = "near-crypto"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "blake2",
  "borsh 1.5.0",
@@ -3084,13 +3086,13 @@ dependencies = [
  "serde",
  "serde_json",
  "subtle",
- "thiserror",
+ "thiserror 2.0.3",
 ]
 
 [[package]]
 name = "near-dyn-configs"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "anyhow",
  "near-chain-configs",
@@ -3101,15 +3103,15 @@ dependencies = [
  "prometheus",
  "serde",
  "serde_json",
- "thiserror",
+ "thiserror 2.0.3",
  "tokio",
  "tracing",
 ]
 
 [[package]]
 name = "near-epoch-manager"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "borsh 1.5.0",
  "itertools 0.10.5",
@@ -3134,7 +3136,7 @@ dependencies = [
 
 [[package]]
 name = "near-firehose-indexer"
-version = "2.3.1"
+version = "2.4.0-rc.1"
 dependencies = [
  "actix",
  "clap 3.2.25",
@@ -3147,6 +3149,7 @@ dependencies = [
  "prost 0.11.9",
  "prost-types 0.11.9",
  "rkyv",
+ "syn 2.0.87",
  "tokio",
  "tonic-build 0.8.4",
  "tracing",
@@ -3155,16 +3158,16 @@ dependencies = [
 
 [[package]]
 name = "near-fmt"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-primitives-core",
 ]
 
 [[package]]
 name = "near-indexer"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "anyhow",
@@ -3190,8 +3193,8 @@ dependencies = [
 
 [[package]]
 name = "near-indexer-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-primitives",
  "serde",
@@ -3200,8 +3203,8 @@ dependencies = [
 
 [[package]]
 name = "near-jsonrpc"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "actix-cors",
@@ -3230,8 +3233,8 @@ dependencies = [
 
 [[package]]
 name = "near-jsonrpc-client"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix-http",
  "awc",
@@ -3244,8 +3247,8 @@ dependencies = [
 
 [[package]]
 name = "near-jsonrpc-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "arbitrary",
  "near-chain-configs",
@@ -3255,14 +3258,14 @@ dependencies = [
  "near-schema-checker-lib",
  "serde",
  "serde_json",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
 ]
 
 [[package]]
 name = "near-mainnet-res"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-account-id",
  "near-chain-configs",
@@ -3272,8 +3275,8 @@ dependencies = [
 
 [[package]]
 name = "near-network"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "anyhow",
@@ -3314,7 +3317,7 @@ dependencies = [
  "smart-default",
  "strum",
  "stun",
- "thiserror",
+ "thiserror 2.0.3",
  "time",
  "tokio",
  "tokio-stream",
@@ -3324,8 +3327,8 @@ dependencies = [
 
 [[package]]
 name = "near-o11y"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "base64 0.21.7",
@@ -3339,7 +3342,7 @@ dependencies = [
  "prometheus",
  "serde",
  "serde_json",
- "thiserror",
+ "thiserror 2.0.3",
  "tokio",
  "tracing",
  "tracing-appender",
@@ -3349,8 +3352,8 @@ dependencies = [
 
 [[package]]
 name = "near-parameters"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "borsh 1.5.0",
  "enum-map",
@@ -3362,13 +3365,13 @@ dependencies = [
  "serde_repr",
  "serde_yaml",
  "strum",
- "thiserror",
+ "thiserror 2.0.3",
 ]
 
 [[package]]
 name = "near-performance-metrics"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "bitflags 1.3.2",
@@ -3382,17 +3385,17 @@ dependencies = [
 
 [[package]]
 name = "near-performance-metrics-macros"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
 name = "near-pool"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "borsh 1.5.0",
  "near-crypto",
@@ -3403,8 +3406,8 @@ dependencies = [
 
 [[package]]
 name = "near-primitives"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "arbitrary",
  "base64 0.21.7",
@@ -3438,15 +3441,15 @@ dependencies = [
  "sha3",
  "smart-default",
  "strum",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
  "zstd",
 ]
 
 [[package]]
 name = "near-primitives-core"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "arbitrary",
  "base64 0.21.7",
@@ -3460,13 +3463,13 @@ dependencies = [
  "serde",
  "serde_repr",
  "sha2",
- "thiserror",
+ "thiserror 2.0.3",
 ]
 
 [[package]]
 name = "near-rosetta-rpc"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "actix-cors",
@@ -3490,19 +3493,19 @@ dependencies = [
  "serde",
  "serde_json",
  "strum",
- "thiserror",
+ "thiserror 2.0.3",
  "tokio",
 ]
 
 [[package]]
 name = "near-schema-checker-core"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 
 [[package]]
 name = "near-schema-checker-lib"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "near-schema-checker-core",
  "near-schema-checker-macro",
@@ -3510,18 +3513,18 @@ dependencies = [
 
 [[package]]
 name = "near-schema-checker-macro"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 
 [[package]]
 name = "near-stdx"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 
 [[package]]
 name = "near-store"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "actix-rt",
@@ -3557,15 +3560,15 @@ dependencies = [
  "smallvec",
  "strum",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.3",
  "tokio",
  "tracing",
 ]
 
 [[package]]
 name = "near-telemetry"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "awc",
@@ -3583,8 +3586,8 @@ dependencies = [
 
 [[package]]
 name = "near-time"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "serde",
  "time",
@@ -3593,8 +3596,8 @@ dependencies = [
 
 [[package]]
 name = "near-vm-compiler"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "enumset",
  "finite-wasm",
@@ -3602,15 +3605,15 @@ dependencies = [
  "near-vm-vm",
  "rkyv",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
  "wasmparser 0.99.0",
 ]
 
 [[package]]
 name = "near-vm-compiler-singlepass"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "dynasm 2.0.0",
  "dynasmrt 2.0.0",
@@ -3629,8 +3632,8 @@ dependencies = [
 
 [[package]]
 name = "near-vm-engine"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "backtrace",
  "cfg-if 1.0.0",
@@ -3645,14 +3648,14 @@ dependencies = [
  "rustc-demangle",
  "rustix",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
 ]
 
 [[package]]
 name = "near-vm-runner"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "anyhow",
  "blst",
@@ -3689,7 +3692,7 @@ dependencies = [
  "sha3",
  "strum",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
  "wasm-encoder 0.27.0",
  "wasmer-compiler-near",
@@ -3707,19 +3710,19 @@ dependencies = [
 
 [[package]]
 name = "near-vm-types"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "indexmap 1.9.3",
  "num-traits",
  "rkyv",
- "thiserror",
+ "thiserror 2.0.3",
 ]
 
 [[package]]
 name = "near-vm-vm"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "backtrace",
  "cc",
@@ -3732,15 +3735,15 @@ dependencies = [
  "near-vm-types",
  "region",
  "rkyv",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
  "winapi",
 ]
 
 [[package]]
 name = "near-wallet-contract"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "anyhow",
  "near-primitives-core",
@@ -3749,8 +3752,8 @@ dependencies = [
 
 [[package]]
 name = "nearcore"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "actix",
  "actix-rt",
@@ -3768,6 +3771,7 @@ dependencies = [
  "hyper",
  "hyper-tls",
  "indicatif",
+ "itertools 0.10.5",
  "near-async",
  "near-chain",
  "near-chain-configs",
@@ -3805,7 +3809,7 @@ dependencies = [
  "smart-default",
  "strum",
  "tempfile",
- "thiserror",
+ "thiserror 2.0.3",
  "tokio",
  "tracing",
  "xz2",
@@ -3838,8 +3842,8 @@ dependencies = [
 
 [[package]]
 name = "node-runtime"
-version = "2.3.1"
-source = "git+https://github.com/near/nearcore?rev=2.3.1#2bce389e4fd9273b78e4efbb16fb3317a7389b5b"
+version = "2.4.0-rc.1"
+source = "git+https://github.com/near/nearcore?rev=2.4.0-rc.1#a83c18490cf4dafaedca01458f365dc5871bd293"
 dependencies = [
  "borsh 1.5.0",
  "near-crypto",
@@ -3856,7 +3860,7 @@ dependencies = [
  "rayon",
  "serde_json",
  "sha2",
- "thiserror",
+ "thiserror 2.0.3",
  "tracing",
 ]
 
@@ -4005,7 +4009,7 @@ checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -4047,7 +4051,7 @@ dependencies = [
  "js-sys",
  "once_cell",
  "pin-project-lite",
- "thiserror",
+ "thiserror 1.0.61",
  "urlencoding",
 ]
 
@@ -4065,7 +4069,7 @@ dependencies = [
  "opentelemetry-semantic-conventions",
  "opentelemetry_sdk",
  "prost 0.12.6",
- "thiserror",
+ "thiserror 1.0.61",
  "tokio",
  "tonic 0.11.0",
 ]
@@ -4105,7 +4109,7 @@ dependencies = [
  "ordered-float",
  "percent-encoding",
  "rand",
- "thiserror",
+ "thiserror 1.0.61",
  "tokio",
  "tokio-stream",
 ]
@@ -4171,7 +4175,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "serde_yaml",
- "thiserror",
+ "thiserror 1.0.61",
  "url",
 ]
 
@@ -4206,7 +4210,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -4377,7 +4381,7 @@ checksum = "2f38a4412a78282e09a2cf38d195ea5420d15ba0602cb375210efbc877243965"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -4433,7 +4437,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f12335488a2f3b0a83b14edad48dca9879ce89b2edd10e80237e4e852dd645e"
 dependencies = [
  "proc-macro2",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -4509,7 +4513,7 @@ dependencies = [
  "memchr",
  "parking_lot 0.12.2",
  "protobuf 2.28.0",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -4641,7 +4645,7 @@ dependencies = [
  "itertools 0.12.1",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -4687,7 +4691,7 @@ checksum = "58678a64de2fced2bdec6bca052a6716a0efe692d6e3f53d1bda6a1def64cfc0"
 dependencies = [
  "once_cell",
  "protobuf-support",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -4702,7 +4706,7 @@ dependencies = [
  "protobuf-parse",
  "regex",
  "tempfile",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -4717,7 +4721,7 @@ dependencies = [
  "protobuf 3.4.0",
  "protobuf-support",
  "tempfile",
- "thiserror",
+ "thiserror 1.0.61",
  "which",
 ]
 
@@ -4727,7 +4731,7 @@ version = "3.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e1ed294a835b0f30810e13616b1cd34943c6d1e84a8f3b0dcfe466d256c3e7e7"
 dependencies = [
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -4887,7 +4891,7 @@ checksum = "bd283d9651eeda4b2a83a43c1c91b266c40fd76ecd39a50a8c630ae69dc72891"
 dependencies = [
  "getrandom",
  "libredox",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -5132,7 +5136,7 @@ dependencies = [
  "serde-xml-rs",
  "serde_derive",
  "sha2",
- "thiserror",
+ "thiserror 1.0.61",
  "time",
  "tokio",
  "tokio-stream",
@@ -5337,7 +5341,7 @@ checksum = "65162e9059be2f6a3421ebbb4fef3e74b7d9e7c60c50a0e292c6239f19f1edfa"
 dependencies = [
  "log",
  "serde",
- "thiserror",
+ "thiserror 1.0.61",
  "xml-rs",
 ]
 
@@ -5358,7 +5362,7 @@ checksum = "6048858004bcff69094cd972ed40a32500f153bd3be9f716b2eed2e8217c4838"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -5389,7 +5393,7 @@ checksum = "6c64451ba24fc7a6a2d60fc75dd9c83c90903b19028d4eff35e88fc1e86564e9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -5431,7 +5435,7 @@ dependencies = [
  "darling",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -5676,7 +5680,7 @@ dependencies = [
  "rand",
  "ring",
  "subtle",
- "thiserror",
+ "thiserror 1.0.61",
  "tokio",
  "url",
  "webrtc-util",
@@ -5701,9 +5705,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.65"
+version = "2.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2863d96a84c6439701d7a38f9de935ec562c8832cc55d1dde0f513b52fad106"
+checksum = "25aa4ce346d03a6dcd68dd8b4010bcb74e54e62c90c573f394c46eae99aba32d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5719,7 +5723,7 @@ dependencies = [
  "proc-macro-error",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -5815,7 +5819,16 @@ version = "1.0.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c546c80d6be4bc6a00c0f01730c08df82eaa7a7a61f11d656526506112cc1709"
 dependencies = [
- "thiserror-impl",
+ "thiserror-impl 1.0.61",
+]
+
+[[package]]
+name = "thiserror"
+version = "2.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c006c85c7651b3cf2ada4584faa36773bd07bac24acfb39f3c431b36d7e667aa"
+dependencies = [
+ "thiserror-impl 2.0.3",
 ]
 
 [[package]]
@@ -5826,7 +5839,18 @@ checksum = "46c3384250002a6d5af4d114f2845d37b57521033f30d5c3f46c4d70e1197533"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "2.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f077553d607adc1caf65430528a576c757a71ed73944b66ebb58ef2bbd243568"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -5941,7 +5965,7 @@ checksum = "630bdcf245f78637c13ec01ffae6187cca34625e8c63150d424b59e55af2675e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -6164,7 +6188,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3566e8ce28cc0a3fe42519fc80e6b4c943cc4c8cef275620eb8dac2d3d4e06cf"
 dependencies = [
  "crossbeam-channel",
- "thiserror",
+ "thiserror 1.0.61",
  "time",
  "tracing-subscriber",
 ]
@@ -6177,7 +6201,7 @@ checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -6414,7 +6438,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
  "wasm-bindgen-shared",
 ]
 
@@ -6448,7 +6472,7 @@ checksum = "e94f17b526d0a461a191c78ea52bbce64071ed5c04c9ffe424dcb38f74171bb7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -6500,7 +6524,7 @@ dependencies = [
  "rkyv",
  "smallvec",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmer-types-near",
  "wasmer-vm-near",
  "wasmparser 0.78.2",
@@ -6538,7 +6562,7 @@ dependencies = [
  "more-asserts",
  "rustc-demangle",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmer-compiler-near",
  "wasmer-types-near",
  "wasmer-vm-near",
@@ -6555,7 +6579,7 @@ dependencies = [
  "leb128",
  "region",
  "rkyv",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmer-compiler-near",
  "wasmer-engine-near",
  "wasmer-types-near",
@@ -6635,7 +6659,7 @@ checksum = "1ba154adffb0fbd33f5dabd3788a1744d846b43e6e090d44269c7ee8fa5743e4"
 dependencies = [
  "indexmap 1.9.3",
  "rkyv",
- "thiserror",
+ "thiserror 1.0.61",
 ]
 
 [[package]]
@@ -6653,7 +6677,7 @@ dependencies = [
  "more-asserts",
  "region",
  "rkyv",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmer-types-near",
  "winapi",
 ]
@@ -6768,7 +6792,7 @@ dependencies = [
  "log",
  "object",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmparser 0.115.0",
  "wasmtime-cranelift-shared",
  "wasmtime-environ",
@@ -6806,7 +6830,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "target-lexicon 0.12.14",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmparser 0.115.0",
  "wasmtime-types",
 ]
@@ -6894,7 +6918,7 @@ dependencies = [
  "cranelift-entity",
  "serde",
  "serde_derive",
- "thiserror",
+ "thiserror 1.0.61",
  "wasmparser 0.115.0",
 ]
 
@@ -6906,7 +6930,7 @@ checksum = "09b5575a75e711ca6c36bb9ad647c93541cdc8e34218031acba5da3f35919dd3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -6951,7 +6975,7 @@ dependencies = [
  "log",
  "nix 0.24.3",
  "rand",
- "thiserror",
+ "thiserror 1.0.61",
  "tokio",
  "winapi",
 ]
@@ -7219,7 +7243,7 @@ checksum = "15e934569e47891f7d9411f1a451d947a60e000ab3bd24fbb970f000387d1b3b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -7239,7 +7263,7 @@ checksum = "ce36e65b0d2999d2aafac989fb249189a141aee1f53c612c1f37d72631959f69"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.65",
+ "syn 2.0.87",
 ]
 
 [[package]]

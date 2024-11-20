@@ -100,7 +100,7 @@ impl From<&near_indexer::IndexerShard> for IndexerShard {
         };
 
         IndexerShard {
-            shard_id: is.shard_id,
+            shard_id: is.shard_id.into(),
             chunk,
             receipt_execution_outcomes: is
                 .receipt_execution_outcomes
@@ -759,7 +759,7 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
             encoded_length: ch.encoded_length,
             height_created: ch.height_created,
             height_included: ch.height_included,
-            shard_id: ch.shard_id,
+            shard_id: ch.shard_id.into(),
             gas_used: ch.gas_used,
             gas_limit: ch.gas_limit,
             validator_reward: Some(BigInt::from(ch.validator_reward)),
