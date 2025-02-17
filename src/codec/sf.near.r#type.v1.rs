@@ -732,7 +732,10 @@ pub struct MerklePathItem {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Action {
-    #[prost(oneof = "action::Action", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9")]
+    #[prost(
+        oneof = "action::Action",
+        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13"
+    )]
     pub action: ::core::option::Option<action::Action>,
 }
 /// Nested message and enum types in `Action`.
@@ -757,7 +760,35 @@ pub mod action {
         DeleteAccount(super::DeleteAccountAction),
         #[prost(message, tag = "9")]
         Delegate(super::SignedDelegateAction),
+        #[prost(message, tag = "10")]
+        DeployGlobalContract(super::DeployGlobalContractAction),
+        #[prost(message, tag = "11")]
+        DeployGlobalContractByAccountId(super::DeployGlobalContractByAccountIdAction),
+        #[prost(message, tag = "12")]
+        UseGlobalContract(super::UseGlobalContractAction),
+        #[prost(message, tag = "13")]
+        UseGlobalContractByAccountId(super::UseGlobalContractByAccountIdAction),
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeployGlobalContractAction {
+    #[prost(bytes = "vec", tag = "1")]
+    pub code: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeployGlobalContractByAccountIdAction {
+    #[prost(bytes = "vec", tag = "1")]
+    pub code: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UseGlobalContractAction {
+    #[prost(message, optional, tag = "1")]
+    pub code_hash: ::core::option::Option<CryptoHash>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UseGlobalContractByAccountIdAction {
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAccountAction {}

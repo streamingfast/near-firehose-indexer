@@ -697,6 +697,30 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::DeployGlobalContract { code } => Action {
+                action: Some(action::Action::DeployGlobalContract {
+                    0: DeployGlobalContractAction { code: code.into() },
+                }),
+            },
+            near_views::ActionView::DeployGlobalContractByAccountId { code } => Action {
+                action: Some(action::Action::DeployGlobalContractByAccountId {
+                    0: DeployGlobalContractByAccountIdAction { code: code.into() },
+                }),
+            },
+            near_views::ActionView::UseGlobalContract { code_hash } => Action {
+                action: Some(action::Action::UseGlobalContract {
+                    0: UseGlobalContractAction {
+                        code_hash: Some(CryptoHash::from(code_hash)),
+                    },
+                }),
+            },
+            near_views::ActionView::UseGlobalContractByAccountId { account_id } => Action {
+                action: Some(action::Action::UseGlobalContractByAccountId {
+                    0: UseGlobalContractByAccountIdAction {
+                        account_id: account_id.to_string(),
+                    },
+                }),
+            },
         }
     }
 }
@@ -781,7 +805,7 @@ impl From<Box<NearSignature>> for Signature {
             NearSignature::ED25519(s) => Signature {
                 r#type: CurveKind::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
-            } as Signature,
+            },
             NearSignature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {
@@ -799,7 +823,7 @@ impl From<NearSignature> for Signature {
             NearSignature::ED25519(s) => Signature {
                 r#type: CurveKind::Ed25519.into(),
                 bytes: Vec::from(s.to_bytes()),
-            } as Signature,
+            },
             NearSignature::SECP256K1(s) => {
                 let data = Vec::from(<[u8; 65]>::from(s));
                 Signature {

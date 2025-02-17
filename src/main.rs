@@ -12,7 +12,9 @@ use tracing::info;
 fn main() {
     info!(target: "main", "Starting");
 
-    openssl_probe::init_ssl_cert_env_vars();
+    unsafe {
+        openssl_probe::init_openssl_env_vars();
+    }
     logging::init();
 
     let opts: Opts = Opts::parse();
@@ -34,6 +36,7 @@ fn main() {
                 home_dir,
                 sync_mode,
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
+                finality: near_primitives::types::Finality::None,
                 validate_genesis: false,
             };
             info!(target: "main", "Indexer config initiated");
