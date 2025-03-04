@@ -18,9 +18,9 @@ ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH
 
-RUN ls .
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain none && \
+    export TOOLCHAIN_VERSION=$(cat rust-toolchain.toml | grep -oE 'channel\s+=\s+".*"' | cut -d'"' -f2) && \
+    rustup toolchain install $TOOLCHAIN_VERSION-x86_64-unknown-linux-gnu
 
 FROM rust-base AS build
 

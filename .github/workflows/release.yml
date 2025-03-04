@@ -2,6 +2,8 @@ name: Release
 
 on:
   push:
+    branches:
+      - release/test-ci
     tags:
       - "*-fire"
   workflow_dispatch:
@@ -92,10 +94,11 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/release/test-ci' }}
         with:
           name: ${{ env.RELEASE_VERSION }}
           tag_name: ${{ env.RELEASE_VERSION }}
+          draft: ${{ github.ref == 'refs/heads/release/test-ci' }}
           body: ${{ env.CHANGELOG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_unmatched_files: true
