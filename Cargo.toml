@@ -17,6 +17,7 @@ aws-sdk-s3 = "1.29.0"
 clap = { version = "4.5.4", features = ["color", "derive", "env"] }
 dotenv = "0.15.0"
 futures = "0.3.5"
+hex = { version = "0.4.2", features = ["serde"] }
 http = "1.1.0"
 humantime = "2.1.0"
 openssl-probe = "0.1.5"
@@ -40,7 +41,6 @@ tracing-subscriber = "0.3.18"
 # ] }
 # actix = "0.13.0"
 # clap = { version = "3.1.6", features = ["derive"] }
-# hex = { version = "0.4.2", features = ["serde"] }
 # openssl = { version = "^0.10.60", features = ["vendored"] }
 # openssl-probe = "0.1.4"
 # prost = "0.11.6"

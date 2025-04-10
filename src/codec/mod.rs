@@ -4,14 +4,15 @@ mod codec;
 pub use codec::*;
 use near_crypto::PublicKey as NearPublicKey;
 use near_crypto::Signature as NearSignature;
+use near_indexer::StreamerMessage;
 use near_indexer::near_primitives;
+use near_indexer::near_primitives::action::GlobalContractIdentifier;
 use near_indexer::near_primitives::errors as near_errors;
 use near_indexer::near_primitives::errors::ActionErrorKind;
 use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
     DataReceiverView, ExecutionMetadataView, ExecutionStatusView, ReceiptEnumView,
 };
-use near_indexer::StreamerMessage;
 
 use hex;
 use std::fmt::{Display, Formatter};
@@ -157,6 +158,29 @@ impl From<near_views::ReceiptView> for Receipt {
                     0: ReceiptData {
                         data_id: Some(CryptoHash::from(data_id)),
                         data: data.unwrap_or(vec![]),
+                    },
+                }),
+                ReceiptEnumView::GlobalContractDistribution {
+                    id,
+                    target_shard,
+                    already_delivered_shards,
+                    code,
+                } => Some(receipt::Receipt::GlobalContractDistribution {
+                    0: ReceiptGlobalContractDistribution {
+                        id: Some(match id {
+                            GlobalContractIdentifier::CodeHash(hash) => {
+                                receipt_global_contract_distribution::Id::CodeHash(hash.into())
+                            }
+                            GlobalContractIdentifier::AccountId(id) => {
+                                receipt_global_contract_distribution::Id::AccountId(id.into())
+                            }
+                        }),
+                        target_shard: target_shard.into(),
+                        already_delivered_shards: already_delivered_shards
+                            .iter()
+                            .map(|s| (*s).into())
+                            .collect(),
+                        code: code.into(),
                     },
                 }),
             },
@@ -498,13 +522,17 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                 },
                                             }
                                         }
-                                        ActionErrorKind::NonRefundableTransferToExistingAccount {
-                                            account_id,
-                                        } => action_error::Kind::NonRefundableTransferToExistingAccount {
-                                            0: NonRefundableTransferToExistingAccountKind {
-                                                account_id: account_id.to_string(),
-                                            },
-                                        },
+                                        ActionErrorKind::GlobalContractDoesNotExist { identifier } => {
+                                            action_error::Kind::GlobalContractDoesNotExist {
+                                                0: GlobalContractDoesNotExist {
+                                                    identifier: Some(match identifier {
+                                                        GlobalContractIdentifier::CodeHash(hash) => global_contract_does_not_exist::Identifier::CodeHash(hash.into()),
+                                                        GlobalContractIdentifier::AccountId(id) => global_contract_does_not_exist::Identifier::AccountId(id.into()),
+                                                    }),
+                                                },
+
+                                            }
+                                        }
                                     }),
                                 },
                             })

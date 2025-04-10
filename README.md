@@ -59,9 +59,7 @@ near-firehose-indexer --home-dir ./near-home-mainnet run
 ### Protobuf Definitions
 
 The protobuf definitions in this project requires you to have
-
-- https://github.com/streamingfast/proto
-- https://github.com/streamingfast/proto-near
+`github.com/streamingfast/firehose-near` checked out as a sibling of this project.
 
 Cloned as sibling of this project. So that ultimately, all three projects
 are part of parent folder all at the same depth.
