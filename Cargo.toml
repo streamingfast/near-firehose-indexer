@@ -30,9 +30,9 @@ tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
 
 # Additional dependencies for NEAR
-near-indexer = { git = "https://github.com/near/nearcore", rev = "2.6.1-rc.1" }
-near-crypto = { git = "https://github.com/near/nearcore", rev = "2.6.1-rc.1" }
-near-primitives = { git = "https://github.com/near/nearcore", rev = "2.6.1-rc.1" }
+near-indexer = { git = "https://github.com/near/nearcore", rev = "2.6.2" }
+near-crypto = { git = "https://github.com/near/nearcore", rev = "2.6.2" }
+near-primitives = { git = "https://github.com/near/nearcore", rev = "2.6.2" }
 
 # StreamingFast needed dependencies
 hex = { version = "0.4.2", features = ["serde"] }
