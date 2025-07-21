@@ -8,7 +8,7 @@ const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
     author = "StreamingFast Developers <dev@streamingfast.io>"
 )]
 pub(crate) struct Opts {
-    #[clap(short, long)]
+    #[clap(long)]
     pub home: Option<std::path::PathBuf>,
     #[clap(short, long)]
     pub start_block: Option<u64>,
