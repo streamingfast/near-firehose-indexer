@@ -1,3 +1,7 @@
+## v2.7.0-rc.4
+
+* Bumped to [2.7.0-rc.4](https://github.com/near/nearcore/releases/tag/2.7.0-rc.4).
+
 ## 1.37.0-rc.3-fire
 
 CODE_COLOR: CODE_RED_TESTNET

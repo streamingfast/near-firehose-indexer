@@ -1,13 +1,8 @@
 ARG CORE_VERSION=latest
 
-FROM ubuntu:24.04 AS base
+FROM ghcr.io/streamingfast/firehose-core:${CORE_VERSION} AS firecore
 
-ENV TZ="Etc/UTC"
-RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates libssl-dev vim htop iotop sysstat wget \
-    strace lsof curl jq tzdata
-
-FROM base AS rust-base
+FROM firecore AS rust-base
 
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     git cmake g++ pkg-config curl llvm clang
@@ -26,25 +21,9 @@ FROM rust-base AS build
 
 COPY . .
 
-RUN CARGO_TARGET_DIR=/tmp/target make release
+RUN CARGO_TARGET_DIR=/tmp/target make release && \
+    chmod +x /tmp/target/release/near-firehose-indexer
 
-FROM base
-
-ENV TZ="Etc/UTC"
-RUN rm -rf /var/cache/apt /var/lib/apt/lists/*
-
-RUN rm /etc/localtime && ln -snf /usr/share/zoneinfo/America/Montreal /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
-
-# s5cmd is a CLI tool to manipulate S3 store (Needed to sync NEAR Foundation backup(s))
-RUN mkdir /tmp/s5cmd && \
-    cd /tmp/s5cmd && \
-    wget -O s5cmd.tar.gz https://github.com/peak/s5cmd/releases/download/v2.0.0/s5cmd_2.0.0_Linux-64bit.tar.gz && \
-    tar -xzvf s5cmd.tar.gz && \
-    cp s5cmd /usr/bin/ && \
-    cd / && \
-    rm -rf /tmp/s5cmd
+FROM firecore
 
 COPY --from=build /tmp/target/release/near-firehose-indexer /app/near-firehose-indexer
-RUN chmod +x /app/near-firehose-indexer
-
-ENV PATH="$PATH:/app"
