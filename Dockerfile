@@ -1,8 +1,8 @@
-ARG CORE_VERSION=latest
+ARG FIRENEAR_VERSION=latest
 
-FROM ghcr.io/streamingfast/firehose-core:${CORE_VERSION} AS firecore
+FROM ghcr.io/streamingfast/firehose-near:${FIRENEAR_VERSION} AS firenear
 
-FROM firecore AS rust-base
+FROM firenear AS rust-base
 
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     git cmake g++ pkg-config curl llvm clang
@@ -24,6 +24,6 @@ COPY . .
 RUN CARGO_TARGET_DIR=/tmp/target make release && \
     chmod +x /tmp/target/release/near-firehose-indexer
 
-FROM firecore
+FROM firenear
 
 COPY --from=build /tmp/target/release/near-firehose-indexer /app/near-firehose-indexer
