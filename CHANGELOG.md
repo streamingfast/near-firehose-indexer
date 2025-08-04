@@ -1,4 +1,10 @@
-## v2.7.0-rc.4
+## v2.7.0-rc.4-fh3.0-1
+
+* Removed all `clone` by using move operations instead.
+
+* Fixed release pipeline for new tag formats.
+
+## v2.7.0-rc.4-fh3.0
 
 * Bumped to [2.7.0-rc.4](https://github.com/near/nearcore/releases/tag/2.7.0-rc.4).
 
