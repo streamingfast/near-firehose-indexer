@@ -17,27 +17,22 @@ use near_indexer::near_primitives::views::{
 use hex;
 use std::fmt::{Display, Formatter};
 
-impl From<&near_indexer::StreamerMessage> for Block {
-    fn from(sm: &StreamerMessage) -> Self {
+impl From<near_indexer::StreamerMessage> for Block {
+    fn from(sm: StreamerMessage) -> Self {
         Block {
-            header: Some(BlockHeader::from(&sm.block.header)),
-            shards: sm.shards.iter().map(|s| IndexerShard::from(s)).collect(),
+            header: Some(BlockHeader::from(sm.block.header)),
+            shards: sm.shards.into_iter().map(IndexerShard::from).collect(),
             author: sm.block.author.to_string(),
-            chunk_headers: sm
-                .block
-                .chunks
-                .iter()
-                .map(|ch| ChunkHeader::from(ch))
-                .collect(),
+            chunk_headers: sm.block.chunks.into_iter().map(ChunkHeader::from).collect(),
             state_changes: vec![],
         }
     }
 }
 
-impl From<&near_views::BlockHeaderView> for BlockHeader {
-    fn from(h: &near_views::BlockHeaderView) -> Self {
-        let challenges_result = &h.challenges_result;
-        let validator_proposals = &h.validator_proposals;
+impl From<near_views::BlockHeaderView> for BlockHeader {
+    fn from(h: near_views::BlockHeaderView) -> Self {
+        let challenges_result = h.challenges_result;
+        let validator_proposals = h.validator_proposals;
 
         BlockHeader {
             hash: Some(CryptoHash::from(h.hash)),
@@ -61,15 +56,15 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             random_value: Some(CryptoHash::from(h.random_value)),
             validator_proposals: validator_proposals
                 .into_iter()
-                .map(|p| ValidatorStake::from(p))
+                .map(ValidatorStake::from)
                 .collect(),
-            chunk_mask: h.chunk_mask.clone(),
+            chunk_mask: h.chunk_mask,
             gas_price: Some(BigInt::from(h.gas_price)),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
             total_supply: Some(BigInt::from(h.total_supply)),
             challenges_result: challenges_result
                 .into_iter()
-                .map(|cr| SlashedValidator::from(cr))
+                .map(SlashedValidator::from)
                 .collect(),
             last_final_block_height: 0,
             last_final_block: Some(CryptoHash::from(h.last_final_block)),
@@ -79,46 +74,35 @@ impl From<&near_views::BlockHeaderView> for BlockHeader {
             block_merkle_root: Some(CryptoHash::from(h.block_merkle_root)),
             epoch_sync_data_hash: vec![], //todo: this is v3 feature, what that means?
             approvals: h
-                .clone()
                 .approvals
                 .into_iter()
-                .filter_map(|s| match s {
-                    None => None,
-                    Some(sig) => Some(sig.into()),
-                })
+                .filter_map(|s| s.map(|sig| sig.into()))
                 .collect(),
-            signature: Some(h.signature.clone().into()),
+            signature: Some(h.signature.into()),
             latest_protocol_version: h.latest_protocol_version,
         }
     }
 }
 
-impl From<&near_indexer::IndexerShard> for IndexerShard {
-    fn from(is: &near_indexer::IndexerShard) -> Self {
-        let chunk: Option<IndexerChunk> = match &is.chunk {
-            None => None,
-            Some(c) => Some(IndexerChunk::from(c)),
-        };
-
+impl From<near_indexer::IndexerShard> for IndexerShard {
+    fn from(is: near_indexer::IndexerShard) -> Self {
         IndexerShard {
             shard_id: is.shard_id.into(),
-            chunk,
+            chunk: is.chunk.map(IndexerChunk::from),
             receipt_execution_outcomes: is
                 .receipt_execution_outcomes
-                .iter()
-                .map(|r| IndexerExecutionOutcomeWithReceipt::from(r))
+                .into_iter()
+                .map(IndexerExecutionOutcomeWithReceipt::from)
                 .collect(),
         }
     }
 }
 
-impl From<&near_indexer::IndexerExecutionOutcomeWithReceipt>
-    for IndexerExecutionOutcomeWithReceipt
-{
-    fn from(r: &near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
+impl From<near_indexer::IndexerExecutionOutcomeWithReceipt> for IndexerExecutionOutcomeWithReceipt {
+    fn from(r: near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
         IndexerExecutionOutcomeWithReceipt {
-            execution_outcome: Some(ExecutionOutcomeWithId::from(r.execution_outcome.clone())),
-            receipt: Some(Receipt::from(r.receipt.clone())),
+            execution_outcome: Some(ExecutionOutcomeWithId::from(r.execution_outcome)),
+            receipt: Some(Receipt::from(r.receipt)),
         }
     }
 }
@@ -145,13 +129,13 @@ impl From<near_views::ReceiptView> for Receipt {
                         gas_price: Some(BigInt::from(gas_price)),
                         output_data_receivers: output_data_receivers
                             .into_iter()
-                            .map(|o| DataReceiver::from(o))
+                            .map(DataReceiver::from)
                             .collect(),
                         input_data_ids: input_data_ids
                             .into_iter()
                             .map(|i| CryptoHash::from(i))
                             .collect(),
-                        actions: actions.into_iter().map(|a| Action::from(a)).collect(),
+                        actions: actions.into_iter().map(Action::from).collect(),
                     },
                 }),
                 ReceiptEnumView::Data { data_id, data, .. } => Some(receipt::Receipt::Data {
@@ -197,22 +181,17 @@ impl From<near_views::DataReceiverView> for DataReceiver {
     }
 }
 
-impl From<&near_indexer::IndexerChunkView> for IndexerChunk {
-    fn from(s: &near_indexer::IndexerChunkView) -> Self {
+impl From<near_indexer::IndexerChunkView> for IndexerChunk {
+    fn from(s: near_indexer::IndexerChunkView) -> Self {
         IndexerChunk {
             author: s.author.to_string(),
-            header: Some(ChunkHeader::from(&s.header)),
+            header: Some(ChunkHeader::from(s.header)),
             transactions: s
                 .transactions
-                .iter()
-                .map(|tx| IndexerTransactionWithOutcome::from(tx.clone()))
-                .collect(),
-            receipts: s
-                .receipts
-                .clone()
                 .into_iter()
-                .map(|r| Receipt::from(r))
+                .map(IndexerTransactionWithOutcome::from)
                 .collect(),
+            receipts: s.receipts.into_iter().map(Receipt::from).collect(),
         }
     }
 }
@@ -798,9 +777,9 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
     }
 }
 
-impl From<&near_views::ChunkHeaderView> for ChunkHeader {
-    fn from(ch: &near_views::ChunkHeaderView) -> Self {
-        let validator_proposals = &ch.validator_proposals;
+impl From<near_views::ChunkHeaderView> for ChunkHeader {
+    fn from(ch: near_views::ChunkHeaderView) -> Self {
+        let validator_proposals = ch.validator_proposals;
 
         ChunkHeader {
             chunk_hash: Vec::from(ch.chunk_hash),
@@ -820,9 +799,9 @@ impl From<&near_views::ChunkHeaderView> for ChunkHeader {
             tx_root: Vec::from(ch.tx_root),
             validator_proposals: validator_proposals
                 .into_iter()
-                .map(|vp| ValidatorStake::from(vp))
+                .map(ValidatorStake::from)
                 .collect(),
-            signature: Some(ch.signature.clone().into()),
+            signature: Some(ch.signature.into()),
         }
     }
 }
@@ -878,8 +857,8 @@ impl From<NearPublicKey> for PublicKey {
     }
 }
 
-impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
-    fn from(sv: &near_primitives::challenge::SlashedValidator) -> Self {
+impl From<near_primitives::challenge::SlashedValidator> for SlashedValidator {
+    fn from(sv: near_primitives::challenge::SlashedValidator) -> Self {
         SlashedValidator {
             account_id: sv.account_id.to_string(),
             is_double_sign: sv.is_double_sign,
@@ -887,13 +866,13 @@ impl From<&near_primitives::challenge::SlashedValidator> for SlashedValidator {
     }
 }
 
-impl From<&near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
-    fn from(sv: &near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
+impl From<near_primitives::views::validator_stake_view::ValidatorStakeView> for ValidatorStake {
+    fn from(sv: near_primitives::views::validator_stake_view::ValidatorStakeView) -> Self {
         match sv {
             near_primitives::views::validator_stake_view::ValidatorStakeView::V1(v) => {
                 ValidatorStake {
                     account_id: v.account_id.to_string(),
-                    public_key: Some(PublicKey::from(v.public_key.clone())),
+                    public_key: Some(PublicKey::from(v.public_key)),
                     stake: Some(BigInt::from(v.stake)),
                 }
             }
