@@ -7,10 +7,17 @@ on:
     tags:
       - "*-fh3.0*"
   workflow_dispatch:
+    inputs:
+      firenear_version:
+        description: 'Firehose NEAR version to use'
+        required: false
+        default: 'latest'
+        type: string
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  FIRENEAR_VERSION: ${{ inputs.firenear_version || 'latest' }}
 
 jobs:
   release:
