@@ -2,7 +2,7 @@
 
 This is a *re-release* of `v2.7.0-rc.4-fh3.0`
 
-## v2.7.0-rc.4-fh3.0-1
+#### v2.7.0-rc.4-fh3.0-1
 
 This is a *re-release* of `v2.7.0-rc.4-fh3.0`
 
