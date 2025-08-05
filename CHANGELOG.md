@@ -1,3 +1,7 @@
+## v2.7.0-rc.4-fh3.0-3
+
+Release should now have correct binary attached now.
+
 ## v2.7.0-rc.4-fh3.0-2
 
 This is a *re-release* of `v2.7.0-rc.4-fh3.0`
