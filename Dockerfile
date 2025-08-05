@@ -5,7 +5,7 @@ FROM ghcr.io/streamingfast/firehose-near:${FIRENEAR_VERSION} AS firenear
 FROM firenear AS rust-base
 
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    git cmake g++ pkg-config curl llvm clang
+    git cmake g++ pkg-config curl llvm clang libssl-dev
 
 COPY ./rust-toolchain.toml ./rust-toolchain.toml
 
