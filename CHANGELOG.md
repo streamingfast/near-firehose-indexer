@@ -1,4 +1,8 @@
-## v2.7.0-rc.4-fh3.0-4
+## v2.7.0-rc.4-fh3.0-5
+
+This is a *re-release* of `v2.7.0-rc.4-fh3.0-3` and `v2.7.0-rc.4-fh3.0-4` with CI build fix.
+
+#### v2.7.0-rc.4-fh3.0-4
 
 This is a *re-release* of `v2.7.0-rc.4-fh3.0-3` with CI build fix.
 
