@@ -96,7 +96,7 @@ jobs:
 
       - name: Extract binary from Docker image
         run: |
-          image_tag="${{ needs.build-and-push.outputs.image-tag }}"
+          image_tag=$${ env.REGISTRY }/${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}
           binary="near-firehose-indexer-x86-64-unknown-linux-gnu"
 
           # The --platform are not really needed here, but it removes the warning
