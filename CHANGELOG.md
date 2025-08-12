@@ -1,3 +1,7 @@
+## v2.7.0-fh3.0
+
+* Bumped to [2.7.0](https://github.com/near/nearcore/releases/tag/2.7.0).
+
 ## v2.7.0-rc.4-fh3.0-5
 
 This is a *re-release* of `v2.7.0-rc.4-fh3.0-3` and `v2.7.0-rc.4-fh3.0-4` with CI build fix.
