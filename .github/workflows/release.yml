@@ -88,7 +88,7 @@ jobs:
         id: changelog
         run: |
           chmod 755 ./.github/generate_change_log.sh
-          CHANGELOG=$(./.github/generate_change_log.sh ${{ env.RELEASE_VERSION }})
+          CHANGELOG=$(./.github/generate_change_log.sh)
 
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG" >> $GITHUB_ENV
