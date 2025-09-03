@@ -1,6 +1,8 @@
 ARG FIRENEAR_VERSION=latest
+ARG FIRECORE_VERSION=latest
 
 FROM ghcr.io/streamingfast/firehose-near:${FIRENEAR_VERSION} AS firenear
+FROM ghcr.io/streamingfast/firehose-core:${FIRECORE_VERSION} AS firecore
 
 FROM firenear AS rust-base
 
@@ -24,6 +26,10 @@ COPY . .
 RUN CARGO_TARGET_DIR=/tmp/target make release && \
     chmod +x /tmp/target/release/near-firehose-indexer
 
-FROM firenear
+# We start from firehose-core base so we get proper motd and reader scripts
+FROM firecore
+
+ENTRYPOINT [ "/app/firenear" ]
 
 COPY --from=build /tmp/target/release/near-firehose-indexer /app/near-firehose-indexer
+COPY --from=firenear /app/firenear /app/firenear
