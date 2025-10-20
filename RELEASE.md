@@ -4,7 +4,7 @@ When a new version of nearcore is released, the near-firehose-indexer should be 
 
 Once this is done, compile the project locally using `make release` and check that the project compiles locally.  This is important, because the Github action takes about 30 minutes to compile, and so compiling locally allows you to potentially save a lot of time.
 
-After you have validated that the project compiles locally, tag your commit with the following format: `{{nearcore-tag}}-fire`.
+After you have validated that the project compiles locally, tag your commit with the following format: `{{nearcore-tag}}-fh3.0`.
 
 The Github action will then compile the project and push the docker image to Dockerhub.  This image can then be used in the `firehose-near` project's Github action to build the bundle image.
 
@@ -17,10 +17,28 @@ Let's say Near releases a new version of nearcore with tag `1.99.0-rc.3`
 4. Commit changes and tag commit with `1.99.0-rc.3-fire`
 5. Push commit.
 
+### GitHub Release
+
+To release the version, simply ensure that `CHANGELOG.md` latest header is either `## Unreleased` or `## <version>` and do:
+
+```shell
+bash .pre-release.sh <version>-fh3.0
+```
+
+This will take care of updating the `CHANGELOG.md` header (if `## Unreleased`), align the `Cargo.toml` `version` field with the specified version and will make a commit.
+
+Then simply do a tag with the version you want to release:
+
+```shell
+git tag <version>-fh3.0
+```
+
+This will trigger a GitHub CI action that will build the Docker image and perform a propre release on Github directly.
+
 ### Notes
 
-* When nearcore releases a new set of release candidates (ie: an `-rc.1` release), this usually involves many more changes than a normal release. Normally, you will need to also update the `rust-toolchain.toml` file to match their version.  
-* If compilation still fails, then you will need to dig deeper into the reasons why. Start with the compilation errors and work backwards from there.  
+* When nearcore releases a new set of release candidates (ie: an `-rc.1` release), this usually involves many more changes than a normal release. Normally, you will need to also update the `rust-toolchain.toml` file to match their version.
+* If compilation still fails, then you will need to dig deeper into the reasons why. Start with the compilation errors and work backwards from there.
 * One thing you might try is to git checkout the original nearcore project at the given tag, and try to compile their project. It is not inconceivable that nearcore has a bug in their code that prevents compilation.
 * If nearcore does not compile, you can try to reach out to the Near team on their Discord in the rust-support channel.  They are usually very helpful.
 * We use a multi-stage Dockerfile which compiles the `near-firehose-indexer` app in Docker using the Ubuntu 20.04 image.  One day, this might need to be updated to a more recent version of Ubuntu.  If so, you will need to update the Dockerfile accordingly.  The nearcore project still uses 18.04, so we should be good for a while.
@@ -31,7 +49,7 @@ If everything has gone as planned, the Github action will have built a Docker im
 
 ### Where to deploy?
 
-In the release notes on nearcore, you will see a note which indicates where to deploy in the `CODE_COLOR` section.  This section is of the form `CODE_{color}_{TESTNET/MAINNET}`, where the color represents the urgency of the release.  
+In the release notes on nearcore, you will see a note which indicates where to deploy in the `CODE_COLOR` section.  This section is of the form `CODE_{color}_{TESTNET/MAINNET}`, where the color represents the urgency of the release.
 
 For example, `CODE_RED_MAINNET` means that the release is urgent and should be deployed to mainnet as soon as possible.  `CODE_YELLOW_TESTNET` means that the release is not urgent, but should be deployed to testnet as soon as possible.  `CODE_GREEN_TESTNET` means that the release is not urgent, and can be deployed to testnet at your leisure.
 

@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       firenear_version:
-        description: 'Firehose NEAR version to use'
+        description: "Firehose NEAR version to use"
         required: false
-        default: 'latest'
+        default: "latest"
         type: string
 
 env:
@@ -81,18 +81,15 @@ jobs:
       - name: Set Env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Generate Change Log
+      - name: Extract Changelog
         id: changelog
         run: |
-          chmod 755 ./.github/generate_change_log.sh
-          CHANGELOG=$(./.github/generate_change_log.sh)
+          curl -L https://github.com/streamingfast/sfreleaser/releases/download/v0.12.1/sfreleaser_linux_x86_64.tar.gz | tar -xz
+          chmod +x sfreleaser
 
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$CHANGELOG" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          ./sfreleaser changelog extract-section \
+            github://token:${{ github.token }}@${{ github.repository }}/$GITHUB_SHA/CHANGELOG.md \
+            --github-output="changelog:$GITHUB_OUTPUT"
 
       - name: Extract binary from Docker image
         run: |
@@ -108,7 +105,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ env.CHANGELOG }}
+          body: ${{ steps.changelog.outputs.changelog }}
           prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
           files: |
             ./near-firehose-indexer-x86-64-unknown-linux-gnu
