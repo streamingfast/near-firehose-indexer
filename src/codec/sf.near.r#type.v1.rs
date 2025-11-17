@@ -774,7 +774,7 @@ pub struct MerklePathItem {
 pub struct Action {
     #[prost(
         oneof = "action::Action",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13"
+        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14"
     )]
     pub action: ::core::option::Option<action::Action>,
 }
@@ -808,6 +808,8 @@ pub mod action {
         UseGlobalContract(super::UseGlobalContractAction),
         #[prost(message, tag = "13")]
         UseGlobalContractByAccountId(super::UseGlobalContractByAccountIdAction),
+        #[prost(message, tag = "14")]
+        DeterministicStateInit(super::DeterministicStateInit),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -829,6 +831,31 @@ pub struct UseGlobalContractAction {
 pub struct UseGlobalContractByAccountIdAction {
     #[prost(string, tag = "1")]
     pub account_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeterministicStateInit {
+    #[prost(message, optional, tag = "1")]
+    pub code: ::core::option::Option<GlobalContractIdentifierView>,
+    #[prost(map = "string, bytes", tag = "2")]
+    pub data:
+        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::vec::Vec<u8>>,
+    #[prost(message, optional, tag = "3")]
+    pub deposit: ::core::option::Option<BigInt>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GlobalContractIdentifierView {
+    #[prost(oneof = "global_contract_identifier_view::Identifier", tags = "1, 2")]
+    pub identifier: ::core::option::Option<global_contract_identifier_view::Identifier>,
+}
+/// Nested message and enum types in `GlobalContractIdentifierView`.
+pub mod global_contract_identifier_view {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Identifier {
+        #[prost(message, tag = "1")]
+        CodeHash(super::CryptoHash),
+        #[prost(string, tag = "2")]
+        AccountId(::prost::alloc::string::String),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAccountAction {}
@@ -968,6 +995,7 @@ pub enum ReceiptValidationError {
     NumberInputDataDependenciesExceeded = 5,
     ActionsValidationError = 6,
     ReceiptSizeExceeded = 7,
+    InvalidRefundTo = 8,
 }
 ///todo: add more detail?
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

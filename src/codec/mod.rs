@@ -14,6 +14,7 @@ use near_indexer::near_primitives::views::{
     DataReceiverView, ExecutionMetadataView, ExecutionStatusView, ReceiptEnumView,
 };
 
+use base64::{Engine as _, engine::general_purpose};
 use hex;
 use std::fmt::{Display, Formatter};
 
@@ -59,9 +60,9 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
                 .map(ValidatorStake::from)
                 .collect(),
             chunk_mask: h.chunk_mask,
-            gas_price: Some(BigInt::from(h.gas_price)),
+            gas_price: Some(BigInt::from(h.gas_price.as_yoctonear())),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
-            total_supply: Some(BigInt::from(h.total_supply)),
+            total_supply: Some(BigInt::from(h.total_supply.as_yoctonear())),
             challenges_result: challenges_result
                 .into_iter()
                 .map(SlashedValidator::from)
@@ -126,7 +127,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     0: ReceiptAction {
                         signer_id: signer_id.to_string(),
                         signer_public_key: Some(PublicKey::from(signer_public_key)),
-                        gas_price: Some(BigInt::from(gas_price)),
+                        gas_price: Some(BigInt::from(gas_price.as_yoctonear())),
                         output_data_receivers: output_data_receivers
                             .into_iter()
                             .map(DataReceiver::from)
@@ -238,8 +239,8 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
                 .into_iter()
                 .map(|id| CryptoHash::from(id))
                 .collect(),
-            gas_burnt: o.gas_burnt,
-            tokens_burnt: Some(BigInt::from(o.tokens_burnt)),
+            gas_burnt: o.gas_burnt.as_gas(),
+            tokens_burnt: Some(BigInt::from(o.tokens_burnt.as_yoctonear())),
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
             metadata: match o.metadata {
@@ -349,7 +350,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::LackBalanceForState {
                                             0: LackBalanceForStateErrorKind {
                                                 account_id: account_id.to_string(),
-                                                balance: Some(BigInt::from(amount)),
+                                                balance: Some(BigInt::from(amount.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::TriesToUnstake { account_id } => {
@@ -367,9 +368,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::TriesToStake {
                                             0: TriesToStakeErrorKind {
                                                 account_id: account_id.to_string(),
-                                                stake: Some(BigInt::from(stake)),
-                                                locked: Some(BigInt::from(locked)),
-                                                balance: Some(BigInt::from(balance)),
+                                                stake: Some(BigInt::from(stake.as_yoctonear())),
+                                                locked: Some(BigInt::from(locked.as_yoctonear())),
+                                                balance: Some(BigInt::from(balance.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::InsufficientStake {
@@ -379,8 +380,8 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::InsufficientStake {
                                             0: InsufficientStakeErrorKind {
                                                 account_id: account_id.to_string(),
-                                                stake: Some(BigInt::from(stake)),
-                                                minimum_stake: Some(BigInt::from(minimum_stake)),
+                                                stake: Some(BigInt::from(stake.as_yoctonear())),
+                                                minimum_stake: Some(BigInt::from(minimum_stake.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::FunctionCallError(fce) => {
@@ -439,6 +440,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                     }
                                                     near_primitives::errors::ReceiptValidationError::ReceiptSizeExceeded { .. } => {
                                                         ReceiptValidationError::ReceiptSizeExceeded.into()
+                                                    }
+                                                    near_primitives::errors::ReceiptValidationError::InvalidRefundTo { .. } => {
+                                                        ReceiptValidationError::InvalidRefundTo.into()
                                                     }
                                                 }}
                                             }
@@ -637,22 +641,22 @@ impl From<near_views::ActionView> for Action {
                     0: FunctionCallAction {
                         method_name,
                         args: args.into(),
-                        gas,
-                        deposit: Some(BigInt::from(deposit)),
+                        gas: gas.as_gas(),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
                     },
                 }),
             },
             near_views::ActionView::Transfer { deposit } => Action {
                 action: Some(action::Action::Transfer {
                     0: TransferAction {
-                        deposit: Some(BigInt::from(deposit)),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
                     },
                 }),
             },
             near_views::ActionView::Stake { stake, public_key } => Action {
                 action: Some(action::Action::Stake {
                     0: StakeAction {
-                        stake: Some(BigInt::from(stake)),
+                        stake: Some(BigInt::from(stake.as_yoctonear())),
                         public_key: Some(PublicKey::from(public_key)),
                     },
                 }),
@@ -728,6 +732,22 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::DeterministicStateInit {
+                code,
+                data,
+                deposit,
+            } => Action {
+                action: Some(action::Action::DeterministicStateInit {
+                    0: DeterministicStateInit {
+                        code: Some(GlobalContractIdentifierView::from(code)),
+                        data: data
+                            .into_iter()
+                            .map(|(k, v)| (general_purpose::STANDARD.encode(k), v))
+                            .collect(),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
+                    },
+                }),
+            },
         }
     }
 }
@@ -761,7 +781,7 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
                     0: FunctionCallPermission {
                         allowance: match allowance {
                             None => None,
-                            Some(a) => Some(BigInt::from(a)),
+                            Some(a) => Some(BigInt::from(a.as_yoctonear())),
                         },
                         receiver_id,
                         method_names,
@@ -791,10 +811,10 @@ impl From<near_views::ChunkHeaderView> for ChunkHeader {
             height_created: ch.height_created,
             height_included: ch.height_included,
             shard_id: ch.shard_id.into(),
-            gas_used: ch.gas_used,
-            gas_limit: ch.gas_limit,
-            validator_reward: Some(BigInt::from(ch.validator_reward)),
-            balance_burnt: Some(BigInt::from(ch.balance_burnt)),
+            gas_used: ch.gas_used.as_gas(),
+            gas_limit: ch.gas_limit.as_gas(),
+            validator_reward: Some(BigInt::from(ch.validator_reward.as_yoctonear())),
+            balance_burnt: Some(BigInt::from(ch.balance_burnt.as_yoctonear())),
             outgoing_receipts_root: Vec::from(ch.outgoing_receipts_root),
             tx_root: Vec::from(ch.tx_root),
             validator_proposals: validator_proposals
@@ -873,7 +893,7 @@ impl From<near_primitives::views::validator_stake_view::ValidatorStakeView> for 
                 ValidatorStake {
                     account_id: v.account_id.to_string(),
                     public_key: Some(PublicKey::from(v.public_key)),
-                    stake: Some(BigInt::from(v.stake)),
+                    stake: Some(BigInt::from(v.stake.as_yoctonear())),
                 }
             }
         }
@@ -907,5 +927,26 @@ impl Display for Block {
         let header = self.header.as_ref().unwrap();
 
         write!(f, "#{} ({})", header.height, header.hash.as_ref().unwrap())
+    }
+}
+
+impl From<near_primitives::views::GlobalContractIdentifierView> for GlobalContractIdentifierView {
+    fn from(view: near_primitives::views::GlobalContractIdentifierView) -> Self {
+        match view {
+            near_primitives::views::GlobalContractIdentifierView::CodeHash(hash) => {
+                GlobalContractIdentifierView {
+                    identifier: Some(global_contract_identifier_view::Identifier::CodeHash(
+                        CryptoHash::from(hash),
+                    )),
+                }
+            }
+            near_primitives::views::GlobalContractIdentifierView::AccountId(account_id) => {
+                GlobalContractIdentifierView {
+                    identifier: Some(global_contract_identifier_view::Identifier::AccountId(
+                        account_id.to_string(),
+                    )),
+                }
+            }
+        }
     }
 }
