@@ -1,3 +1,6 @@
+## v2.10.0-rc.4-fh3.0
+
+* Bumped to [2.10.0-rc.4](https://github.com/near/nearcore/releases/tag/2.10.0-rc.4).
 
 ## v2.9.0-fh3.0
 
