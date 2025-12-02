@@ -3638,7 +3638,7 @@ dependencies = [
 
 [[package]]
 name = "near-firehose-indexer"
-version = "2.10.0"
+version = "2.10.0-fh3.0"
 dependencies = [
  "actix",
  "anyhow",
