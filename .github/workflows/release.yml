@@ -84,7 +84,7 @@ jobs:
       - name: Extract Changelog
         id: changelog
         run: |
-          curl -L https://github.com/streamingfast/sfreleaser/releases/download/v0.12.1/sfreleaser_linux_x86_64.tar.gz | tar -xz
+          curl -L https://github.com/streamingfast/sfreleaser/releases/download/v0.13.1/sfreleaser_linux_x86_64.tar.gz | tar -xz
           chmod +x sfreleaser
 
           ./sfreleaser changelog extract-section \
