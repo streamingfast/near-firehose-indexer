@@ -150,6 +150,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     target_shard,
                     already_delivered_shards,
                     code,
+                    nonce: _,
                 } => Some(receipt::Receipt::GlobalContractDistribution {
                     0: ReceiptGlobalContractDistribution {
                         id: Some(match id {
@@ -516,6 +517,11 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
 
                                             }
                                         }
+                                        ActionErrorKind::GasKeyDoesNotExist { .. }
+                                        | ActionErrorKind::InsufficientGasKeyBalance { .. }
+                                        | ActionErrorKind::GasKeyBalanceTooHigh { .. } => {
+                                            unimplemented!("GasKey action error kinds are not supported yet")
+                                        }
                                     }),
                                 },
                             })
@@ -576,6 +582,11 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                     }
                                     near_primitives::errors::InvalidTxError::ShardStuck {..} => {
                                         InvalidTxError::ShardStuck.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::InvalidNonceIndex { .. }
+                                    | near_primitives::errors::InvalidTxError::NotEnoughGasKeyBalance { .. }
+                                    | near_primitives::errors::InvalidTxError::NotEnoughBalanceForDeposit { .. } => {
+                                        unimplemented!("GasKey invalid tx error kinds are not supported yet")
                                     }
                                 },
                             })
@@ -748,6 +759,10 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::TransferToGasKey { .. }
+            | near_views::ActionView::WithdrawFromGasKey { .. } => {
+                unimplemented!("GasKey action view kinds are not supported yet")
+            }
         }
     }
 }
@@ -793,6 +808,10 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
                     0: FullAccessPermission {},
                 }),
             },
+            near_views::AccessKeyPermissionView::GasKeyFunctionCall { .. }
+            | near_views::AccessKeyPermissionView::GasKeyFullAccess { .. } => {
+                unimplemented!("GasKey access key permission view kinds are not supported yet")
+            }
         }
     }
 }
