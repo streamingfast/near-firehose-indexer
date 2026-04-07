@@ -12,8 +12,6 @@ pub(crate) struct Opts {
     pub home: Option<std::path::PathBuf>,
     #[clap(short, long)]
     pub start_block: Option<u64>,
-    #[clap(long, default_value = "0")]
-    pub legacy_receipt_ordering_last_block: u64,
     #[clap(subcommand)]
     pub subcmd: SubCommand,
 }
