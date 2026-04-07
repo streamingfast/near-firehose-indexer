@@ -18,15 +18,53 @@ use base64::{Engine as _, engine::general_purpose};
 use hex;
 use std::fmt::{Display, Formatter};
 
-impl From<near_indexer::StreamerMessage> for Block {
-    fn from(sm: StreamerMessage) -> Self {
-        Block {
-            header: Some(BlockHeader::from(sm.block.header)),
-            shards: sm.shards.into_iter().map(IndexerShard::from).collect(),
-            author: sm.block.author.to_string(),
-            chunk_headers: sm.block.chunks.into_iter().map(ChunkHeader::from).collect(),
-            state_changes: vec![],
-        }
+pub fn block_from(sm: StreamerMessage, legacy_receipt_ordering_last_block: u64) -> Block {
+    let block_height = sm.block.header.height;
+    Block {
+        header: Some(BlockHeader::from(sm.block.header)),
+        shards: sm
+            .shards
+            .into_iter()
+            .map(|shard| indexer_shard_from(shard, block_height, legacy_receipt_ordering_last_block))
+            .collect(),
+        author: sm.block.author.to_string(),
+        chunk_headers: sm.block.chunks.into_iter().map(ChunkHeader::from).collect(),
+        state_changes: vec![],
+    }
+}
+
+// nearcore 2.11.0 fixed receipt_execution_outcomes ordering (https://github.com/near/nearcore/pull/15184): outcomes were previously
+// sorted by CryptoHash, now they preserve execution order. To keep firehose output
+// deterministic for blocks produced before the 2.11.0 deployment, we re-apply the old BTreeMap
+// sort for any block strictly below legacy_receipt_ordering_last_block
+fn indexer_shard_from(is: near_indexer::IndexerShard, block_height: u64, legacy_receipt_ordering_last_block: u64) -> IndexerShard {
+    let mut outcomes: Vec<IndexerExecutionOutcomeWithReceipt> = is
+        .receipt_execution_outcomes
+        .into_iter()
+        .map(IndexerExecutionOutcomeWithReceipt::from)
+        .collect();
+    if block_height < legacy_receipt_ordering_last_block {
+        outcomes.sort_by(|a, b| {
+            let a_id = a
+                .execution_outcome
+                .as_ref()
+                .and_then(|o| o.id.as_ref())
+                .map(|h| h.bytes.as_slice())
+                .unwrap_or(&[]);
+            let b_id = b
+                .execution_outcome
+                .as_ref()
+                .and_then(|o| o.id.as_ref())
+                .map(|h| h.bytes.as_slice())
+                .unwrap_or(&[]);
+            a_id.cmp(b_id)
+        });
+    }
+
+    IndexerShard {
+        shard_id: is.shard_id.into(),
+        chunk: is.chunk.map(IndexerChunk::from),
+        receipt_execution_outcomes: outcomes,
     }
 }
 
@@ -85,19 +123,6 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
     }
 }
 
-impl From<near_indexer::IndexerShard> for IndexerShard {
-    fn from(is: near_indexer::IndexerShard) -> Self {
-        IndexerShard {
-            shard_id: is.shard_id.into(),
-            chunk: is.chunk.map(IndexerChunk::from),
-            receipt_execution_outcomes: is
-                .receipt_execution_outcomes
-                .into_iter()
-                .map(IndexerExecutionOutcomeWithReceipt::from)
-                .collect(),
-        }
-    }
-}
 
 impl From<near_indexer::IndexerExecutionOutcomeWithReceipt> for IndexerExecutionOutcomeWithReceipt {
     fn from(r: near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {

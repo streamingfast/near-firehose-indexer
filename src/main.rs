@@ -53,9 +53,10 @@ fn main() {
                 let mut stream = indexer.streamer();
                 info!(target: "main", "Streamer initiated");
 
+                let legacy_receipt_ordering_last_block = opts.legacy_receipt_ordering_last_block;
                 actix::spawn(async move {
                     while let Some(streamer_message) = stream.recv().await {
-                        let block = codec::Block::from(streamer_message);
+                        let block = codec::block_from(streamer_message, legacy_receipt_ordering_last_block);
                         firehose::on_block(&block);
                     }
                 });
