@@ -17,6 +17,7 @@ pub struct Block {
 ///
 /// This can be used to unpack a [Block] when only the [BlockHeader] information
 /// is required and greatly reduced required memory.
+#[allow(dead_code)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HeaderOnlyBlock {
     #[prost(message, optional, tag = "2")]
