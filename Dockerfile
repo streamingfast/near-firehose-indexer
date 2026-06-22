@@ -1,5 +1,5 @@
 ARG FIRENEAR_VERSION=latest
-ARG FIRECORE_VERSION=latest
+ARG FIRECORE_VERSION=v1.14.6
 
 FROM ghcr.io/streamingfast/firehose-near:${FIRENEAR_VERSION} AS firenear
 FROM ghcr.io/streamingfast/firehose-core:${FIRECORE_VERSION} AS firecore
