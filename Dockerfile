@@ -1,4 +1,4 @@
-ARG FIRENEAR_VERSION=latest
+ARG FIRENEAR_VERSION=5129a74
 ARG FIRECORE_VERSION=v1.14.6
 
 FROM ghcr.io/streamingfast/firehose-near:${FIRENEAR_VERSION} AS firenear
