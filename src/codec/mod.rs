@@ -552,6 +552,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         | ActionErrorKind::GasKeyBalanceTooHigh { .. } => {
                                             unimplemented!("GasKey action error kinds are not supported yet")
                                         }
+                                        ActionErrorKind::DelegateActionInvalidNonceIndex { .. } => {
+                                            unimplemented!("DelegateActionInvalidNonceIndex is not supported yet")
+                                        }
                                     }),
                                 },
                             })
@@ -793,6 +796,9 @@ impl From<near_views::ActionView> for Action {
             | near_views::ActionView::WithdrawFromGasKey { .. } => {
                 unimplemented!("GasKey action view kinds are not supported yet")
             }
+            near_views::ActionView::DelegateV2 { .. } => {
+                unimplemented!("DelegateV2 action view is not supported yet")
+            }
         }
     }
 }
@@ -889,6 +895,9 @@ impl From<Box<NearSignature>> for Signature {
                     bytes: data,
                 }
             }
+            NearSignature::MLDSA65(_) => {
+                unimplemented!("MLDSA65 signature is not supported yet")
+            }
         }
     }
 }
@@ -907,6 +916,9 @@ impl From<NearSignature> for Signature {
                     bytes: data,
                 }
             }
+            NearSignature::MLDSA65(_) => {
+                unimplemented!("MLDSA65 signature is not supported yet")
+            }
         }
     }
 }
@@ -922,6 +934,9 @@ impl From<NearPublicKey> for PublicKey {
                 r#type: CurveKind::Secp256k1.into(),
                 bytes: s.as_ref().into(),
             },
+            NearPublicKey::MLDSA65(_) => {
+                unimplemented!("MLDSA65 public key is not supported yet")
+            }
         }
     }
 }
