@@ -1,3 +1,90 @@
+## v2.13.0-rc.2-fh3.0-1
+
+* fixed unimplemented mldsa65 curve
+
+## v2.13.0-rc.2-fh3.0
+
+* Bumped to [2.13.0-rc.2](https://github.com/near/nearcore/releases/tag/2.13.0-rc.2).
+
+## v2.13.0-rc.1-fh3.0
+
+* Bumped to [2.13.0-rc.1](https://github.com/near/nearcore/releases/tag/2.13.0-rc.1).
+
+## v2.12.0-fh3.0
+
+* Bumped to [2.12.0](https://github.com/near/nearcore/releases/tag/2.12.0).
+
+## v2.12.0-rc.2-fh3.0
+
+* Bumped to [2.12.0-rc.2](https://github.com/near/nearcore/releases/tag/2.12.0-rc.2).
+
+## v2.12.0-rc.1-fh3.0
+
+* Bumped to [2.12.0-rc.1](https://github.com/near/nearcore/releases/tag/2.12.0-rc.1).
+
+## v2.11.1-fh3.0
+
+* Bumped to [2.11.1](https://github.com/near/nearcore/releases/tag/2.11.1).
+
+## v2.11.0-fh3.0
+
+* Bumped to [2.11.0](https://github.com/near/nearcore/releases/tag/2.11.0).
+
+## v2.11.0-rc.5-fh3.0
+
+* Bumped to [2.11.0-rc.5](https://github.com/near/nearcore/releases/tag/2.11.0-rc.5).
+
+## v2.11.0-rc.4-fh3.0
+
+* Bumped to [2.11.0-rc.4](https://github.com/near/nearcore/releases/tag/2.11.0-rc.4).
+
+## v2.11.0-rc.3-fh3.0
+
+* Bumped to [2.11.0-rc.3](https://github.com/near/nearcore/releases/tag/2.11.0-rc.3).
+
+## v2.11.0-rc.2-fh3.0
+
+* Bumped to [2.11.0-rc.2](https://github.com/near/nearcore/releases/tag/2.11.0-rc.2).
+
+## v2.11.0-rc.1-fh3.0
+
+* Bumped to [2.11.0-rc.1](https://github.com/near/nearcore/releases/tag/2.11.0-rc.1).
+
+## v2.10.7-fh3.0
+
+* Bumped to [2.10.7](https://github.com/near/nearcore/releases/tag/2.10.7).
+
+## v2.10.6-fh3.0
+
+* Bumped to [2.10.6](https://github.com/near/nearcore/releases/tag/2.10.6).
+
+## v2.10.5-fh3.0
+
+* Bumped to [2.10.5](https://github.com/near/nearcore/releases/tag/2.10.5).
+
+## v2.10.4-fh3.0
+
+* Bumped to [2.10.4](https://github.com/near/nearcore/releases/tag/2.10.4).
+
+## v2.10.3-fh3.0
+
+* Bumped to [2.10.3](https://github.com/near/nearcore/releases/tag/2.10.3).
+
+## v2.10.1-fh3.0
+
+* Bumped to [2.10.1](https://github.com/near/nearcore/releases/tag/2.10.1).
+
+## v2.10.0-fh3.0
+
+* Bumped to [2.10.0](https://github.com/near/nearcore/releases/tag/2.10.0).
+
+## v2.10.0-rc.5-fh3.0
+
+* Bumped to [2.10.0-rc.5](https://github.com/near/nearcore/releases/tag/2.10.0-rc.5).
+
+## v2.10.0-rc.4-fh3.0
+
+* Bumped to [2.10.0-rc.4](https://github.com/near/nearcore/releases/tag/2.10.0-rc.4).
 
 ## v2.9.0-fh3.0
 

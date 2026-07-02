@@ -14,18 +14,62 @@ use near_indexer::near_primitives::views::{
     DataReceiverView, ExecutionMetadataView, ExecutionStatusView, ReceiptEnumView,
 };
 
+use base64::{Engine as _, engine::general_purpose};
 use hex;
 use std::fmt::{Display, Formatter};
 
+// nearcore 2.11.0 fixed receipt_execution_outcomes ordering (https://github.com/near/nearcore/pull/15184): outcomes were previously
+// sorted by CryptoHash, now they preserve execution order. To keep firehose output
+// deterministic for blocks produced before the 2.11.0 deployment, we re-apply the old BTreeMap
+// sort for any block strictly below legacy_receipt_ordering_last_block
+const LEGACY_RECEIPT_ORDERING_LAST_BLOCK: u64 = 193444226;
+
 impl From<near_indexer::StreamerMessage> for Block {
     fn from(sm: StreamerMessage) -> Self {
+        let block_height = sm.block.header.height;
         Block {
             header: Some(BlockHeader::from(sm.block.header)),
-            shards: sm.shards.into_iter().map(IndexerShard::from).collect(),
+            shards: sm
+                .shards
+                .into_iter()
+                .map(|shard| indexer_shard_from(shard, block_height))
+                .collect(),
             author: sm.block.author.to_string(),
             chunk_headers: sm.block.chunks.into_iter().map(ChunkHeader::from).collect(),
             state_changes: vec![],
         }
+    }
+}
+
+fn indexer_shard_from(is: near_indexer::IndexerShard, block_height: u64) -> IndexerShard {
+    let mut outcomes: Vec<IndexerExecutionOutcomeWithReceipt> = is
+        .receipt_execution_outcomes
+        .into_iter()
+        .map(IndexerExecutionOutcomeWithReceipt::from)
+        .collect();
+
+    if block_height < LEGACY_RECEIPT_ORDERING_LAST_BLOCK {
+        outcomes.sort_by(|a, b| {
+            let a_id = a
+                .execution_outcome
+                .as_ref()
+                .and_then(|o| o.id.as_ref())
+                .map(|h| h.bytes.as_slice())
+                .unwrap_or(&[]);
+            let b_id = b
+                .execution_outcome
+                .as_ref()
+                .and_then(|o| o.id.as_ref())
+                .map(|h| h.bytes.as_slice())
+                .unwrap_or(&[]);
+            a_id.cmp(b_id)
+        });
+    }
+
+    IndexerShard {
+        shard_id: is.shard_id.into(),
+        chunk: is.chunk.map(IndexerChunk::from),
+        receipt_execution_outcomes: outcomes,
     }
 }
 
@@ -59,9 +103,9 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
                 .map(ValidatorStake::from)
                 .collect(),
             chunk_mask: h.chunk_mask,
-            gas_price: Some(BigInt::from(h.gas_price)),
+            gas_price: Some(BigInt::from(h.gas_price.as_yoctonear())),
             block_ordinal: 0, //todo: this is v3 feature, what that means?
-            total_supply: Some(BigInt::from(h.total_supply)),
+            total_supply: Some(BigInt::from(h.total_supply.as_yoctonear())),
             challenges_result: challenges_result
                 .into_iter()
                 .map(SlashedValidator::from)
@@ -84,19 +128,6 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
     }
 }
 
-impl From<near_indexer::IndexerShard> for IndexerShard {
-    fn from(is: near_indexer::IndexerShard) -> Self {
-        IndexerShard {
-            shard_id: is.shard_id.into(),
-            chunk: is.chunk.map(IndexerChunk::from),
-            receipt_execution_outcomes: is
-                .receipt_execution_outcomes
-                .into_iter()
-                .map(IndexerExecutionOutcomeWithReceipt::from)
-                .collect(),
-        }
-    }
-}
 
 impl From<near_indexer::IndexerExecutionOutcomeWithReceipt> for IndexerExecutionOutcomeWithReceipt {
     fn from(r: near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
@@ -126,7 +157,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     0: ReceiptAction {
                         signer_id: signer_id.to_string(),
                         signer_public_key: Some(PublicKey::from(signer_public_key)),
-                        gas_price: Some(BigInt::from(gas_price)),
+                        gas_price: Some(BigInt::from(gas_price.as_yoctonear())),
                         output_data_receivers: output_data_receivers
                             .into_iter()
                             .map(DataReceiver::from)
@@ -149,6 +180,7 @@ impl From<near_views::ReceiptView> for Receipt {
                     target_shard,
                     already_delivered_shards,
                     code,
+                    nonce: _,
                 } => Some(receipt::Receipt::GlobalContractDistribution {
                     0: ReceiptGlobalContractDistribution {
                         id: Some(match id {
@@ -238,8 +270,8 @@ impl From<near_views::ExecutionOutcomeView> for ExecutionOutcome {
                 .into_iter()
                 .map(|id| CryptoHash::from(id))
                 .collect(),
-            gas_burnt: o.gas_burnt,
-            tokens_burnt: Some(BigInt::from(o.tokens_burnt)),
+            gas_burnt: o.gas_burnt.as_gas(),
+            tokens_burnt: Some(BigInt::from(o.tokens_burnt.as_yoctonear())),
             executor_id: o.executor_id.to_string(),
             status: Some(execution_outcome::Status::from(o.status)),
             metadata: match o.metadata {
@@ -349,7 +381,7 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::LackBalanceForState {
                                             0: LackBalanceForStateErrorKind {
                                                 account_id: account_id.to_string(),
-                                                balance: Some(BigInt::from(amount)),
+                                                balance: Some(BigInt::from(amount.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::TriesToUnstake { account_id } => {
@@ -367,9 +399,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::TriesToStake {
                                             0: TriesToStakeErrorKind {
                                                 account_id: account_id.to_string(),
-                                                stake: Some(BigInt::from(stake)),
-                                                locked: Some(BigInt::from(locked)),
-                                                balance: Some(BigInt::from(balance)),
+                                                stake: Some(BigInt::from(stake.as_yoctonear())),
+                                                locked: Some(BigInt::from(locked.as_yoctonear())),
+                                                balance: Some(BigInt::from(balance.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::InsufficientStake {
@@ -379,8 +411,8 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                         } => action_error::Kind::InsufficientStake {
                                             0: InsufficientStakeErrorKind {
                                                 account_id: account_id.to_string(),
-                                                stake: Some(BigInt::from(stake)),
-                                                minimum_stake: Some(BigInt::from(minimum_stake)),
+                                                stake: Some(BigInt::from(stake.as_yoctonear())),
+                                                minimum_stake: Some(BigInt::from(minimum_stake.as_yoctonear())),
                                             },
                                         },
                                         ActionErrorKind::FunctionCallError(fce) => {
@@ -439,6 +471,9 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                     }
                                                     near_primitives::errors::ReceiptValidationError::ReceiptSizeExceeded { .. } => {
                                                         ReceiptValidationError::ReceiptSizeExceeded.into()
+                                                    }
+                                                    near_primitives::errors::ReceiptValidationError::InvalidRefundTo { .. } => {
+                                                        ReceiptValidationError::InvalidRefundTo.into()
                                                     }
                                                 }}
                                             }
@@ -512,6 +547,14 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
 
                                             }
                                         }
+                                        ActionErrorKind::GasKeyDoesNotExist { .. }
+                                        | ActionErrorKind::InsufficientGasKeyBalance { .. }
+                                        | ActionErrorKind::GasKeyBalanceTooHigh { .. } => {
+                                            unimplemented!("GasKey action error kinds are not supported yet")
+                                        }
+                                        ActionErrorKind::DelegateActionInvalidNonceIndex { .. } => {
+                                            unimplemented!("DelegateActionInvalidNonceIndex is not supported yet")
+                                        }
                                     }),
                                 },
                             })
@@ -572,6 +615,11 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                     }
                                     near_primitives::errors::InvalidTxError::ShardStuck {..} => {
                                         InvalidTxError::ShardStuck.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::InvalidNonceIndex { .. }
+                                    | near_primitives::errors::InvalidTxError::NotEnoughGasKeyBalance { .. }
+                                    | near_primitives::errors::InvalidTxError::NotEnoughBalanceForDeposit { .. } => {
+                                        unimplemented!("GasKey invalid tx error kinds are not supported yet")
                                     }
                                 },
                             })
@@ -637,22 +685,22 @@ impl From<near_views::ActionView> for Action {
                     0: FunctionCallAction {
                         method_name,
                         args: args.into(),
-                        gas,
-                        deposit: Some(BigInt::from(deposit)),
+                        gas: gas.as_gas(),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
                     },
                 }),
             },
             near_views::ActionView::Transfer { deposit } => Action {
                 action: Some(action::Action::Transfer {
                     0: TransferAction {
-                        deposit: Some(BigInt::from(deposit)),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
                     },
                 }),
             },
             near_views::ActionView::Stake { stake, public_key } => Action {
                 action: Some(action::Action::Stake {
                     0: StakeAction {
-                        stake: Some(BigInt::from(stake)),
+                        stake: Some(BigInt::from(stake.as_yoctonear())),
                         public_key: Some(PublicKey::from(public_key)),
                     },
                 }),
@@ -728,6 +776,29 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::DeterministicStateInit {
+                code,
+                data,
+                deposit,
+            } => Action {
+                action: Some(action::Action::DeterministicStateInit {
+                    0: DeterministicStateInit {
+                        code: Some(GlobalContractIdentifierView::from(code)),
+                        data: data
+                            .into_iter()
+                            .map(|(k, v)| (general_purpose::STANDARD.encode(k), v))
+                            .collect(),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
+                    },
+                }),
+            },
+            near_views::ActionView::TransferToGasKey { .. }
+            | near_views::ActionView::WithdrawFromGasKey { .. } => {
+                unimplemented!("GasKey action view kinds are not supported yet")
+            }
+            near_views::ActionView::DelegateV2 { .. } => {
+                unimplemented!("DelegateV2 action view is not supported yet")
+            }
         }
     }
 }
@@ -761,7 +832,7 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
                     0: FunctionCallPermission {
                         allowance: match allowance {
                             None => None,
-                            Some(a) => Some(BigInt::from(a)),
+                            Some(a) => Some(BigInt::from(a.as_yoctonear())),
                         },
                         receiver_id,
                         method_names,
@@ -773,6 +844,10 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
                     0: FullAccessPermission {},
                 }),
             },
+            near_views::AccessKeyPermissionView::GasKeyFunctionCall { .. }
+            | near_views::AccessKeyPermissionView::GasKeyFullAccess { .. } => {
+                unimplemented!("GasKey access key permission view kinds are not supported yet")
+            }
         }
     }
 }
@@ -791,10 +866,10 @@ impl From<near_views::ChunkHeaderView> for ChunkHeader {
             height_created: ch.height_created,
             height_included: ch.height_included,
             shard_id: ch.shard_id.into(),
-            gas_used: ch.gas_used,
-            gas_limit: ch.gas_limit,
-            validator_reward: Some(BigInt::from(ch.validator_reward)),
-            balance_burnt: Some(BigInt::from(ch.balance_burnt)),
+            gas_used: ch.gas_used.as_gas(),
+            gas_limit: ch.gas_limit.as_gas(),
+            validator_reward: Some(BigInt::from(ch.validator_reward.as_yoctonear())),
+            balance_burnt: Some(BigInt::from(ch.balance_burnt.as_yoctonear())),
             outgoing_receipts_root: Vec::from(ch.outgoing_receipts_root),
             tx_root: Vec::from(ch.tx_root),
             validator_proposals: validator_proposals
@@ -820,6 +895,10 @@ impl From<Box<NearSignature>> for Signature {
                     bytes: data,
                 }
             }
+            NearSignature::MLDSA65(s) => Signature {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
+            },
         }
     }
 }
@@ -838,6 +917,10 @@ impl From<NearSignature> for Signature {
                     bytes: data,
                 }
             }
+            NearSignature::MLDSA65(s) => Signature {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
+            },
         }
     }
 }
@@ -852,6 +935,10 @@ impl From<NearPublicKey> for PublicKey {
             NearPublicKey::SECP256K1(s) => PublicKey {
                 r#type: CurveKind::Secp256k1.into(),
                 bytes: s.as_ref().into(),
+            },
+            NearPublicKey::MLDSA65(s) => PublicKey {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
             },
         }
     }
@@ -873,7 +960,7 @@ impl From<near_primitives::views::validator_stake_view::ValidatorStakeView> for 
                 ValidatorStake {
                     account_id: v.account_id.to_string(),
                     public_key: Some(PublicKey::from(v.public_key)),
-                    stake: Some(BigInt::from(v.stake)),
+                    stake: Some(BigInt::from(v.stake.as_yoctonear())),
                 }
             }
         }
@@ -907,5 +994,26 @@ impl Display for Block {
         let header = self.header.as_ref().unwrap();
 
         write!(f, "#{} ({})", header.height, header.hash.as_ref().unwrap())
+    }
+}
+
+impl From<near_primitives::views::GlobalContractIdentifierView> for GlobalContractIdentifierView {
+    fn from(view: near_primitives::views::GlobalContractIdentifierView) -> Self {
+        match view {
+            near_primitives::views::GlobalContractIdentifierView::CodeHash(hash) => {
+                GlobalContractIdentifierView {
+                    identifier: Some(global_contract_identifier_view::Identifier::CodeHash(
+                        CryptoHash::from(hash),
+                    )),
+                }
+            }
+            near_primitives::views::GlobalContractIdentifierView::AccountId(account_id) => {
+                GlobalContractIdentifierView {
+                    identifier: Some(global_contract_identifier_view::Identifier::AccountId(
+                        account_id.to_string(),
+                    )),
+                }
+            }
+        }
     }
 }
