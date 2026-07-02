@@ -965,6 +965,7 @@ pub struct FullAccessPermission {}
 pub enum CurveKind {
     Ed25519 = 0,
     Secp256k1 = 1,
+    Mldsa65 = 2,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

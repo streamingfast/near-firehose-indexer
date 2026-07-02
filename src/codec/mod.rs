@@ -895,9 +895,10 @@ impl From<Box<NearSignature>> for Signature {
                     bytes: data,
                 }
             }
-            NearSignature::MLDSA65(_) => {
-                unimplemented!("MLDSA65 signature is not supported yet")
-            }
+            NearSignature::MLDSA65(s) => Signature {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
+            },
         }
     }
 }
@@ -916,9 +917,10 @@ impl From<NearSignature> for Signature {
                     bytes: data,
                 }
             }
-            NearSignature::MLDSA65(_) => {
-                unimplemented!("MLDSA65 signature is not supported yet")
-            }
+            NearSignature::MLDSA65(s) => Signature {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
+            },
         }
     }
 }
@@ -934,9 +936,10 @@ impl From<NearPublicKey> for PublicKey {
                 r#type: CurveKind::Secp256k1.into(),
                 bytes: s.as_ref().into(),
             },
-            NearPublicKey::MLDSA65(_) => {
-                unimplemented!("MLDSA65 public key is not supported yet")
-            }
+            NearPublicKey::MLDSA65(s) => PublicKey {
+                r#type: CurveKind::Mldsa65.into(),
+                bytes: s.0.to_vec(),
+            },
         }
     }
 }
