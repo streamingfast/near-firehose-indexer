@@ -547,13 +547,40 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
 
                                             }
                                         }
-                                        ActionErrorKind::GasKeyDoesNotExist { .. }
-                                        | ActionErrorKind::InsufficientGasKeyBalance { .. }
-                                        | ActionErrorKind::GasKeyBalanceTooHigh { .. } => {
-                                            unimplemented!("GasKey action error kinds are not supported yet")
+                                        ActionErrorKind::GasKeyDoesNotExist { account_id, public_key } => {
+                                            action_error::Kind::GasKeyDoesNotExist {
+                                                0: GasKeyDoesNotExistKind {
+                                                    account_id: account_id.to_string(),
+                                                    public_key: Some(PublicKey::from(*public_key)),
+                                                },
+                                            }
                                         }
-                                        ActionErrorKind::DelegateActionInvalidNonceIndex { .. } => {
-                                            unimplemented!("DelegateActionInvalidNonceIndex is not supported yet")
+                                        ActionErrorKind::InsufficientGasKeyBalance { account_id, public_key, balance, required } => {
+                                            action_error::Kind::InsufficientGasKeyBalance {
+                                                0: InsufficientGasKeyBalanceKind {
+                                                    account_id: account_id.to_string(),
+                                                    public_key: Some(PublicKey::from(*public_key)),
+                                                    balance: Some(BigInt::from(balance.as_yoctonear())),
+                                                    required: Some(BigInt::from(required.as_yoctonear())),
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::GasKeyBalanceTooHigh { account_id, public_key, balance } => {
+                                            action_error::Kind::GasKeyBalanceTooHigh {
+                                                0: GasKeyBalanceTooHighKind {
+                                                    account_id: account_id.to_string(),
+                                                    public_key: public_key.map(|pk| PublicKey::from(*pk)),
+                                                    balance: Some(BigInt::from(balance.as_yoctonear())),
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::DelegateActionInvalidNonceIndex { nonce_index, num_nonces } => {
+                                            action_error::Kind::DelegateActionInvalidNonceIndex {
+                                                0: DelegateActionInvalidNonceIndexKind {
+                                                    nonce_index: nonce_index.into(),
+                                                    num_nonces: num_nonces.into(),
+                                                },
+                                            }
                                         }
                                     }),
                                 },
@@ -616,10 +643,14 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                     near_primitives::errors::InvalidTxError::ShardStuck {..} => {
                                         InvalidTxError::ShardStuck.into()
                                     }
-                                    near_primitives::errors::InvalidTxError::InvalidNonceIndex { .. }
-                                    | near_primitives::errors::InvalidTxError::NotEnoughGasKeyBalance { .. }
-                                    | near_primitives::errors::InvalidTxError::NotEnoughBalanceForDeposit { .. } => {
-                                        unimplemented!("GasKey invalid tx error kinds are not supported yet")
+                                    near_primitives::errors::InvalidTxError::InvalidNonceIndex { .. } => {
+                                        InvalidTxError::InvalidNonceIndex.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::NotEnoughGasKeyBalance { .. } => {
+                                        InvalidTxError::NotEnoughGasKeyBalance.into()
+                                    }
+                                    near_primitives::errors::InvalidTxError::NotEnoughBalanceForDeposit { .. } => {
+                                        InvalidTxError::NotEnoughBalanceForDeposit.into()
                                     }
                                 },
                             })
@@ -792,12 +823,58 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
-            near_views::ActionView::TransferToGasKey { .. }
-            | near_views::ActionView::WithdrawFromGasKey { .. } => {
-                unimplemented!("GasKey action view kinds are not supported yet")
-            }
-            near_views::ActionView::DelegateV2 { .. } => {
-                unimplemented!("DelegateV2 action view is not supported yet")
+            near_views::ActionView::TransferToGasKey {
+                public_key,
+                deposit,
+            } => Action {
+                action: Some(action::Action::TransferToGasKey {
+                    0: TransferToGasKeyAction {
+                        public_key: Some(PublicKey::from(public_key)),
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
+                    },
+                }),
+            },
+            near_views::ActionView::WithdrawFromGasKey {
+                public_key,
+                amount,
+            } => Action {
+                action: Some(action::Action::WithdrawFromGasKey {
+                    0: WithdrawFromGasKeyAction {
+                        public_key: Some(PublicKey::from(public_key)),
+                        amount: Some(BigInt::from(amount.as_yoctonear())),
+                    },
+                }),
+            },
+            near_views::ActionView::DelegateV2 {
+                delegate_action,
+                signature,
+            } => {
+                let near_primitives::action::delegate::VersionedDelegateActionPayload::V2(
+                    delegate_action,
+                ) = delegate_action;
+                Action {
+                    action: Some(action::Action::DelegateV2 {
+                        0: SignedDelegateActionV2 {
+                            delegate_action: Some(DelegateActionV2 {
+                                sender_id: delegate_action.sender_id.to_string(),
+                                receiver_id: delegate_action.receiver_id.to_string(),
+                                actions: delegate_action
+                                    .actions
+                                    .into_iter()
+                                    .map(|a| a.into())
+                                    .collect(),
+                                nonce: delegate_action.nonce.nonce(),
+                                nonce_index: delegate_action
+                                    .nonce
+                                    .nonce_index()
+                                    .map(|i| i.into()),
+                                max_block_height: delegate_action.max_block_height.into(),
+                                public_key: Some(PublicKey::from(delegate_action.public_key)),
+                            }),
+                            signature: Some(signature.into()),
+                        },
+                    }),
+                }
             }
         }
     }
@@ -844,10 +921,34 @@ impl From<near_views::AccessKeyPermissionView> for AccessKeyPermission {
                     0: FullAccessPermission {},
                 }),
             },
-            near_views::AccessKeyPermissionView::GasKeyFunctionCall { .. }
-            | near_views::AccessKeyPermissionView::GasKeyFullAccess { .. } => {
-                unimplemented!("GasKey access key permission view kinds are not supported yet")
-            }
+            near_views::AccessKeyPermissionView::GasKeyFunctionCall {
+                balance,
+                num_nonces,
+                allowance,
+                receiver_id,
+                method_names,
+            } => AccessKeyPermission {
+                permission: Some(access_key_permission::Permission::GasKeyFunctionCall {
+                    0: GasKeyFunctionCallPermission {
+                        balance: Some(BigInt::from(balance.as_yoctonear())),
+                        num_nonces: num_nonces.into(),
+                        allowance: allowance.map(|a| BigInt::from(a.as_yoctonear())),
+                        receiver_id,
+                        method_names,
+                    },
+                }),
+            },
+            near_views::AccessKeyPermissionView::GasKeyFullAccess {
+                balance,
+                num_nonces,
+            } => AccessKeyPermission {
+                permission: Some(access_key_permission::Permission::GasKeyFullAccess {
+                    0: GasKeyFullAccessPermission {
+                        balance: Some(BigInt::from(balance.as_yoctonear())),
+                        num_nonces: num_nonces.into(),
+                    },
+                }),
+            },
         }
     }
 }

@@ -1,3 +1,7 @@
+## v2.13.0-rc.2-fh3.0-2
+
+* implemented gas key codecs (actions, access key permissions, action/tx errors) and DelegateV2, replacing the `unimplemented!` panics
+
 ## v2.13.0-rc.2-fh3.0-1
 
 * fixed unimplemented mldsa65 curve
