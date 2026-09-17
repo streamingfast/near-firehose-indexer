@@ -1,3 +1,15 @@
+## v2.14.0-rc.2-fh3.0
+
+* Bumped to [2.14.0-rc.2](https://github.com/near/nearcore/releases/tag/2.14.0-rc.2).
+
+* Bumped `rust-toolchain.toml` to `1.95`, matching the minimum supported Rust version nearcore 2.14.0 requires.
+
+* Added codecs for the `UniversalStateInit` action and for the new `TotalPromiseInputSizeExceeded`, `ReceiptStorageProofSizeExceeded`, `MalformedUniversalStateInit` and `AccountNotInitialized` action error kinds.
+
+* `IndexerConfig.skip_broken_blocks` is set to `false`. nearcore 2.14.0 added the field and gives it no default, so it has to be chosen explicitly. When `true`, a block whose `StreamerMessage` still fails to build after the retry budget is skipped, its height recorded as synced, and the stream resumes past it — leaving a permanent hole in the Firehose block stream that nothing goes back for. `false` panics instead, so the reader restarts and retries the same height. This is stricter than 2.13.4, which skipped such a height immediately and without retrying; nearcore's own reference indexer (`tools/indexer/example`) also uses `false`, while `true` exists for the `mirror` traffic generator.
+
+* `DelegateV2` codecs are retained. nearcore 2.14.0 rejects the action at validation but keeps the type, and receipts created before the protocol upgrade still execute.
+
 ## v2.13.3-fh3.0
 
 * Bumped to [2.13.3](https://github.com/near/nearcore/releases/tag/2.13.3).

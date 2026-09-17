@@ -17,7 +17,6 @@ pub struct Block {
 ///
 /// This can be used to unpack a [Block] when only the [BlockHeader] information
 /// is required and greatly reduced required memory.
-#[allow(dead_code)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HeaderOnlyBlock {
     #[prost(message, optional, tag = "2")]
@@ -543,7 +542,7 @@ pub struct ActionError {
     pub index: u64,
     #[prost(
         oneof = "action_error::Kind",
-        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48"
+        tags = "21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52"
     )]
     pub kind: ::core::option::Option<action_error::Kind>,
 }
@@ -609,6 +608,14 @@ pub mod action_error {
         GasKeyBalanceTooHigh(super::GasKeyBalanceTooHighKind),
         #[prost(message, tag = "48")]
         DelegateActionInvalidNonceIndex(super::DelegateActionInvalidNonceIndexKind),
+        #[prost(message, tag = "49")]
+        TotalPromiseInputSizeExceeded(super::TotalPromiseInputSizeExceededKind),
+        #[prost(message, tag = "50")]
+        ReceiptStorageProofSizeExceeded(super::ReceiptStorageProofSizeExceededKind),
+        #[prost(message, tag = "51")]
+        MalformedUniversalStateInit(super::MalformedUniversalStateInitKind),
+        #[prost(message, tag = "52")]
+        AccountNotInitialized(super::AccountNotInitializedKind),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -789,7 +796,7 @@ pub struct InsufficientGasKeyBalanceKind {
 pub struct GasKeyBalanceTooHighKind {
     #[prost(string, tag = "1")]
     pub account_id: ::prost::alloc::string::String,
-    /// Set for DeleteKey (specific key), None for DeleteAccount (aggregate)
+    /// Set for DeleteKey (specific key), unset for DeleteAccount (aggregate)
     #[prost(message, optional, tag = "2")]
     pub public_key: ::core::option::Option<PublicKey>,
     #[prost(message, optional, tag = "3")]
@@ -801,6 +808,33 @@ pub struct DelegateActionInvalidNonceIndexKind {
     pub nonce_index: u32,
     #[prost(uint32, tag = "2")]
     pub num_nonces: u32,
+}
+/// The combined size of the resolved promise inputs (the DataReceipts referenced
+/// by the receipt's input_data_ids) exceeded max_receipt_total_input_size.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TotalPromiseInputSizeExceededKind {
+    #[prost(uint64, tag = "1")]
+    pub size: u64,
+    #[prost(uint64, tag = "2")]
+    pub limit: u64,
+}
+/// The receipt recorded more storage proof than per_receipt_storage_proof_size_limit
+/// allows. The actions after the offending one do not run.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReceiptStorageProofSizeExceededKind {
+    #[prost(uint64, tag = "1")]
+    pub limit: u64,
+}
+/// The bytes of a UniversalStateInit action do not decode into a state init.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MalformedUniversalStateInitKind {}
+/// The action needs a set-up account, but the receiver is an uninitialized
+/// universal account: the account exists, it just has no access keys, code or
+/// data yet. Distinct from AccountDoesNotExist.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AccountNotInitializedKind {
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MerklePath {
@@ -818,7 +852,7 @@ pub struct MerklePathItem {
 pub struct Action {
     #[prost(
         oneof = "action::Action",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17"
+        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18"
     )]
     pub action: ::core::option::Option<action::Action>,
 }
@@ -860,7 +894,59 @@ pub mod action {
         WithdrawFromGasKey(super::WithdrawFromGasKeyAction),
         #[prost(message, tag = "17")]
         DelegateV2(super::SignedDelegateActionV2),
+        #[prost(message, tag = "18")]
+        UniversalStateInit(super::UniversalStateInitAction),
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TransferToGasKeyAction {
+    #[prost(message, optional, tag = "1")]
+    pub public_key: ::core::option::Option<PublicKey>,
+    #[prost(message, optional, tag = "2")]
+    pub deposit: ::core::option::Option<BigInt>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WithdrawFromGasKeyAction {
+    #[prost(message, optional, tag = "1")]
+    pub public_key: ::core::option::Option<PublicKey>,
+    #[prost(message, optional, tag = "2")]
+    pub amount: ::core::option::Option<BigInt>,
+}
+/// Creates a `0u` universal account (NEP: universal accounts). `state_init` is the
+/// opaque borsh of a UniversalStateInit -- nearcore models it as RawStateInit, a
+/// newtype over the raw bytes -- so it is carried through verbatim rather than
+/// decoded into a structured message here.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UniversalStateInitAction {
+    #[prost(bytes = "vec", tag = "1")]
+    pub state_init: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, optional, tag = "2")]
+    pub deposit: ::core::option::Option<BigInt>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SignedDelegateActionV2 {
+    #[prost(message, optional, tag = "1")]
+    pub signature: ::core::option::Option<Signature>,
+    #[prost(message, optional, tag = "2")]
+    pub delegate_action: ::core::option::Option<DelegateActionV2>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DelegateActionV2 {
+    #[prost(string, tag = "1")]
+    pub sender_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub receiver_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub actions: ::prost::alloc::vec::Vec<Action>,
+    #[prost(uint64, tag = "4")]
+    pub nonce: u64,
+    /// Present only for gas-key nonces (GasKeyNonce); unset for a plain nonce.
+    #[prost(uint32, optional, tag = "5")]
+    pub nonce_index: ::core::option::Option<u32>,
+    #[prost(uint64, tag = "6")]
+    pub max_block_height: u64,
+    #[prost(message, optional, tag = "7")]
+    pub public_key: ::core::option::Option<PublicKey>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeployGlobalContractAction {
@@ -886,6 +972,7 @@ pub struct UseGlobalContractByAccountIdAction {
 pub struct DeterministicStateInit {
     #[prost(message, optional, tag = "1")]
     pub code: ::core::option::Option<GlobalContractIdentifierView>,
+    /// data key is base64-encoded string
     #[prost(map = "string, bytes", tag = "2")]
     pub data:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::vec::Vec<u8>>,
@@ -977,45 +1064,6 @@ pub struct DelegateAction {
     pub public_key: ::core::option::Option<PublicKey>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TransferToGasKeyAction {
-    #[prost(message, optional, tag = "1")]
-    pub public_key: ::core::option::Option<PublicKey>,
-    #[prost(message, optional, tag = "2")]
-    pub deposit: ::core::option::Option<BigInt>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct WithdrawFromGasKeyAction {
-    #[prost(message, optional, tag = "1")]
-    pub public_key: ::core::option::Option<PublicKey>,
-    #[prost(message, optional, tag = "2")]
-    pub amount: ::core::option::Option<BigInt>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SignedDelegateActionV2 {
-    #[prost(message, optional, tag = "1")]
-    pub signature: ::core::option::Option<Signature>,
-    #[prost(message, optional, tag = "2")]
-    pub delegate_action: ::core::option::Option<DelegateActionV2>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DelegateActionV2 {
-    #[prost(string, tag = "1")]
-    pub sender_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub receiver_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub actions: ::prost::alloc::vec::Vec<Action>,
-    #[prost(uint64, tag = "4")]
-    pub nonce: u64,
-    /// Present only for gas-key nonces (GasKeyNonce); unset for a plain nonce.
-    #[prost(uint32, optional, tag = "5")]
-    pub nonce_index: ::core::option::Option<u32>,
-    #[prost(uint64, tag = "6")]
-    pub max_block_height: u64,
-    #[prost(message, optional, tag = "7")]
-    pub public_key: ::core::option::Option<PublicKey>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccessKey {
     #[prost(uint64, tag = "1")]
     pub nonce: u64,
@@ -1042,6 +1090,17 @@ pub mod access_key_permission {
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FunctionCallPermission {
+    #[prost(message, optional, tag = "1")]
+    pub allowance: ::core::option::Option<BigInt>,
+    #[prost(string, tag = "2")]
+    pub receiver_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub method_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FullAccessPermission {}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GasKeyFunctionCallPermission {
     #[prost(message, optional, tag = "1")]
     pub balance: ::core::option::Option<BigInt>,
@@ -1061,17 +1120,6 @@ pub struct GasKeyFullAccessPermission {
     #[prost(uint32, tag = "2")]
     pub num_nonces: u32,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FunctionCallPermission {
-    #[prost(message, optional, tag = "1")]
-    pub allowance: ::core::option::Option<BigInt>,
-    #[prost(string, tag = "2")]
-    pub receiver_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub method_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FullAccessPermission {}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum CurveKind {
