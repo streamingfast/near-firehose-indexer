@@ -38,6 +38,11 @@ fn main() {
                 await_for_node_synced: near_indexer::AwaitForNodeSyncedEnum::StreamWhileSyncing,
                 finality: near_primitives::types::Finality::None,
                 validate_genesis: false,
+                // Never skip a block. Skipping records the height as synced and
+                // resumes past it, leaving a permanent hole in the Firehose block
+                // stream that nothing goes back for. Failing loudly instead lets
+                // the reader restart and retry the same height.
+                skip_broken_blocks: false,
             };
             info!(target: "main", "Indexer config initiated");
 
