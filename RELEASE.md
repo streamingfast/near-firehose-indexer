@@ -11,11 +11,13 @@ The Github action will then compile the project and push the docker image to Doc
 ### Example:
 
 Let's say Near releases a new version of nearcore with tag `1.99.0-rc.3`
-1. Update the `Cargo.toml` file package version to `1.99.0-rc.3`
+1. Update the `Cargo.toml` file package version to `1.99.0-rc.3-fh3.0`
 2. In `Cargo.toml`, update all `nearcore` dependencies' `rev` tag to `1.99.0-rc.3`
 3. Run `make release` locally to validate that the project compiles
-4. Commit changes and tag commit with `1.99.0-rc.3-fire`
+4. Commit changes and tag commit with `v1.99.0-rc.3-fh3.0`
 5. Push commit.
+
+Version bumps are made against the `release/v2.x` branch, not `develop`.
 
 ### GitHub Release
 
@@ -30,8 +32,13 @@ This will take care of updating the `CHANGELOG.md` header (if `## Unreleased`), 
 Then simply do a tag with the version you want to release:
 
 ```shell
-git tag <version>-fh3.0
+git tag v<version>-fh3.0
 ```
+
+The leading `v` is required. The release workflow derives the Docker image tag
+straight from the git ref, and every published image carries it
+(`v2.13.2-fh3.0`, ...), so a tag without the `v` publishes an image that
+`sf-operator`'s pins cannot resolve.
 
 This will trigger a GitHub CI action that will build the Docker image and perform a propre release on Github directly.
 

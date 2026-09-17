@@ -4,7 +4,6 @@ mod codec;
 pub use codec::*;
 use near_crypto::PublicKey as NearPublicKey;
 use near_crypto::Signature as NearSignature;
-use near_indexer::StreamerMessage;
 use near_indexer::near_primitives;
 use near_indexer::near_primitives::action::GlobalContractIdentifier;
 use near_indexer::near_primitives::errors as near_errors;
@@ -13,8 +12,9 @@ use near_indexer::near_primitives::views as near_views;
 use near_indexer::near_primitives::views::{
     DataReceiverView, ExecutionMetadataView, ExecutionStatusView, ReceiptEnumView,
 };
+use near_indexer::StreamerMessage;
 
-use base64::{Engine as _, engine::general_purpose};
+use base64::{engine::general_purpose, Engine as _};
 use hex;
 use std::fmt::{Display, Formatter};
 
@@ -127,7 +127,6 @@ impl From<near_views::BlockHeaderView> for BlockHeader {
         }
     }
 }
-
 
 impl From<near_indexer::IndexerExecutionOutcomeWithReceipt> for IndexerExecutionOutcomeWithReceipt {
     fn from(r: near_indexer::IndexerExecutionOutcomeWithReceipt) -> Self {
@@ -582,6 +581,33 @@ impl From<near_views::ExecutionStatusView> for execution_outcome::Status {
                                                 },
                                             }
                                         }
+                                        ActionErrorKind::TotalPromiseInputSizeExceeded { size, limit } => {
+                                            action_error::Kind::TotalPromiseInputSizeExceeded {
+                                                0: TotalPromiseInputSizeExceededKind {
+                                                    size: size,
+                                                    limit: limit,
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::ReceiptStorageProofSizeExceeded { limit } => {
+                                            action_error::Kind::ReceiptStorageProofSizeExceeded {
+                                                0: ReceiptStorageProofSizeExceededKind {
+                                                    limit: limit,
+                                                },
+                                            }
+                                        }
+                                        ActionErrorKind::MalformedUniversalStateInit => {
+                                            action_error::Kind::MalformedUniversalStateInit {
+                                                0: MalformedUniversalStateInitKind {},
+                                            }
+                                        }
+                                        ActionErrorKind::AccountNotInitialized { account_id } => {
+                                            action_error::Kind::AccountNotInitialized {
+                                                0: AccountNotInitializedKind {
+                                                    account_id: account_id.to_string(),
+                                                },
+                                            }
+                                        }
                                     }),
                                 },
                             })
@@ -823,6 +849,19 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
+            near_views::ActionView::UniversalStateInit {
+                state_init,
+                deposit,
+            } => Action {
+                action: Some(action::Action::UniversalStateInit {
+                    0: UniversalStateInitAction {
+                        // RawStateInit is a newtype over the borsh bytes of a
+                        // UniversalStateInit; carried through verbatim.
+                        state_init: state_init.0,
+                        deposit: Some(BigInt::from(deposit.as_yoctonear())),
+                    },
+                }),
+            },
             near_views::ActionView::TransferToGasKey {
                 public_key,
                 deposit,
@@ -834,10 +873,7 @@ impl From<near_views::ActionView> for Action {
                     },
                 }),
             },
-            near_views::ActionView::WithdrawFromGasKey {
-                public_key,
-                amount,
-            } => Action {
+            near_views::ActionView::WithdrawFromGasKey { public_key, amount } => Action {
                 action: Some(action::Action::WithdrawFromGasKey {
                     0: WithdrawFromGasKeyAction {
                         public_key: Some(PublicKey::from(public_key)),
@@ -864,10 +900,7 @@ impl From<near_views::ActionView> for Action {
                                     .map(|a| a.into())
                                     .collect(),
                                 nonce: delegate_action.nonce.nonce(),
-                                nonce_index: delegate_action
-                                    .nonce
-                                    .nonce_index()
-                                    .map(|i| i.into()),
+                                nonce_index: delegate_action.nonce.nonce_index().map(|i| i.into()),
                                 max_block_height: delegate_action.max_block_height.into(),
                                 public_key: Some(PublicKey::from(delegate_action.public_key)),
                             }),
