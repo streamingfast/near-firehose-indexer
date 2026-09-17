@@ -6,8 +6,11 @@ FROM ghcr.io/streamingfast/firehose-core:${FIRECORE_VERSION} AS firecore
 
 FROM firenear AS rust-base
 
+# libclang-dev ships libclang.so, which clang-sys needs at build time. It is
+# pulled in by librocksdb-sys, which nearcore 2.14.0 bumped to 0.17 -- the
+# older 0.11 built without it.
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    git cmake g++ pkg-config curl llvm clang libssl-dev
+    git cmake g++ pkg-config curl llvm clang libclang-dev libssl-dev
 
 COPY ./rust-toolchain.toml ./rust-toolchain.toml
 
